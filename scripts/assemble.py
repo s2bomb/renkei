@@ -1,0 +1,298 @@
+#!/usr/bin/env python3
+"""
+Assemble an archetype into a Claude Code SKILL.md file.
+
+Reads archetype.yaml, composes articles in pillar order (truth → ethos → doctrine),
+and produces a host-adapted SKILL.md for Claude Code.
+
+Usage:
+    python scripts/assemble.py archetypes/development/test-designer --dry-run
+    python scripts/assemble.py archetypes/development/test-designer -o output/
+    python scripts/assemble.py --all archetypes/development/
+    python scripts/assemble.py --push archetypes/development/test-designer
+    python scripts/assemble.py --push --all archetypes/development/
+"""
+
+import argparse
+import difflib
+import re
+import shutil
+import subprocess
+import sys
+import tempfile
+import textwrap
+from pathlib import Path
+
+import yaml
+
+
+PILLARS = ["truth", "ethos", "doctrine"]
+
+
+def read_manifest(archetype_dir: Path) -> dict:
+    """Read and validate archetype.yaml."""
+    manifest_path = archetype_dir / "archetype.yaml"
+    if not manifest_path.exists():
+        print(f"Error: No archetype.yaml found in {archetype_dir}", file=sys.stderr)
+        sys.exit(1)
+    return yaml.safe_load(manifest_path.read_text())
+
+
+def read_article(archetype_dir: Path, pillar: str, filename: str) -> str:
+    """Read a single article file."""
+    path = archetype_dir / pillar / filename
+    if not path.exists():
+        print(f"Error: Article not found: {path}", file=sys.stderr)
+        sys.exit(1)
+    return path.read_text().strip()
+
+
+def downshift_headings(text: str) -> str:
+    """Shift all markdown headings down one level (# → ##, ## → ###, etc.)."""
+    lines = text.split("\n")
+    result = []
+    for line in lines:
+        if re.match(r"^#{1,5}\s", line):
+            result.append("#" + line)
+        else:
+            result.append(line)
+    return "\n".join(result)
+
+
+def build_frontmatter(manifest: dict) -> str:
+    """Build YAML frontmatter for Claude Code SKILL.md."""
+    description = manifest["description"].strip()
+    description = " ".join(description.split())
+    return textwrap.dedent(f"""\
+        ---
+        name: {manifest["name"]}
+        description: {description}
+        model: {manifest.get("model", "opus")}
+        ---""")
+
+
+def build_title(manifest: dict) -> str:
+    """Build the top-level heading from the archetype name."""
+    name = manifest["name"].replace("-", " ").title()
+    return f"# {name}"
+
+
+def assemble(archetype_dir: Path) -> str:
+    """Assemble an archetype into a Claude Code SKILL.md string."""
+    archetype_dir = Path(archetype_dir)
+    manifest = read_manifest(archetype_dir)
+
+    parts = []
+
+    # Frontmatter
+    parts.append(build_frontmatter(manifest))
+    parts.append("")
+
+    # Title
+    parts.append(build_title(manifest))
+    parts.append("")
+
+    # Articles in pillar order
+    for pillar in PILLARS:
+        articles = manifest.get(pillar, [])
+        if not articles:
+            continue
+
+        for article_name in articles:
+            content = read_article(archetype_dir, pillar, article_name)
+            content = downshift_headings(content)
+            parts.append(content)
+            parts.append("")
+
+        # Separator between pillars
+        parts.append("---")
+        parts.append("")
+
+    # Remove trailing separator
+    if parts and parts[-2] == "---":
+        parts.pop(-2)
+
+    return "\n".join(parts).rstrip() + "\n"
+
+
+def get_output_path(manifest: dict, archetype_dir: Path) -> Path:
+    """Get the Claude Code output path from the manifest."""
+    outputs = manifest.get("output", [])
+    for out in outputs:
+        if out.get("target") == "claude-code":
+            return Path(out["path"]).expanduser()
+    return archetype_dir / "assembled.md"
+
+
+def show_diff(name: str, target: Path, assembled: str) -> bool:
+    """Show diff between existing file and assembled output. Returns True if changed."""
+    if not target.exists():
+        line_count = assembled.count("\n")
+        print(f"\n  {name}: NEW FILE → {target} ({line_count} lines)")
+        print("  (no existing file to diff against)\n")
+        return True
+
+    existing = target.read_text()
+    if existing == assembled:
+        print(f"\n  {name}: no changes")
+        return False
+
+    # Use unified diff
+    existing_lines = existing.splitlines(keepends=True)
+    assembled_lines = assembled.splitlines(keepends=True)
+    diff = difflib.unified_diff(
+        existing_lines,
+        assembled_lines,
+        fromfile=f"deployed/{target.name}",
+        tofile=f"assembled/{target.name}",
+        lineterm="",
+    )
+
+    diff_lines = list(diff)
+    if not diff_lines:
+        print(f"\n  {name}: no changes")
+        return False
+
+    # Count additions/removals
+    adds = sum(1 for l in diff_lines if l.startswith("+") and not l.startswith("+++"))
+    removes = sum(
+        1 for l in diff_lines if l.startswith("-") and not l.startswith("---")
+    )
+
+    print(f"\n  {name}: {target}")
+    print(f"  +{adds} -{removes} lines changed\n")
+
+    # Try colored diff via external diff command for readability
+    try:
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".md", delete=False) as f:
+            f.write(assembled)
+            tmp_path = f.name
+        subprocess.run(
+            ["diff", "--color=always", "-u", str(target), tmp_path],
+            check=False,
+        )
+        Path(tmp_path).unlink()
+    except FileNotFoundError:
+        # No diff command, fall back to difflib output
+        for line in diff_lines:
+            print(line, end="")
+        print()
+
+    return True
+
+
+def push_one(archetype_dir: Path, force: bool = False) -> None:
+    """Assemble and push one archetype to its target, with diff approval."""
+    manifest = read_manifest(archetype_dir)
+    name = manifest["name"]
+    target = get_output_path(manifest, archetype_dir)
+    assembled = assemble(archetype_dir)
+
+    changed = show_diff(name, target, assembled)
+
+    if not changed:
+        return
+
+    if not force:
+        answer = input(f"\n  Deploy {name} to {target}? [y/N] ").strip().lower()
+        if answer != "y":
+            print(f"  Skipped {name}")
+            return
+
+    target.parent.mkdir(parents=True, exist_ok=True)
+    target.write_text(assembled)
+    print(f"  Deployed {name} → {target}")
+
+    # Copy references/ directory if it exists in the archetype
+    refs_src = archetype_dir / "references"
+    if refs_src.is_dir():
+        refs_dst = target.parent / "references"
+        if refs_dst.exists():
+            shutil.rmtree(refs_dst)
+        shutil.copytree(refs_src, refs_dst)
+        ref_files = list(refs_dst.rglob("*"))
+        ref_count = sum(1 for f in ref_files if f.is_file())
+        print(f"  Copied references/ ({ref_count} file(s)) → {refs_dst}")
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Assemble archetypes into Claude Code SKILL.md files"
+    )
+    parser.add_argument(
+        "path",
+        type=Path,
+        help="Path to archetype directory, or ensemble directory with --all",
+    )
+    parser.add_argument(
+        "-o",
+        "--output",
+        type=Path,
+        default=None,
+        help="Output path (overrides manifest output target)",
+    )
+    parser.add_argument(
+        "--all",
+        action="store_true",
+        help="Assemble all archetypes in an ensemble directory",
+    )
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Print assembled output to stdout instead of writing files",
+    )
+    parser.add_argument(
+        "--push",
+        action="store_true",
+        help="Assemble, diff against deployed skill, and deploy with approval",
+    )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Skip approval prompt when pushing (use with --push)",
+    )
+
+    args = parser.parse_args()
+
+    # Collect archetype directories
+    if args.all:
+        archetype_dirs = sorted(p.parent for p in args.path.rglob("archetype.yaml"))
+        if not archetype_dirs:
+            print(f"No archetypes found under {args.path}", file=sys.stderr)
+            sys.exit(1)
+    else:
+        archetype_dirs = [args.path]
+
+    # Push mode: assemble → diff → approve → deploy
+    if args.push:
+        for archetype_dir in archetype_dirs:
+            push_one(archetype_dir, force=args.force)
+        return
+
+    # Normal mode: assemble → write
+    for archetype_dir in archetype_dirs:
+        manifest = read_manifest(archetype_dir)
+        assembled = assemble(archetype_dir)
+
+        if args.dry_run:
+            if args.all:
+                print(f"=== {manifest['name']} ===")
+            print(assembled)
+            if args.all:
+                print()
+        else:
+            if args.output and args.all:
+                out_dir = args.output
+                out_dir.mkdir(parents=True, exist_ok=True)
+                output_path = out_dir / f"{manifest['name']}-SKILL.md"
+            elif args.output:
+                output_path = args.output
+            else:
+                output_path = get_output_path(manifest, archetype_dir)
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            output_path.write_text(assembled)
+            print(f"  {manifest['name']} → {output_path}")
+
+
+if __name__ == "__main__":
+    main()
