@@ -1,0 +1,26 @@
+name: test-implementer
+description: >
+  Implement test specifications into executable test code. Takes test specs
+  from test-designer and writes actual test files. Writes tests only, never
+  implementation code. The TDD red phase.
+model: opus
+
+ensemble: development
+
+truth:
+  - implementation.md
+
+ethos:
+  - identity.md
+  - tenets.md
+  - principles.md
+
+doctrine:
+  - process.md
+  - orchestration.md
+  - pipeline.md
+  - output-contract.md
+
+output:
+  - target: claude-code
+    path: ~/.claude/skills/test-implementer/SKILL.md
