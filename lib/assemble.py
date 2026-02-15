@@ -6,11 +6,11 @@ Reads archetype.yaml, composes articles in pillar order (truth → ethos → doc
 and produces a host-adapted SKILL.md for Claude Code.
 
 Usage:
-    python scripts/assemble.py archetypes/development/test-designer --dry-run
-    python scripts/assemble.py archetypes/development/test-designer -o output/
-    python scripts/assemble.py --all archetypes/development/
-    python scripts/assemble.py --push archetypes/development/test-designer
-    python scripts/assemble.py --push --all archetypes/development/
+    python lib/assemble.py archetypes/development/test-designer --dry-run
+    python lib/assemble.py archetypes/development/test-designer -o output/
+    python lib/assemble.py --all archetypes/development/
+    python lib/assemble.py --push archetypes/development/test-designer
+    python lib/assemble.py --push --all archetypes/development/
 """
 
 import argparse
@@ -181,8 +181,80 @@ def show_diff(name: str, target: Path, assembled: str) -> bool:
     return True
 
 
+def find_git_root(path: Path) -> Path | None:
+    """Walk up from path looking for a .git directory."""
+    current = path if path.is_dir() else path.parent
+    for parent in [current, *current.parents]:
+        if (parent / ".git").exists():
+            return parent
+    return None
+
+
+def ensure_git(target: Path) -> Path:
+    """Ensure the target path is inside a git repo. Init one if needed.
+
+    Returns the git root directory.
+    """
+    git_root = find_git_root(target)
+    if git_root is not None:
+        return git_root
+
+    # No git repo found -- init one at the target's parent directory
+    init_dir = target.parent
+    init_dir.mkdir(parents=True, exist_ok=True)
+    subprocess.run(["git", "init"], cwd=init_dir, check=True, capture_output=True)
+    print(f"  Initialized git repo at {init_dir}")
+    return init_dir
+
+
+def git_commit_path(git_root: Path, paths: list[Path], message: str) -> bool:
+    """Stage and commit specific paths in a git repo.
+
+    Returns True if a commit was created, False if nothing to commit.
+    """
+    # Build relative paths for git add
+    rel_paths = []
+    for p in paths:
+        if p.exists():
+            rel_paths.append(str(p.relative_to(git_root)))
+
+    if not rel_paths:
+        return False
+
+    # Stage the paths
+    subprocess.run(
+        ["git", "add", "--"] + rel_paths,
+        cwd=git_root,
+        check=True,
+        capture_output=True,
+    )
+
+    # Check if there's anything staged to commit
+    result = subprocess.run(
+        ["git", "diff", "--cached", "--quiet"],
+        cwd=git_root,
+        capture_output=True,
+    )
+    if result.returncode == 0:
+        # Nothing staged -- no changes to commit
+        return False
+
+    subprocess.run(
+        ["git", "commit", "-m", message],
+        cwd=git_root,
+        check=True,
+        capture_output=True,
+    )
+    return True
+
+
 def push_one(archetype_dir: Path, force: bool = False) -> None:
-    """Assemble and push one archetype to its target, with diff approval."""
+    """Assemble and push one archetype to its target, with diff approval.
+
+    Wraps every deploy in two git commits:
+      1. Pre-deploy snapshot of the current state (rollback point)
+      2. Post-deploy commit of the new state
+    """
     manifest = read_manifest(archetype_dir)
     name = manifest["name"]
     target = get_output_path(manifest, archetype_dir)
@@ -199,20 +271,44 @@ def push_one(archetype_dir: Path, force: bool = False) -> None:
             print(f"  Skipped {name}")
             return
 
+    # Ensure the target is in a git repo
+    git_root = ensure_git(target)
+
+    # Collect all paths that will be affected by this deploy
+    deploy_paths = [target]
+    refs_src = archetype_dir / "references"
+    refs_dst = target.parent / "references"
+    if refs_src.is_dir():
+        deploy_paths.append(refs_dst)
+
+    # Pre-deploy commit: snapshot the current state as a rollback point
+    if target.exists():
+        committed = git_commit_path(
+            git_root, deploy_paths, f"pre-deploy snapshot: {name}"
+        )
+        if committed:
+            print(f"  Committed pre-deploy snapshot for {name}")
+
+    # Deploy: write the new files
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(assembled)
     print(f"  Deployed {name} → {target}")
 
     # Copy references/ directory if it exists in the archetype
-    refs_src = archetype_dir / "references"
     if refs_src.is_dir():
-        refs_dst = target.parent / "references"
         if refs_dst.exists():
             shutil.rmtree(refs_dst)
         shutil.copytree(refs_src, refs_dst)
         ref_files = list(refs_dst.rglob("*"))
         ref_count = sum(1 for f in ref_files if f.is_file())
         print(f"  Copied references/ ({ref_count} file(s)) → {refs_dst}")
+
+    # Post-deploy commit: record the new state
+    committed = git_commit_path(
+        git_root, deploy_paths, f"deploy: {name} (assembled from renkei)"
+    )
+    if committed:
+        print(f"  Committed deploy for {name}")
 
 
 def main():

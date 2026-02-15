@@ -25,5 +25,5 @@ Test implementation complete.
 **Summary**: [N] tests implemented from test spec
 **Status**: Tests committed, expected to fail (implementation phase is next)
 
-Ready for /implement-plan.
+Ready for `/implement-plan`.
 ```
