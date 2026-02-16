@@ -1,4 +1,4 @@
-# Derivation: How Agent Archetypes Are Built
+# AUTHORING: How Agent Archetypes Are Built
 
 This document codifies the method by which agent archetypes are constructed. The method itself is grounded in known goods about how conviction drives action -- in humans, in trained models, and in durable systems.
 
