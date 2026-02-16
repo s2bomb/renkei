@@ -15,3 +15,7 @@ For every test you specify, ask: could a lazy or broken implementation pass this
 ## Error paths are contracts too
 
 The API design specifies error handling — Result types, error propagation, rejection conditions. These are contracts with the same standing as happy-path contracts. They need tests with the same rigour. Code that swallows errors bears false witness about its own state.
+
+## Invariants over incidents
+
+Each test specification must distinguish contract invariants from incidental representation details. Invariants are what must remain true across valid refactors and extensions. Incidental details (field order, collection order when unordered by contract, full-object shape, non-semantic counts) are not proof targets unless the API contract explicitly makes them semantic. A test that fails on incidental change is weak evidence and creates maintenance noise.

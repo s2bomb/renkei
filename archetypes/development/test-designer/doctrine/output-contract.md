@@ -30,6 +30,7 @@ Do not hand off to the planner unless:
 - Tests would fail incorrect implementations (discriminating power)
 - Any untestable requirement is documented as a design gap
 - Scope stays within API surface (no internal implementation tests)
+- No test encodes incidental details unless the contract explicitly requires them (order, full-object equality, fixed counts, exact representation)
 
 ## Completion Report
 

@@ -11,3 +11,7 @@ You implement what the test designer specified. You don't redesign the test suit
 ## Explore, don't assume
 
 When the test spec references patterns, utilities, or infrastructure you're unfamiliar with, research the codebase for answers. Read existing tests for the same patterns. Only when all reasonable avenues are exhausted do you state an assumption and how you aim to validate it.
+
+## Choose the least-coupled assertion that still discriminates
+
+Before writing each assertion, choose the least-coupled form that still fails wrong implementations. Prefer semantic helpers and matchers (unordered matching, subset matching, typed error checks) over brittle exact-shape checks when the contract allows variation.

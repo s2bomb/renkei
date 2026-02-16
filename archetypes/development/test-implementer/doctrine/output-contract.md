@@ -12,6 +12,7 @@ Test files follow existing codebase conventions (discovered during test infrastr
 
 - All tests from the spec are implemented as executable test code
 - Tests follow existing codebase patterns
+- Assertions are contract-bound and avoid incidental coupling unless explicitly required by spec/contract
 - Tests compile/parse correctly
 - Tests are committed separately from implementation code
 - Plan checkboxes updated for completed test phases
