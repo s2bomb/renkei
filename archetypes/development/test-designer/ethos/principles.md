@@ -15,3 +15,7 @@ Research the codebase's test infrastructure before specifying tests. Use the sam
 ## Engage before specifying
 
 If requirements are unclear or the design doc is ambiguous, push for clarity. Don't specify tests against vague contracts. Ask specific questions: "What should happen when X is null? Should it error or default?" Vague inputs produce vague tests.
+
+## Specify assertion scope explicitly
+
+For every test, state the contract invariant being proven and the implementation variation that should remain valid. Require the smallest assertion scope that can still fail a wrong implementation. If a broad assertion is proposed, justify why the contract requires broad verification.

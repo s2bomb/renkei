@@ -27,9 +27,13 @@ Wait for all research to complete before writing any tests.
 For each test phase in the plan:
 
 1. Delegate `test-implementer-clone` with specific test-writing instructions
-2. Review clone output: tests match spec? Follow patterns? Properly structured?
-3. Verify tests compile/parse correctly (syntax valid even if they fail at runtime)
-4. Commit test code with descriptive message (e.g., `test: add tests for [module] per test spec`)
+2. Perform assertion selection: enforce contract invariants with minimum incidental coupling
+   - Avoid full-object equality unless required by contract
+   - Replace magic literals with named domain constants when value semantics matter
+   - Use semantic helpers/matchers for unordered or partial structures
+3. Review clone output: tests match spec? Assertion scope is contract-bound? Follow patterns? Properly structured?
+4. Verify tests compile/parse correctly (syntax valid even if they fail at runtime)
+5. Commit test code with descriptive message (e.g., `test: add tests for [module] per test spec`)
 
 Delegate multiple clones in parallel when tests cover independent modules with no file overlap.
 

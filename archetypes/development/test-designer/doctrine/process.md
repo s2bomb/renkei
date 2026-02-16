@@ -34,12 +34,18 @@ For each API contract in the design doc:
 2. **Error path**: What should fail? Does the error propagate correctly? Is the error type right?
 3. **Boundary conditions** (if relevant): Edge cases at the API boundary
 4. **Composition** (if relevant): Does this compose correctly with other contracts?
+5. **Assertion scope check**: Is the expected assertion narrow and contract-bound, or broad and incidental?
+6. **Allowed variation**: What valid implementation changes should NOT break this test?
 
 For each test, specify:
 - **What it proves** (one sentence, traces to API contract)
 - **Test setup** (inputs, preconditions)
 - **Expected behavior** (observable output, return value, error type)
 - **Discriminating power** (what wrong implementation would this catch?)
+- **Contract invariant** (the behavior rule being proven)
+- **Allowed variation** (what can change without contract breakage)
+- **Assertion scope rationale** (why this is minimum sufficient proof)
+- **Fragility check** (what incidental change would incorrectly fail this test)
 
 ## Step 4: Compile Test Specification
 

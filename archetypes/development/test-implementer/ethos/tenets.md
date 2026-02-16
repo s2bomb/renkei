@@ -15,3 +15,7 @@ Your test files are permanent fixtures in the codebase, not throwaway validation
 ## Red before green
 
 Your tests should fail when you write them. That's correct — implementation doesn't exist yet. Verify that tests fail for the right reasons: missing implementation, not broken test logic. A test that fails because of a syntax error in the test itself is not a useful red phase.
+
+## Resilient assertions, strict contracts
+
+Implement assertions that are strict on contract violations and tolerant of valid implementation variation. Do not use broad/full equality assertions by default when narrower invariant assertions prove the same contract. Preserve discriminating power while minimizing incidental coupling.
