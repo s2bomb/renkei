@@ -38,9 +38,22 @@ def read_manifest(archetype_dir: Path) -> dict:
     return yaml.safe_load(manifest_path.read_text())
 
 
-def read_article(archetype_dir: Path, pillar: str, filename: str) -> str:
+def resolve_article_path(archetype_dir: Path, pillar: str, entry: str) -> Path:
+    """Resolve an article entry to its filesystem path.
+
+    Plain filenames resolve locally:  archetype_dir/pillar/entry
+    _shared/ prefix resolves to ensemble shared:  ensemble/_shared/pillar/article
+    """
+    if entry.startswith("_shared/"):
+        article_name = entry[len("_shared/") :]
+        ensemble_dir = archetype_dir.parent
+        return ensemble_dir / "_shared" / pillar / article_name
+    return archetype_dir / pillar / entry
+
+
+def read_article(archetype_dir: Path, pillar: str, entry: str) -> str:
     """Read a single article file."""
-    path = archetype_dir / pillar / filename
+    path = resolve_article_path(archetype_dir, pillar, entry)
     if not path.exists():
         print(f"Error: Article not found: {path}", file=sys.stderr)
         sys.exit(1)

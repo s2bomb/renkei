@@ -124,6 +124,7 @@ lib/
 thoughts/
   ideas/                    # open/ rejected/ shipped/
   issues/                   # open/ closed/
+  observations/             # open/ validated/ dismissed/ -- field notes from real use
   research/                 # Numbered research papers (01-*.md through 06-*.md)
   skills/                   # Skill drafts and new skill definitions
     drafts/                 # Draft updates to existing deployed skills
@@ -273,6 +274,7 @@ Key terms you must use correctly:
 - **Research papers** (`thoughts/research/`): Numbered sequentially (`01-`, `02-`, etc.). Exploratory, may contain superseded ideas. Do not modify existing research papers unless correcting errors.
 - **Specs** (`thoughts/specs/`): Dated (`YYYY-MM-DD-name.md`). Define concrete changes with origin, problem, solution, and affected items.
 - **Issues** (`thoughts/issues/`): Tracked as markdown in `open/` or `closed/`. May be voice note transcripts.
+- **Observations** (`thoughts/observations/`): Structured field notes from real use. Tracked in `open/`, `validated/`, or `dismissed/`. Each observation separates what happened from what it might mean. Format: Context, What Happened, What Was Expected, Hypothesis, Disposition.
 - **Skill drafts** (`thoughts/skills/drafts/`): Updates to existing skills pending deployment.
 
 ### Tone and Style

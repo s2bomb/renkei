@@ -150,6 +150,16 @@ Practical limit: 1-2 "therefores" in each direction. If a doctrine element requi
 
 The sequence of derivation links from known good through ethos to doctrine. A therefore-chain makes the reasoning visible: "X is true (known good), therefore the agent believes Y (tenet), therefore the agent does Z (process step)." The chain is the audit trail -- it answers "why does this agent do this?"
 
+**Runtime Reasoning Structure**
+
+The derivation chain (Truth -> Ethos -> Doctrine) functioning not just as an authoring method but as a structure the agent reasons through during execution. When doctrine conflicts or situations arise that doctrine did not anticipate, the agent traces back through ethos to truth and derives a resolution. The chain becomes the agent's reasoning scaffold at runtime -- not just the blueprint from which the document was built.
+
+The distinction: as an *authoring structure*, the derivation chain tells the author how to build coherent agent definitions. As a *runtime reasoning structure*, the same chain gives the agent a way to navigate novel tensions by reasoning from first principles rather than breaking rules, hallucinating, or silently failing.
+
+Scope: Emergent property of well-grounded archetypes. Not all archetypes will exhibit runtime reasoning -- it requires a truth layer deep enough to anchor novel derivations and an ethos layer that provides genuine conviction rather than restated instructions. Thin truth layers produce brittle agents that cannot self-heal at tension points.
+
+Not to be confused with: the derivation chain as an authoring method (which describes how the document is written, not how the agent uses it); prompt engineering (which instructs behavior directly rather than grounding it in truth and conviction).
+
 ---
 
 ## System
@@ -213,6 +223,20 @@ Not to be confused with: parallel execution (running multiple agents simultaneou
 The second half of an identity declaration -- what the agent is *not*. Without anti-identity, LLMs drift toward doing everything. Anti-identity is the agent's immune system: it rejects behaviors that would corrupt its role.
 
 Example: "You are an architect, not a researcher, not a planner, not an implementer."
+
+---
+
+## Practice
+
+**Observation**
+
+A structured record of something noticed during real use of an archetype or ensemble. Separates what happened (fact) from what it might mean (hypothesis). Observations are the feedback loop from practice back into the derivation chain -- they capture signal from the field that may warrant changes to archetypes, framework docs, or the method itself.
+
+Scope: Working material. Observations accumulate into pattern recognition and feed into research, specs, or archetype revisions when validated. They are lightweight by design -- frequent capture matters more than exhaustive analysis.
+
+Lifecycle: open (captured) -> validated (signal confirmed, feeds into research/spec/archetype change) or dismissed (evaluated and closed, kept for record).
+
+Not to be confused with: issue (something broken); idea (a raw thought or proposal); research (a deep investigation). An observation is empirical -- it records what happened, not what should happen.
 
 ---
 
