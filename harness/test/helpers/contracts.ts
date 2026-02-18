@@ -20,7 +20,22 @@ export const STARTUP_ERROR_CODES = [
   "SDK_BOOTSTRAP_FAILED",
 ] as const
 
+export const SECTION_2_BOUNDARY_ERROR_CODES = [
+  ...STARTUP_ERROR_CODES,
+  "SKILL_LOAD_FAILED",
+  "COMPOSITION_SURFACE_MISSING",
+] as const
+
+export const BASELINE_VIOLATION_ERROR_CODES = [
+  "BASELINE_COMPOSITION_SURFACE_COUNT_MISMATCH",
+  "BASELINE_UNEXPECTED_FORK_AVAILABILITY",
+  "BASELINE_STARTUP_TIMINGS_MISSING",
+] as const
+
+export const INTEGRATION_DEPTH_ERROR_CODES = ["INTEGRATION_DEPTH_UNSUPPORTED"] as const
+
 type ForkCapabilityID = (typeof FORK_CAPABILITIES)[number]
+type CompositionSurfaceID = (typeof COMPOSITION_SURFACES)[number]
 type StartupWarningCode = (typeof STARTUP_WARNING_CODES)[number]
 type StartupErrorCode = (typeof STARTUP_ERROR_CODES)[number]
 
@@ -39,6 +54,33 @@ export function makeCompositionOnlyReport(serverUrl = "http://127.0.0.1:4099") {
     composition: COMPOSITION_SURFACES.map((id) => ({ id, available: true as const })),
     fork: FORK_CAPABILITIES.map((id) => capability(id, false)),
     probedAt: Date.now(),
+  }
+}
+
+export function makeCompositionReportMissingSurfaces(
+  missing: ReadonlyArray<CompositionSurfaceID>,
+  serverUrl = "http://127.0.0.1:4099",
+) {
+  const report = makeCompositionOnlyReport(serverUrl)
+  const missingSet = new Set(missing)
+  return {
+    ...report,
+    composition: report.composition.filter((surface) => !missingSet.has(surface.id)),
+  }
+}
+
+export function makeCompositionOnlyReportWithForkLeak(options?: {
+  readonly serverUrl?: string
+  readonly leakedCapabilities?: ReadonlyArray<ForkCapabilityID>
+}) {
+  const report = makeCompositionOnlyReport(options?.serverUrl)
+  const leaked = new Set(options?.leakedCapabilities ?? ["background-launch"])
+  return {
+    ...report,
+    fork: report.fork.map((item) => ({
+      ...item,
+      available: leaked.has(item.id),
+    })),
   }
 }
 
@@ -162,6 +204,23 @@ export function makeStartupSuccessResult(options?: {
     ok: true as const,
     value: makeStartupSuccess(options),
   }
+}
+
+export function makeLoadedSkills() {
+  return [
+    {
+      name: "test-designer",
+      description: "Writes test specs",
+      location: "/tmp/skills/test-designer/SKILL.md",
+      content: "# Test Designer",
+    },
+    {
+      name: "implement-plan",
+      description: "Implements approved plans",
+      location: "/tmp/skills/implement-plan/SKILL.md",
+      content: "# Implement Plan",
+    },
+  ] as const
 }
 
 export function makeStartupFailureResult(code: StartupErrorCode) {

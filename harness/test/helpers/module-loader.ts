@@ -44,6 +44,18 @@ export async function loadStartupOrchestratorModule() {
   return loadModule("../../src/runtime/startup-orchestrator")
 }
 
+export async function loadCompositionIntegrationBoundaryModule() {
+  return loadModule("../../src/runtime/composition-integration-boundary")
+}
+
+export async function loadNoDegradationBaselineModule() {
+  return loadModule("../../src/runtime/no-degradation-baseline")
+}
+
+export async function loadIntegrationDepthPolicyModule() {
+  return loadModule("../../src/runtime/integration-depth-policy")
+}
+
 export async function loadRenkeiDevModule() {
   return loadModule("../../src/runtime/renkei-dev")
 }
