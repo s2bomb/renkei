@@ -6,11 +6,11 @@ Reads archetype.yaml, composes articles in pillar order (truth → ethos → doc
 and produces a host-adapted SKILL.md for Claude Code.
 
 Usage:
-    python lib/assemble.py archetypes/development/test-designer --dry-run
-    python lib/assemble.py archetypes/development/test-designer -o output/
-    python lib/assemble.py --all archetypes/development/
-    python lib/assemble.py --push archetypes/development/test-designer
-    python lib/assemble.py --push --all archetypes/development/
+    python framework/lib/assemble.py framework/archetypes/development/test-designer --dry-run
+    python framework/lib/assemble.py framework/archetypes/development/test-designer -o output/
+    python framework/lib/assemble.py --all framework/archetypes/development/
+    python framework/lib/assemble.py --push framework/archetypes/development/test-designer
+    python framework/lib/assemble.py --push --all framework/archetypes/development/
 """
 
 import argparse

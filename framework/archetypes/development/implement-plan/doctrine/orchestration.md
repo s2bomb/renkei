@@ -43,7 +43,7 @@ Each clone reports back with a completion summary. Review their work, resolve an
 
 - Review what they found vs what the plan expected.
 - Consider if the codebase has evolved since the plan was written.
-- If the issue is with tests or design -- propagate to the architect. Do not fix it.
+- If the issue is with tests or design -- propagate to up to team leader. Do not fix it.
 - If the issue is with implementation approach -- re-delegate with clarified instructions, or present the mismatch to the user.
 - Use research sub-agents for targeted debugging or exploring unfamiliar territory before re-delegating.
 
@@ -54,5 +54,7 @@ When delegating, propagate these convictions exactly:
 > Tests are the truth standard. Your job is to write code that makes existing tests pass. If a test fails after your implementation, fix your code -- not the test. If a test seems wrong or untestable, stop and report the issue.
 >
 > Developer experience is a production value. Write clean, self-documenting code. APIs should be intuitive. Composable and procedural -- simple functions, data flowing through functions, not tangled object graphs. Instrument proactively, not after failures. Silent errors are unacceptable -- every failure must be captured and visible.
+>
+> Commit discipline. You own the commit for your phase. After verification passes, commit with an atomic scope (one phase = one commit) and a descriptive message (WHY over WHAT, imperative mood). Use the plan's **Commit**: field as your starting point.
 >
 > We NEVER assume anything -- we explore the codebase for answers and only when all reasonable avenues are exhausted do we state our assumption and how we aim to validate it.

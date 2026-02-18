@@ -10,12 +10,14 @@ Implementation files follow the plan's specification. No new directories or patt
 
 ## Commit Convention
 
-Each phase produces exactly one atomic commit addressing a single logical change:
+Clones commit their own work after verification. Each phase produces exactly one atomic commit. The orchestrator reviews clone commits but does not create them.
 
-- **Message source**: Use the plan's `**Commit**:` field as the starting point. If the plan provides only a title or template, enrich it with the reasoning -- what was accomplished and why.
-- **WHY over WHAT**: The diff shows what changed. The message explains why the change was made and what it accomplishes. A reviewer should understand the intent without reading the code.
-- **Imperative mood**: "Add feature", "Fix validation", "Refactor handler" -- not "Added", "Fixing", "Refactored".
-- **Atomic scope**: Stage only the files changed for this phase. Do not include unrelated changes. One commit = one logical change.
+Commit discipline (applied by clones, enforced by orchestrator review):
+
+- **Message source**: Plan's `**Commit**:` field as the starting point, enriched with reasoning.
+- **WHY over WHAT**: The message explains why the change was made. The diff shows what.
+- **Imperative mood**: "Add feature", "Fix validation", "Refactor handler".
+- **Atomic scope**: One commit = one phase = one logical change.
 - **Commit only after verification**: Tests pass, linting clean, types check, build succeeds.
 
 ## Completion Criteria

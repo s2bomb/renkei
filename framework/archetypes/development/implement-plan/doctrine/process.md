@@ -25,29 +25,18 @@ For each implementation phase:
 3. Specify: phase number, plan path, scope of work, files involved.
 4. Delegate multiple clones in a single message when phases can run in parallel.
 
-## Step 3: Review and Verify
+## Step 3: Review Clone Commits
 
-After a clone completes a phase:
+After a clone completes a phase and reports back with its commit:
 
-1. Review the clone's completion report.
-2. Verify implementation against existing tests:
-   - Run the tests that this phase should make pass.
-   - Tests should transition from failing to passing.
-   - If tests still fail, fix the implementation -- not the tests.
-   - If a test seems wrong, stop and propagate to the architect.
-3. Verify success criteria (tests pass, linting, type checking, build).
-4. For additional validation beyond existing tests:
-   - Add instrumentation spans that prove the code path executes with expected data
-   - Write a temporary validation script if existing tests don't cover a specific concern
-   - Use browser-based validation if the feature has a UI component
-5. If issues remain, delegate the clone again with specific fix instructions.
-6. Once verification passes, create the phase commit:
-   - Start from the plan's `**Commit**:` field. If the plan provides only a title, enrich it with the reasoning -- why this change was made.
-   - Write in imperative mood. Explain WHY, not just WHAT.
-   - Stage only the files changed for this phase.
-   - Commit before moving to the next phase.
-7. Update checkboxes in the plan file.
-8. Update your todos.
+1. Review the clone's completion report and commit hash.
+2. Verify the clone's work:
+   - Run the tests to confirm they pass.
+   - Check success criteria (linting, type checking, build).
+   - Review the commit message -- it should explain WHY, not just WHAT.
+3. If issues remain, delegate the clone again with specific fix instructions.
+4. Update checkboxes in the plan file.
+5. Update your todos.
 
 ## Step 4: Pause for Human Verification
 
