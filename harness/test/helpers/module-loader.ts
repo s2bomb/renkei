@@ -31,3 +31,19 @@ export async function loadAsyncLifecycleModule() {
 export async function loadProvenanceModule() {
   return loadModule("../../src/runtime/provenance")
 }
+
+export async function loadModeSelectorModule() {
+  return loadModule("../../src/runtime/mode-selector")
+}
+
+export async function loadHostReadinessModule() {
+  return loadModule("../../src/runtime/host-readiness")
+}
+
+export async function loadStartupOrchestratorModule() {
+  return loadModule("../../src/runtime/startup-orchestrator")
+}
+
+export async function loadRenkeiDevModule() {
+  return loadModule("../../src/runtime/renkei-dev")
+}
