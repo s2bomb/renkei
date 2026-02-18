@@ -38,6 +38,59 @@ export type ProbeError =
       readonly message: string
     }
 
+export type StartupStage = "readiness" | "probe" | "sdk"
+
+export type StartupWarningCode = "FORK_URL_MISMATCH" | "FORK_URL_INVALID"
+
+export type StartupWarning = {
+  readonly code: StartupWarningCode
+  readonly message: string
+}
+
+export type HostReadinessInput = {
+  readonly serverUrl: string
+  readonly healthPath: string
+  readonly timeoutMs: number
+}
+
+export type HostHealthPayload = {
+  readonly healthy: boolean
+  readonly version?: string
+}
+
+export type HostReadiness = {
+  readonly checkedUrl: string
+  readonly healthUrl: string
+  readonly healthy: true
+  readonly respondedAt: number
+  readonly version?: string
+}
+
+export type StartupSuccess = {
+  readonly serverUrl: string
+  readonly mode: CapabilityReport["mode"]
+  readonly report: CapabilityReport
+  readonly readiness: HostReadiness
+  readonly warnings: ReadonlyArray<StartupWarning>
+  readonly timingsMs: {
+    readonly total: number
+    readonly readiness: number
+    readonly probe: number
+    readonly sdk: number
+  }
+}
+
+export type StartupError =
+  | { readonly code: "STARTUP_SERVER_URL_MISSING" }
+  | { readonly code: "STARTUP_SERVER_URL_INVALID"; readonly value: string; readonly cause: string }
+  | { readonly code: "HOST_HEALTH_TIMEOUT"; readonly healthUrl: string; readonly timeoutMs: number }
+  | { readonly code: "HOST_HEALTH_UNREACHABLE"; readonly healthUrl: string; readonly cause: string }
+  | { readonly code: "HOST_HEALTH_INVALID"; readonly healthUrl: string; readonly detail: string }
+  | { readonly code: "PROBE_FAILED"; readonly error: ProbeError }
+  | { readonly code: "SDK_BOOTSTRAP_FAILED"; readonly error: CompositionError }
+
+export type StartupResult = Result<StartupSuccess, StartupError>
+
 export type ForkThreshold = {
   readonly capability: ForkCapabilityID
   readonly condition: string

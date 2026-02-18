@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "test": "bun test",
+    "renkei-dev": "bun src/runtime/renkei-dev-cli.ts",
     "test:unit": "bun test --filter unit",
     "test:integration": "bun test --filter integration",
     "test:fork": "bun test --filter fork",
