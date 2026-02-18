@@ -8,10 +8,6 @@
     "test:integration": "bun test --filter integration",
     "test:fork": "bun test --filter fork",
     "typecheck": "bun x tsc --noEmit",
-    "lint": "bun x prettier --check \"src/**/*.ts\" \"test/**/*.ts\""
-  },
-  "prettier": {
-    "semi": false,
-    "printWidth": 120
+    "lint": "bun x prettier --check \"src/**/*.ts\" \"test/**/*.ts\" --config ../../opencode/package.json --ignore-path .prettierignore"
   }
 }
