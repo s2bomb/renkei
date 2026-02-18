@@ -1,0 +1,17 @@
+{
+  "name": "@renkei/harness",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "bun test",
+    "test:unit": "bun test --filter unit",
+    "test:integration": "bun test --filter integration",
+    "test:fork": "bun test --filter fork",
+    "typecheck": "bun x tsc --noEmit",
+    "lint": "bun x prettier --check \"src/**/*.ts\" \"test/**/*.ts\""
+  },
+  "prettier": {
+    "semi": false,
+    "printWidth": 120
+  }
+}
