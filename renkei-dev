@@ -1,57 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
-
 REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
-PORT="${OPENCODE_PORT:-4099}"
-HOST="${OPENCODE_HOST:-127.0.0.1}"
-HEALTH_URL="http://${HOST}:${PORT}/global/health"
-SERVER_PID=""
 
-cleanup() {
-  if [ -n "$SERVER_PID" ] && kill -0 "$SERVER_PID" 2>/dev/null; then
-    kill "$SERVER_PID" 2>/dev/null
-    wait "$SERVER_PID" 2>/dev/null || true
-  fi
-}
-trap cleanup EXIT INT TERM
-
-# Install vendor deps if node_modules missing
+# Install vendor deps if needed
 if [ ! -d "$REPO_ROOT/vendor/opencode/node_modules" ]; then
-  echo "Installing vendor/opencode dependencies..."
   bun install --cwd "$REPO_ROOT/vendor/opencode"
 fi
 
-# Start OpenCode server in background
-bun run --cwd "$REPO_ROOT/vendor/opencode/packages/opencode" --conditions=browser src/index.ts serve --hostname "$HOST" --port "$PORT" &
-SERVER_PID=$!
-
-# Wait for health (up to 10s)
-for i in $(seq 1 20); do
-  if curl -sf "$HEALTH_URL" >/dev/null 2>&1; then
-    break
-  fi
-  if ! kill -0 "$SERVER_PID" 2>/dev/null; then
-    echo "Server failed to start. Check: ~/.local/share/opencode/log/dev.log"
-    exit 1
-  fi
-  sleep 0.5
-done
-
-if ! curl -sf "$HEALTH_URL" >/dev/null 2>&1; then
-  echo "Server did not become healthy within 10s."
-  exit 1
-fi
-
-# Run harness startup validation
-export OPENCODE_SERVER_URL="http://${HOST}:${PORT}"
-bun run --cwd "$REPO_ROOT/harness" renkei-dev -- --timeout-ms=5000 "$@"
-STATUS=$?
-
-if [ $STATUS -eq 0 ]; then
-  echo ""
-  echo "Server running at $OPENCODE_SERVER_URL"
-  echo "Press Ctrl+C to stop."
-  wait "$SERVER_PID"
-else
-  exit $STATUS
-fi
+# Run OpenCode from repo root -- it picks up AGENTS.md and .claude/skills/ automatically
+exec bun run --cwd "$REPO_ROOT/vendor/opencode/packages/opencode" --conditions=browser src/index.ts run "$@"
