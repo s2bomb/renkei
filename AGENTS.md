@@ -43,7 +43,7 @@ These four are ordered by priority. A developer should sacrifice simplicity (3) 
 │    Derivation method (the "compiler")               │
 ├─────────────────────────────────────────────────────┤
 │  Layer 2: Harness             (harness/)            │
-│    Agent execution runtime (OpenCode composition)   │
+│    Agent execution runtime (composition over OpenCode)│
 │    Teams as core primitive                          │
 │    Communication: in-person + email protocols       │
 │    CLI + TUI + Web + SDK + Server                   │
@@ -57,7 +57,7 @@ These four are ordered by priority. A developer should sacrifice simplicity (3) 
 
 **Layer 1** defines WHO agents are. The archetype framework produces agent definitions grounded in domain truths and driven by conviction. This is the authoring layer.
 
-**Layer 2** embodies agents and lets them act. The harness executes archetypes as live agents, composes them into teams, manages communication, and gives humans operational control. This is the runtime layer.
+**Layer 2** embodies agents and lets them act. The harness (composition layer over vanilla OpenCode) executes archetypes as live agents, composes them into teams, manages communication, and gives humans operational control. This is the runtime layer.
 
 **Layer 3** connects agents to the world humans already use. Email, Slack, Discord, databases, file systems -- not invented tools, but the tools that already exist. This is the integration layer.
 
@@ -76,7 +76,7 @@ Every directory in the codebase belongs to exactly one category. Each category c
 | Category | Rule | Location |
 |---|---|---|
 | **Framework** | Archetype authoring system. Definitions, assembly tooling, framework-specific docs. See `framework/AGENTS.md`. | `framework/` |
-| **Harness** | Agent execution runtime. Composition layer over OpenCode. See `harness/AGENTS.md`. | `harness/` |
+| **Harness** | Agent execution runtime. Composition layer over vanilla OpenCode. See `harness/AGENTS.md`. | `harness/` |
 | **Docs** | Stable, synthesized references. Edit only when decisions change. Not a working area. | `docs/` |
 | **Thoughts** | Working area. Ideas, issues, research, specs, skill drafts. Historical record -- do not modify research papers. | `thoughts/` |
 | **Root** | Repo metadata only. `AGENTS.md`, `CLAUDE.md`, `README.md`, `.gitignore`. Nothing else at root level. | `/` |
@@ -108,7 +108,7 @@ Is it code?
 |   |
 |   +-- Does it execute agents, manage teams, or run the runtime? (TypeScript)
 |   |   +-- Yes → harness/
-|   |           Rule: composes with OpenCode, no framework internals
+|   |           Rule: composes over vanilla OpenCode, no framework internals
 |   |
 |   +-- Neither → Reconsider: does this code belong in renkei at all?
 |
@@ -151,7 +151,7 @@ framework/                        # Layer 1: Archetype authoring system
     assemble.py                   # Assembly script: compose, diff, deploy, git-wrap
 
 harness/                          # Layer 2: Agent execution runtime
-  (OpenCode composition layer -- see harness/AGENTS.md)
+  (Composition layer over vanilla OpenCode -- see harness/AGENTS.md)
 
 docs/
   framework/                      # Stable, synthesized framework documentation
@@ -300,7 +300,7 @@ Python tooling uses only stdlib plus:
 |---|---|
 | `pyyaml` | Parse `archetype.yaml` manifests |
 
-TypeScript dependencies will be inherited from OpenCode's existing dependency tree plus minimal additions.
+TypeScript dependencies will be inherited from vanilla OpenCode's existing dependency tree plus minimal additions.
 
 Do not add dependencies without justification. Every dependency is a bet that its maintenance, security, and API stability will be worth the cost of not writing the code yourself.
 
@@ -390,7 +390,7 @@ Do not add testing infrastructure preemptively. Add it when the first test is wr
 | Layer | Status |
 |---|---|
 | Framework | Working. Assembly script, 3 archetypes built and deployed. |
-| Harness | Primitives exist in OpenCode fork. Not integrated into this repo. |
+| Harness | Composition layer over vanilla OpenCode. Runtime modules built and tested. Not yet daily-drivable. |
 | Tools | Not started. |
 
 See `thoughts/roadmap.md` for the full milestone tracker.

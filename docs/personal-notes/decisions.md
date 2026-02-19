@@ -193,6 +193,28 @@ Renkei exists to **define and audit agent archetypes from the most fundamental l
 
 ---
 
+## Harness Architecture: Composition Over Vanilla OpenCode
+
+**Decision**: The harness is a pure composition layer over vanilla OpenCode. Zero fork. OpenCode is treated as an upstream dependency with no modifications.
+
+**Date**: 2026-02-19
+
+**Grounding**:
+- The `openteams` branch (40+ commits, 2026-02-14 to 2026-02-18) prototyped team primitives directly inside OpenCode before Renkei existed as a separate repo. The M1/M2 research incorrectly derived "fork boundaries" by diffing the `openteams` branch against upstream (`git diff upstream/dev..openteams`), which described existing fork work rather than analyzing composition limitations. The fork was the evidence for needing a fork -- circular reasoning.
+- The fork threshold table contained `diffPreview` fields that were literal excerpts from the `openteams` branch diff.
+- Complexity compounds. Maintaining a fork creates an ongoing merge tax against upstream. Every upstream release becomes a conflict resolution exercise. This cost compounds with every feature added to either side.
+- Composition preserves the option to propose upstream extension points if composition seams prove insufficient, without the sunk cost of fork maintenance.
+
+**What this means**:
+- OpenCode is a dependency, not a sibling on disk.
+- If a composition seam is insufficient for future needs (e.g., teams), the approach is to propose an OpenCode extension point upstream, not maintain fork patches.
+- The `openteams` branch is preserved as historical prototype work. It will be brought back as composition-layer work when the harness is stable and teams become active scope.
+- Teams primitive is future scope, not current M1 scope.
+
+**What was removed**: 6 runtime modules (fork-threshold, async-lifecycle, provenance, teammate-session, mode-selector, integration-depth-policy), 6 test files, all fork/teammate/provenance types from the type system. 29 unit tests remain (down from 49), all passing. Typecheck and lint clean.
+
+---
+
 ## Critical Path
 
 Strict dependency order:

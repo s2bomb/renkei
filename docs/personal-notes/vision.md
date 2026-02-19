@@ -26,7 +26,7 @@ Therefore: define agents through truth-grounded conviction (archetypes), compose
 │    Derivation method (the "compiler")               │
 │    GUI for authoring and auditing archetypes         │
 ├─────────────────────────────────────────────────────┤
-│  Layer 2: Harness (fork of OpenCode)                │
+│  Layer 2: Harness (composition over OpenCode)        │
 │    Agent execution runtime                          │
 │    Teams as core primitive                          │
 │    Communication: in-person + email protocols       │
@@ -41,7 +41,7 @@ Therefore: define agents through truth-grounded conviction (archetypes), compose
 
 **Layer 1** defines WHO agents are. The archetype framework -- truth, ethos, doctrine -- produces agent definitions grounded in domain truths and driven by conviction. This is the authoring layer.
 
-**Layer 2** embodies agents and lets them act. The harness (forked from OpenCode) executes archetypes as live agents, composes them into teams, manages communication, and gives humans operational control. This is the runtime layer.
+**Layer 2** embodies agents and lets them act. The harness (composition layer over OpenCode) executes archetypes as live agents, composes them into teams, manages communication, and gives humans operational control. This is the runtime layer.
 
 **Layer 3** connects agents to the world humans already use. Email, Slack, Discord, databases, file systems -- not invented tools, but the tools that already exist. This is the integration layer.
 
@@ -124,7 +124,7 @@ These theories and observations support the design:
 | Layer | Status |
 |---|---|
 | Archetype Framework | Working. Assembly script, 2 archetypes (test-designer, test-implementer) built and deployed. |
-| Harness | Primitives implemented in OpenCode fork (`teams`, `send_message`, `teams_status`, `standby`, `stop_teammate`). Not daily-drivable yet. |
+| Harness | Composition layer over vanilla OpenCode. Runtime modules (integration probe, composition seam, startup orchestrator) built and tested. Teams primitive is future scope. |
 | Tools & Integrations | Not started. |
 
 ## The Constraint
@@ -135,4 +135,4 @@ The harness is what blocks everything. Without a daily-drivable harness:
 - The teams model cannot be validated.
 - The conviction benchmark cannot collect fixtures.
 
-The first milestone is: **daily-drivable harness** -- works as well as plain OpenCode, plus teams primitive, plus archetype loading, plus session capture.
+The first milestone is: **daily-drivable harness** -- works as well as plain OpenCode, plus archetype loading, plus session capture. Teams primitive is future scope, to be built as a composition layer when the harness is stable.
