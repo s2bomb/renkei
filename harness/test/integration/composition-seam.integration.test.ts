@@ -3,25 +3,17 @@ import { mkdir, mkdtemp, writeFile } from "node:fs/promises"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { createCompositionFixture } from "../helpers/fixture"
-import {
-  loadCompositionSeamModule,
-  loadIntegrationProbeModule,
-  loadTeammateSessionModule,
-} from "../helpers/module-loader"
+import { loadCompositionSeamModule, loadIntegrationProbeModule } from "../helpers/module-loader"
 
 describe("integration composition seam contracts", () => {
-  test("T-01 composition-only runtime reports four composition surfaces and fork unavailable", async () => {
+  test("T-01 composition runtime reports four composition surfaces", async () => {
     const fixture = createCompositionFixture()
     const runtime = await loadIntegrationProbeModule()
 
     const result = await runtime.probeIntegrationCapabilities(fixture.serverUrl)
     expect(result.ok).toBe(true)
     if (result.ok) {
-      expect(result.value.mode).toBe("composition-only")
       expect(result.value.composition).toHaveLength(4)
-      for (const capability of result.value.fork) {
-        expect(capability.available).toBe(false)
-      }
     }
   })
 
@@ -209,42 +201,6 @@ describe("integration composition seam contracts", () => {
     expect(result.ok).toBe(false)
     if (!result.ok) {
       expect(result.error.code).toBe("SDK_CONNECTION_FAILED")
-    }
-  })
-
-  test("T-19 create child session succeeds on composition-only runtime without name", async () => {
-    const fixture = createCompositionFixture()
-    const probe = await loadIntegrationProbeModule()
-    const seam = await loadCompositionSeamModule()
-    const teammate = await loadTeammateSessionModule()
-
-    const report = await probe.probeIntegrationCapabilities(fixture.serverUrl)
-    expect(report.ok).toBe(true)
-    if (!report.ok) {
-      return
-    }
-
-    const client = await seam.createHarnessSDKClient({ serverUrl: fixture.serverUrl, directory: process.cwd() })
-    expect(client.ok).toBe(true)
-    if (!client.ok) {
-      return
-    }
-
-    const parent = await client.value.session.create({ title: `parent-${fixture.runID}` })
-    const result = await teammate.createTeammateSession(
-      {
-        parentSessionID: parent.id,
-        agentType: "general",
-      },
-      report.value,
-      client.value,
-    )
-
-    expect(result.ok).toBe(true)
-    if (result.ok) {
-      expect(result.value.parentID).toBe(parent.id)
-      expect(typeof result.value.id).toBe("string")
-      expect(typeof result.value.slug).toBe("string")
     }
   })
 })

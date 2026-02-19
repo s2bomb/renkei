@@ -1,31 +1,13 @@
 import { recordSpan } from "./observability"
 import {
   COMPOSITION_SURFACE_IDS,
-  FORK_CAPABILITY_IDS,
   type CapabilityReport,
   type CompositionSurfaceID,
-  type ForkCapabilityID,
   type ProbeError,
   type Result,
 } from "./types"
 
 const DEFAULT_TIMEOUT_MS = 1500
-
-function normalizeUrl(url: string): string {
-  return new URL(url).toString().replace(/\/$/, "")
-}
-
-function detectForkMode(serverUrl: string): CapabilityReport["mode"] {
-  const forkUrl = process.env.OPENCODE_FORK_SERVER_URL
-  if (!forkUrl) {
-    return "composition-only"
-  }
-  try {
-    return normalizeUrl(forkUrl) === normalizeUrl(serverUrl) ? "fork-available" : "composition-only"
-  } catch {
-    return "composition-only"
-  }
-}
 
 async function verifyReachable(serverUrl: string, timeoutMs: number): Promise<Result<true, ProbeError>> {
   const controller = new AbortController()
@@ -63,24 +45,15 @@ export async function probeIntegrationCapabilities(
     return reachable
   }
 
-  const mode = detectForkMode(serverUrl)
   const report: CapabilityReport = {
     serverUrl,
-    mode,
     composition: COMPOSITION_SURFACE_IDS.map((id) => ({ id, available: true })),
-    fork: FORK_CAPABILITY_IDS.map((id) => ({
-      id,
-      available: mode === "fork-available",
-      gatingChange: `gating:${id}`,
-    })),
     probedAt: Date.now(),
   }
 
   recordSpan("harness.integration.probe", {
     server_url: serverUrl,
-    mode: report.mode,
     composition_count: report.composition.length,
-    fork_available_count: report.fork.filter((item) => item.available).length,
     probe_duration_ms: Date.now() - startedAt,
   })
   return { ok: true, value: report }
@@ -102,8 +75,4 @@ export function requireCompositionSurface(
       message: `Required composition surface unavailable: ${surface}`,
     },
   }
-}
-
-export function hasForkCapability(report: CapabilityReport, capability: ForkCapabilityID): boolean {
-  return report.fork.some((item) => item.id === capability && item.available)
 }

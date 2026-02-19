@@ -3,9 +3,7 @@ import {
   STARTUP_ERROR_CODES,
   makeStartupError,
   makeStartupFailureResult,
-  makeStartupSuccess,
   makeStartupSuccessResult,
-  makeStartupWarning,
 } from "../helpers/contracts"
 import { loadRenkeiDevModule } from "../helpers/module-loader"
 
@@ -263,45 +261,5 @@ describe("unit renkei-dev contracts", () => {
 
       expect(allowed.has(code)).toBe(true)
     }
-  })
-
-  test("T-21 warning ownership path preserves probe-derived mode", async () => {
-    const runtime = await loadRenkeiDevModule()
-    const warning = makeStartupWarning("FORK_URL_MISMATCH")
-    let startupInputWarningCode = ""
-
-    const exitCode = await runtime.runRenkeiDevCommand(
-      {
-        serverUrl: "http://127.0.0.1:4099",
-        json: true,
-      },
-      {
-        selectStartupMode: () => ({
-          mode: "composition-only",
-          warning,
-        }),
-        startHarnessRuntime: async (input: {
-          warning?: { code: "FORK_URL_MISMATCH" | "FORK_URL_INVALID"; message: string }
-        }) => {
-          startupInputWarningCode = input.warning?.code ?? ""
-          return {
-            ok: true,
-            value: makeStartupSuccess({
-              mode: "fork-available",
-              warnings: input.warning ? [input.warning] : [],
-            }),
-          }
-        },
-      },
-    )
-
-    const report = parseLastJson(stdout)
-    expect(exitCode).toBe(0)
-    expect(startupInputWarningCode).toBe("FORK_URL_MISMATCH")
-    expect(((report.startup as Record<string, unknown>).mode as string) === "fork-available").toBe(true)
-
-    const warnings = (report.startup as Record<string, unknown>).warnings as ReadonlyArray<Record<string, unknown>>
-    expect(Array.isArray(warnings)).toBe(true)
-    expect(warnings[0].code).toBe("FORK_URL_MISMATCH")
   })
 })

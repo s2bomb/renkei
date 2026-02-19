@@ -1,8 +1,7 @@
 import { describe, expect, test } from "bun:test"
 import {
   BASELINE_VIOLATION_ERROR_CODES,
-  makeCompositionOnlyReport,
-  makeCompositionOnlyReportWithForkLeak,
+  makeCompositionReport,
   makeCompositionReportMissingSurfaces,
   makeStartupSuccess,
 } from "../helpers/contracts"
@@ -22,19 +21,17 @@ function startupWithoutTiming(field: TimingField) {
 }
 
 describe("unit no-degradation-baseline contracts", () => {
-  test("T2-08 composition-only baseline passes with required status fields", async () => {
+  test("T2-08 composition baseline passes with required status fields", async () => {
     const runtime = await loadNoDegradationBaselineModule()
 
     const result = runtime.evaluateNoDegradationBaseline({
-      report: makeCompositionOnlyReport(),
+      report: makeCompositionReport(),
       startup: makeStartupSuccess(),
     })
 
     expect(result.ok).toBe(true)
     if (result.ok) {
       expect(result.value.status.compositionSurfaceCount).toBe(4)
-      expect(result.value.status.forkAvailableCount).toBe(0)
-      expect(result.value.status.mode).toBe("composition-only")
       expect(result.value.status.timingsPresent).toBe(true)
     }
   })
@@ -57,32 +54,12 @@ describe("unit no-degradation-baseline contracts", () => {
     }
   })
 
-  test("T2-10 unexpected fork availability in composition-only fails loudly", async () => {
-    const runtime = await loadNoDegradationBaselineModule()
-
-    const leaked = makeCompositionOnlyReportWithForkLeak({
-      leakedCapabilities: ["background-launch", "message-provenance"],
-    })
-
-    const result = runtime.evaluateNoDegradationBaseline({
-      report: leaked,
-      startup: makeStartupSuccess(),
-    })
-
-    expect(result.ok).toBe(false)
-    if (!result.ok) {
-      expect(result.error.code).toBe("BASELINE_UNEXPECTED_FORK_AVAILABILITY")
-      expect(result.error.mode).toBe("composition-only")
-      expect(result.error.availableCapabilities.includes("background-launch")).toBe(true)
-    }
-  })
-
   test("T2-11 missing startup timing fields return BASELINE_STARTUP_TIMINGS_MISSING", async () => {
     const runtime = await loadNoDegradationBaselineModule()
 
     for (const field of ["total", "readiness", "probe", "sdk"] as const) {
       const result = runtime.evaluateNoDegradationBaseline({
-        report: makeCompositionOnlyReport(),
+        report: makeCompositionReport(),
         startup: startupWithoutTiming(field),
       })
 
@@ -99,7 +76,6 @@ describe("unit no-degradation-baseline contracts", () => {
 
     const requirement = runtime.defaultBaselineRequirement()
     expect(requirement.requiredCompositionSurfaceCount).toBe(4)
-    expect(requirement.requireForkUnavailableInCompositionOnly).toBe(true)
     expect(requirement.requireStartupTimingFields).toBe(true)
   })
 })

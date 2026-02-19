@@ -1,4 +1,6 @@
 import { existsSync } from "node:fs"
+import { resolve } from "node:path"
+import { resolveRepoRoot } from "./repo-path-resolution"
 import type { Result } from "./types"
 import type { RunbookEnvironmentVar } from "./operator-runbook-contract"
 import {
@@ -58,6 +60,7 @@ export type EnvironmentPreflightDependencies = {
   readonly resolveWorkingDirectoryLabel: (
     input: WorkingDirectoryResolutionInput,
   ) => Result<WorkingDirectoryLabel, WorkingDirectoryResolutionError>
+  readonly resolveRepoRootAbsolutePath: (cwd: string) => Result<string, { readonly code: string }>
 }
 
 function defaultParseUrl(value: string): Result<string, { readonly cause: string }> {
@@ -81,6 +84,15 @@ function mergeDependencies(deps?: Partial<EnvironmentPreflightDependencies>): En
     pathExists: deps?.pathExists ?? defaultPathExists,
     cwd: deps?.cwd ?? process.cwd,
     resolveWorkingDirectoryLabel: deps?.resolveWorkingDirectoryLabel ?? resolveSectionERunbookWorkingDirectoryLabel,
+    resolveRepoRootAbsolutePath:
+      deps?.resolveRepoRootAbsolutePath ??
+      ((cwd) => {
+        const result = resolveRepoRoot(cwd)
+        if (!result.ok) {
+          return { ok: false, error: { code: result.error.code } }
+        }
+        return { ok: true, value: result.value.absolute }
+      }),
   }
 }
 
@@ -136,10 +148,20 @@ export async function verifySectionERunbookEnvironmentPreflight(
 
   // Stage 3: Validate working directory
   const currentCwd = resolved.cwd()
-  // Use process.cwd() as repoRoot approximation -- the label resolver needs real paths
-  // Injected resolveWorkingDirectoryLabel handles the actual resolution
-  const repoRoot = process.cwd()
-  const harnessPath = process.cwd()
+  const repoRootResult = resolved.resolveRepoRootAbsolutePath(currentCwd)
+  if (!repoRootResult.ok) {
+    return {
+      ok: false,
+      error: {
+        code: "RUNBOOK_PREFLIGHT_CWD_INVALID",
+        cwd: currentCwd,
+        allowed: ["repo-root", "harness"],
+      },
+    }
+  }
+
+  const repoRoot = repoRootResult.value
+  const harnessPath = resolve(repoRoot, "harness")
 
   const labelResult = resolved.resolveWorkingDirectoryLabel({
     absoluteCwd: currentCwd,

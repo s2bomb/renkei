@@ -1,10 +1,9 @@
-import { selectStartupMode } from "./mode-selector"
 import {
   startHarnessRuntime,
   type Clock,
   type RenkeiDevDependencies as RuntimeDependencies,
 } from "./startup-orchestrator"
-import type { StartupError, StartupResult, StartupSuccess, StartupWarning, StartupWarningCode } from "./types"
+import type { StartupError, StartupResult, StartupSuccess } from "./types"
 
 const DEFAULT_TIMEOUT_MS = 1500
 const DEFAULT_HEALTH_PATH = "/global/health"
@@ -54,7 +53,6 @@ export type StartupJsonFailureReport = {
 export type StartupJsonReport = StartupJsonSuccessReport | StartupJsonFailureReport
 
 export type RenkeiDevDependencies = {
-  readonly selectStartupMode: typeof selectStartupMode
   readonly startHarnessRuntime: typeof startHarnessRuntime
   readonly clock: Clock
 }
@@ -72,44 +70,6 @@ type ResolvedInput = {
 
 const DEFAULT_CLOCK: Clock = {
   nowMs: () => Date.now(),
-}
-
-function toWarningMessage(code: StartupWarningCode): string {
-  if (code === "FORK_URL_INVALID") {
-    return "Fork server URL is invalid; continuing in composition-only mode"
-  }
-  return "Fork server URL does not match serverUrl; continuing in composition-only mode"
-}
-
-function normalizeWarning(warning: unknown): StartupWarning | undefined {
-  if (!warning) {
-    return undefined
-  }
-
-  if (typeof warning === "string") {
-    if (warning === "FORK_URL_INVALID" || warning === "FORK_URL_MISMATCH") {
-      return {
-        code: warning,
-        message: toWarningMessage(warning),
-      }
-    }
-    return undefined
-  }
-
-  if (typeof warning === "object") {
-    const candidate = warning as { code?: unknown; message?: unknown }
-    if (
-      (candidate.code === "FORK_URL_INVALID" || candidate.code === "FORK_URL_MISMATCH") &&
-      typeof candidate.message === "string"
-    ) {
-      return {
-        code: candidate.code,
-        message: candidate.message,
-      }
-    }
-  }
-
-  return undefined
 }
 
 function resolveInput(args: RenkeiDevArgs): ResolvedInput {
@@ -178,7 +138,7 @@ function toJsonReport(timestampMs: number, input: ResolvedInput, result: Startup
 
 function renderHumanReadable(result: StartupResult): void {
   if (result.ok) {
-    console.log(`renkei-dev startup ok mode=${result.value.mode} serverUrl=${result.value.serverUrl}`)
+    console.log(`renkei-dev startup ok serverUrl=${result.value.serverUrl}`)
     return
   }
   const detail = "value" in result.error ? ` value=${result.error.value}` : ""
@@ -187,7 +147,6 @@ function renderHumanReadable(result: StartupResult): void {
 
 export async function runRenkeiDevCommand(args: RenkeiDevArgs, deps?: Partial<RenkeiDevDependencies>): Promise<number> {
   const runtimeDeps: RenkeiDevDependencies = {
-    selectStartupMode,
     startHarnessRuntime,
     clock: DEFAULT_CLOCK,
     ...deps,
@@ -217,19 +176,12 @@ export async function runRenkeiDevCommand(args: RenkeiDevArgs, deps?: Partial<Re
     return 1
   }
 
-  const selection = runtimeDeps.selectStartupMode({
-    serverUrl: input.serverUrl,
-    forkServerUrl: process.env.OPENCODE_FORK_SERVER_URL,
-  })
-  const warning = normalizeWarning(selection.warning)
-
   const runtimeResult = await runtimeDeps.startHarnessRuntime(
     {
       serverUrl: input.serverUrl,
       cwd: process.cwd(),
       timeoutMs: input.timeoutMs,
       healthPath: input.healthPath,
-      warning,
     },
     deps as Partial<RuntimeDependencies> | undefined,
   )

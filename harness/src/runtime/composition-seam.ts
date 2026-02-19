@@ -268,18 +268,6 @@ export async function createHarnessSDKClient(config: {
         })
       },
     },
-    teammate: {
-      async sendMessage(input) {
-        addMessage(store, input.targetSessionID, {
-          fromSessionID: input.fromSessionID,
-          content: input.content,
-          sourceName: input.sourceName,
-        })
-      },
-      async listMessages(sessionID: string) {
-        return store.messages.get(sessionID) ?? []
-      },
-    },
   }
 
   if (store.sessions.size === 0) {

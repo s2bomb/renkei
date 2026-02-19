@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test"
 import {
   SECTION_2_BOUNDARY_ERROR_CODES,
-  makeCompositionOnlyReport,
+  makeCompositionReport,
   makeCompositionReportMissingSurfaces,
   makeLoadedSkills,
   makeStartupError,
@@ -23,7 +23,7 @@ describe("unit composition-integration-boundary contracts", () => {
   test("T2-06 assertRequiredSurfaces passes when all required surfaces are available", async () => {
     const runtime = await loadCompositionIntegrationBoundaryModule()
 
-    const report = makeCompositionOnlyReport()
+    const report = makeCompositionReport()
     const result = runtime.assertRequiredSurfaces(report, ["tool-registry", "plugin-hooks", "skill-load", "sdk-client"])
 
     expect(result.ok).toBe(true)
@@ -82,7 +82,7 @@ describe("unit composition-integration-boundary contracts", () => {
       }),
       createHarnessSDKClient: async () => ({
         ok: true,
-        value: { session: {}, teammate: {} },
+        value: { session: {} },
       }),
       loadDeployedSkills: async () => ({
         ok: true,
@@ -92,9 +92,11 @@ describe("unit composition-integration-boundary contracts", () => {
 
     expect(result.ok).toBe(false)
     if (!result.ok) {
-      expect(result.error.code).toBe("COMPOSITION_SURFACE_MISSING")
-      expect(result.error.surface).toBe("skill-load")
-      expect(result.error.report).toBe(report)
+      expect(result.error.code).toBe("PURE_SURFACE_CONTRACT_FAILED")
+      expect(result.error.error.code).toBe("REQUIRED_SURFACE_UNAVAILABLE")
+      if (result.error.error.code === "REQUIRED_SURFACE_UNAVAILABLE") {
+        expect(result.error.error.surface).toBe("skill-load")
+      }
     }
   })
 
@@ -108,7 +110,7 @@ describe("unit composition-integration-boundary contracts", () => {
       }),
       createHarnessSDKClient: async () => ({
         ok: true,
-        value: { session: {}, teammate: {} },
+        value: { session: {} },
       }),
       loadDeployedSkills: async () => ({
         ok: false,
@@ -129,6 +131,7 @@ describe("unit composition-integration-boundary contracts", () => {
 
   test("T2-05 missing required surface short-circuits before skill loading", async () => {
     const runtime = await loadCompositionIntegrationBoundaryModule()
+    let sdkCalls = 0
     let loadCalls = 0
 
     const result = await runtime.bootstrapCompositionBoundary(makeBoundaryInput(), {
@@ -139,10 +142,13 @@ describe("unit composition-integration-boundary contracts", () => {
           report: makeCompositionReportMissingSurfaces(["tool-registry"]),
         },
       }),
-      createHarnessSDKClient: async () => ({
-        ok: true,
-        value: { session: {}, teammate: {} },
-      }),
+      createHarnessSDKClient: async () => {
+        sdkCalls += 1
+        return {
+          ok: true,
+          value: { session: {} },
+        }
+      },
       loadDeployedSkills: async () => {
         loadCalls += 1
         return { ok: true, value: makeLoadedSkills() }
@@ -151,15 +157,16 @@ describe("unit composition-integration-boundary contracts", () => {
 
     expect(result.ok).toBe(false)
     if (!result.ok) {
-      expect(result.error.code).toBe("COMPOSITION_SURFACE_MISSING")
+      expect(result.error.code).toBe("PURE_SURFACE_CONTRACT_FAILED")
     }
+    expect(sdkCalls).toBe(0)
     expect(loadCalls).toBe(0)
   })
 
   test("T2-01 success returns startup, sdk client, and loaded skills", async () => {
     const runtime = await loadCompositionIntegrationBoundaryModule()
     const startup = makeStartupSuccess()
-    const sdk = { session: {}, teammate: {} }
+    const sdk = { session: {} }
     const loadedSkills = makeLoadedSkills()
 
     const result = await runtime.bootstrapCompositionBoundary(makeBoundaryInput(), {

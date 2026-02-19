@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto"
-import type { SessionCreateInput, SessionID, SessionInfo, SessionMessage, TeammateStatus } from "./types"
+import type { SessionCreateInput, SessionID, SessionInfo, SessionMessage } from "./types"
 
 type RuntimeStore = {
   readonly tools: Map<string, unknown>
@@ -7,7 +7,6 @@ type RuntimeStore = {
   readonly sessions: Map<SessionID, SessionInfo>
   readonly childIndex: Map<SessionID, Set<SessionID>>
   readonly messages: Map<SessionID, SessionMessage[]>
-  readonly teammateStatuses: Map<SessionID, TeammateStatus>
 }
 
 const stores = new Map<string, RuntimeStore>()
@@ -19,7 +18,6 @@ function createStore(): RuntimeStore {
     sessions: new Map(),
     childIndex: new Map(),
     messages: new Map(),
-    teammateStatuses: new Map(),
   }
 }
 
@@ -83,27 +81,6 @@ export function listChildren(
     result.push(session)
   }
   return result
-}
-
-export function archiveSession(store: RuntimeStore, sessionID: SessionID): SessionInfo | null {
-  const existing = store.sessions.get(sessionID)
-  if (!existing) {
-    return null
-  }
-  if (existing.time.archived) {
-    return existing
-  }
-  const now = Date.now()
-  const updated: SessionInfo = {
-    ...existing,
-    time: {
-      ...existing.time,
-      updated: now,
-      archived: now,
-    },
-  }
-  store.sessions.set(sessionID, updated)
-  return updated
 }
 
 export function addMessage(store: RuntimeStore, sessionID: SessionID, message: SessionMessage): void {

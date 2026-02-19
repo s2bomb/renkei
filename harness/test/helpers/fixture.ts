@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto"
-import { getForkServerUrl, requireCompositionServerUrl } from "./env"
+import { requireCompositionServerUrl } from "./env"
 
 export type SessionCleanup = () => Promise<void> | void
 
@@ -34,12 +34,4 @@ function createFixture(serverUrl: string): RuntimeFixture {
 
 export function createCompositionFixture(): RuntimeFixture {
   return createFixture(requireCompositionServerUrl())
-}
-
-export function createForkFixture(): RuntimeFixture {
-  const serverUrl = getForkServerUrl()
-  if (!serverUrl) {
-    throw new Error("OPENCODE_FORK_SERVER_URL is required for fork tests")
-  }
-  return createFixture(serverUrl)
 }

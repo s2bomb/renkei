@@ -1,14 +1,13 @@
 import { createHarnessSDKClient } from "./composition-seam"
 import { checkHostReadiness } from "./host-readiness"
 import { probeIntegrationCapabilities } from "./integration-probe"
-import type { StartupResult, StartupWarning } from "./types"
+import type { StartupResult } from "./types"
 
 export type StartupInput = {
   readonly serverUrl: string
   readonly cwd: string
   readonly timeoutMs: number
   readonly healthPath: string
-  readonly warning?: StartupWarning
 }
 
 export type Clock = {
@@ -84,10 +83,8 @@ export async function startHarnessRuntime(
     ok: true,
     value: {
       serverUrl: input.serverUrl,
-      mode: probe.value.mode,
       report: probe.value,
       readiness: readiness.value,
-      warnings: input.warning ? [input.warning] : [],
       timingsMs: {
         readiness: t1 - t0,
         probe: t2 - t1,

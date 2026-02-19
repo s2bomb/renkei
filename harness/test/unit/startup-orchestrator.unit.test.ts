@@ -1,10 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import {
-  STARTUP_ERROR_CODES,
-  makeCompositionOnlyReport,
-  makeHostReadiness,
-  makeStartupError,
-} from "../helpers/contracts"
+import { STARTUP_ERROR_CODES, makeCompositionReport, makeHostReadiness, makeStartupError } from "../helpers/contracts"
 import { loadStartupOrchestratorModule } from "../helpers/module-loader"
 
 describe("unit startup-orchestrator contracts", () => {
@@ -26,11 +21,11 @@ describe("unit startup-orchestrator contracts", () => {
         },
         probeIntegrationCapabilities: async () => {
           calls.push("probe")
-          return { ok: true, value: makeCompositionOnlyReport() }
+          return { ok: true, value: makeCompositionReport() }
         },
         createHarnessSDKClient: async () => {
           calls.push("sdk")
-          return { ok: true, value: { session: {}, teammate: {} } }
+          return { ok: true, value: { session: {} } }
         },
       },
     )
@@ -58,11 +53,11 @@ describe("unit startup-orchestrator contracts", () => {
         }),
         probeIntegrationCapabilities: async () => {
           probeCalls += 1
-          return { ok: true, value: makeCompositionOnlyReport() }
+          return { ok: true, value: makeCompositionReport() }
         },
         createHarnessSDKClient: async () => {
           sdkCalls += 1
-          return { ok: true, value: { session: {}, teammate: {} } }
+          return { ok: true, value: { session: {} } }
         },
       },
     )
@@ -98,7 +93,7 @@ describe("unit startup-orchestrator contracts", () => {
         }),
         createHarnessSDKClient: async () => {
           sdkCalls += 1
-          return { ok: true, value: { session: {}, teammate: {} } }
+          return { ok: true, value: { session: {} } }
         },
       },
     )
@@ -123,7 +118,7 @@ describe("unit startup-orchestrator contracts", () => {
       },
       {
         checkHostReadiness: async () => ({ ok: true, value: makeHostReadiness() }),
-        probeIntegrationCapabilities: async () => ({ ok: true, value: makeCompositionOnlyReport() }),
+        probeIntegrationCapabilities: async () => ({ ok: true, value: makeCompositionReport() }),
         createHarnessSDKClient: async () => ({
           ok: false,
           error: {
@@ -156,8 +151,8 @@ describe("unit startup-orchestrator contracts", () => {
       },
       {
         checkHostReadiness: async () => ({ ok: true, value: makeHostReadiness() }),
-        probeIntegrationCapabilities: async () => ({ ok: true, value: makeCompositionOnlyReport() }),
-        createHarnessSDKClient: async () => ({ ok: true, value: { session: {}, teammate: {} } }),
+        probeIntegrationCapabilities: async () => ({ ok: true, value: makeCompositionReport() }),
+        createHarnessSDKClient: async () => ({ ok: true, value: { session: {} } }),
         clock: {
           nowMs: () => {
             const value = reads[count] ?? reads[reads.length - 1]
@@ -176,10 +171,8 @@ describe("unit startup-orchestrator contracts", () => {
       expect(result.value.timingsMs.sdk).toBe(60)
       expect(result.value.timingsMs.total).toBe(130)
       expect(typeof result.value.serverUrl).toBe("string")
-      expect(typeof result.value.mode).toBe("string")
       expect(typeof result.value.report).toBe("object")
       expect(typeof result.value.readiness).toBe("object")
-      expect(Array.isArray(result.value.warnings)).toBe(true)
     }
   })
 
@@ -216,7 +209,7 @@ describe("unit startup-orchestrator contracts", () => {
       },
       {
         checkHostReadiness: async () => ({ ok: true, value: makeHostReadiness() }),
-        probeIntegrationCapabilities: async () => ({ ok: true, value: makeCompositionOnlyReport() }),
+        probeIntegrationCapabilities: async () => ({ ok: true, value: makeCompositionReport() }),
         createHarnessSDKClient: async () => ({
           ok: false,
           error: {

@@ -138,6 +138,7 @@ type RunbookEnvironmentPreflightRuntime = {
       parseUrl: (value: string) => OkResult<string> | ErrResult<{ cause: string }>
       pathExists: (path: string) => Promise<boolean>
       cwd: () => string
+      resolveRepoRootAbsolutePath: (cwd: string) => OkResult<string> | ErrResult<{ code: string }>
       resolveWorkingDirectoryLabel: (input: {
         absoluteCwd: string
         repoRootAbsolutePath: string
@@ -812,6 +813,7 @@ describe("unit section-4 runbook-environment-preflight contracts", () => {
         parseUrl: (value) => ({ ok: true, value: value.trim() }),
         pathExists: async () => true,
         cwd: () => "/home/user/project/harness",
+        resolveRepoRootAbsolutePath: () => ({ ok: true, value: "/home/user/project" }),
         resolveWorkingDirectoryLabel: () => ({ ok: true, value: "harness" }),
       },
     )
@@ -831,6 +833,58 @@ describe("unit section-4 runbook-environment-preflight contracts", () => {
       expect(val.resolvedPaths.includes("harness")).toBe(true)
       expect(typeof val.workingDirectory).toBe("string")
       expect(val.workingDirectoryLabel).toBe("harness")
+    }
+  })
+
+  test("default cwd and repo-root resolvers are exercised without dependency injection", async () => {
+    const runtime = (await loadRunbookEnvironmentPreflightModule()) as RunbookEnvironmentPreflightRuntime
+    const currentCwd = process.cwd()
+
+    const result = await runtime.verifySectionERunbookEnvironmentPreflight(
+      {
+        requiredEnv: ["OPENCODE_SERVER_URL"],
+        requiredPaths: ["vendor/opencode", "harness"],
+        expectedWorkingDirectories: ["repo-root", "harness"],
+      },
+      {
+        nowMs: () => 1700000000014,
+        getEnv: () => "http://127.0.0.1:4099",
+        parseUrl: (value) => ({ ok: true, value }),
+        pathExists: async () => true,
+      },
+    )
+
+    expect(result.ok).toBe(true)
+    if (result.ok) {
+      expect(["repo-root", "harness"]).toContain(result.value.workingDirectoryLabel)
+      expect(result.value.workingDirectory).toBe(currentCwd)
+    }
+  })
+
+  test("repo-root resolution failure maps to typed cwd-invalid preflight error", async () => {
+    const runtime = (await loadRunbookEnvironmentPreflightModule()) as RunbookEnvironmentPreflightRuntime
+    const allowed = new Set<string>(PREFLIGHT_ERROR_CODES)
+
+    const result = await runtime.verifySectionERunbookEnvironmentPreflight(
+      {
+        requiredEnv: ["OPENCODE_SERVER_URL"],
+        requiredPaths: ["vendor/opencode"],
+        expectedWorkingDirectories: ["harness"],
+      },
+      {
+        getEnv: () => "http://127.0.0.1:4099",
+        parseUrl: (value) => ({ ok: true, value }),
+        pathExists: async () => true,
+        cwd: () => "/workspace/renkei/harness",
+        resolveRepoRootAbsolutePath: () => ({ ok: false, error: { code: "PATH_TARGET_MISSING" } }),
+      },
+    )
+
+    expect(result.ok).toBe(false)
+    if (!result.ok) {
+      expect(allowed.has(String(result.error.code))).toBe(true)
+      expect(result.error.code).toBe("RUNBOOK_PREFLIGHT_CWD_INVALID")
+      expect(result.error.cwd).toBe("/workspace/renkei/harness")
     }
   })
 

@@ -26,7 +26,7 @@ export type WorkingDirectoryResolutionError =
 function normalizePath(raw: string): string {
   // Step 1: replace backslashes with forward slashes
   let path = raw.replace(/\\/g, "/")
-  // Step 2: collapse repeated slashes (but preserve leading double slash for UNC)
+  // Step 2: collapse repeated slashes
   path = path.replace(/\/+/g, "/")
   // Step 4: remove trailing slash unless it is the root
   if (path.length > 1 && path.endsWith("/")) {

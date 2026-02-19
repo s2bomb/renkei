@@ -4,14 +4,11 @@ type StartupTimingField = "total" | "readiness" | "probe" | "sdk"
 
 export type BaselineRequirement = {
   readonly requiredCompositionSurfaceCount: 4
-  readonly requireForkUnavailableInCompositionOnly: true
   readonly requireStartupTimingFields: true
 }
 
 export type BaselineStatus = {
   readonly compositionSurfaceCount: number
-  readonly forkAvailableCount: number
-  readonly mode: "composition-only" | "fork-available"
   readonly timingsPresent: true
 }
 
@@ -20,11 +17,6 @@ export type BaselineViolationError =
       readonly code: "BASELINE_COMPOSITION_SURFACE_COUNT_MISMATCH"
       readonly expected: number
       readonly actual: number
-    }
-  | {
-      readonly code: "BASELINE_UNEXPECTED_FORK_AVAILABILITY"
-      readonly mode: "composition-only" | "fork-available"
-      readonly availableCapabilities: ReadonlyArray<string>
     }
   | {
       readonly code: "BASELINE_STARTUP_TIMINGS_MISSING"
@@ -41,17 +33,12 @@ const REQUIRED_TIMING_FIELDS: ReadonlyArray<StartupTimingField> = ["total", "rea
 export function defaultBaselineRequirement(): BaselineRequirement {
   return {
     requiredCompositionSurfaceCount: 4,
-    requireForkUnavailableInCompositionOnly: true,
     requireStartupTimingFields: true,
   }
 }
 
 function countAvailableCompositionSurfaces(report: CapabilityReport): number {
   return report.composition.filter((surface) => surface.available).length
-}
-
-function availableForkCapabilities(report: CapabilityReport): ReadonlyArray<string> {
-  return report.fork.filter((capability) => capability.available).map((capability) => capability.id)
 }
 
 function findMissingTimingField(startup: StartupSuccess): StartupTimingField | null {
@@ -82,22 +69,6 @@ export function evaluateNoDegradationBaseline(input: {
     }
   }
 
-  const availableCapabilities = availableForkCapabilities(input.report)
-  if (
-    requirement.requireForkUnavailableInCompositionOnly &&
-    input.report.mode === "composition-only" &&
-    availableCapabilities.length > 0
-  ) {
-    return {
-      ok: false,
-      error: {
-        code: "BASELINE_UNEXPECTED_FORK_AVAILABILITY",
-        mode: input.report.mode,
-        availableCapabilities,
-      },
-    }
-  }
-
   if (requirement.requireStartupTimingFields) {
     const missingTiming = findMissingTimingField(input.startup)
     if (missingTiming) {
@@ -117,8 +88,6 @@ export function evaluateNoDegradationBaseline(input: {
       requirement,
       status: {
         compositionSurfaceCount,
-        forkAvailableCount: availableCapabilities.length,
-        mode: input.report.mode,
         timingsPresent: true,
       },
     },

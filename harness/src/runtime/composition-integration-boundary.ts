@@ -1,4 +1,6 @@
+import { loadApprovedSurfaceRegistry, type ApprovedSurfaceRegistryError } from "./approved-surface-registry"
 import { createHarnessSDKClient, loadDeployedSkills, type SessionInfo } from "./composition-seam"
+import { enforcePureSurfaceContract, type SurfaceGateViolation } from "./pure-surface-gate"
 import { startHarnessRuntime } from "./startup-orchestrator"
 import type {
   CapabilityReport,
@@ -9,7 +11,6 @@ import type {
   Result,
   StartupError,
   StartupSuccess,
-  StartupWarning,
 } from "./types"
 
 export type CompositionBoundaryInput = {
@@ -17,7 +18,6 @@ export type CompositionBoundaryInput = {
   readonly cwd: string
   readonly timeoutMs: number
   readonly healthPath: string
-  readonly warning?: StartupWarning
   readonly skillRoots?: ReadonlyArray<string>
 }
 
@@ -29,6 +29,15 @@ export type CompositionBoundaryOutput = {
 
 export type CompositionBoundaryError =
   | StartupError
+  | {
+      readonly code: "APPROVED_SURFACE_REGISTRY_FAILED"
+      readonly path: string
+      readonly error: ApprovedSurfaceRegistryError
+    }
+  | {
+      readonly code: "PURE_SURFACE_CONTRACT_FAILED"
+      readonly error: SurfaceGateViolation
+    }
   | {
       readonly code: "SKILL_LOAD_FAILED"
       readonly error: CompositionError
@@ -42,6 +51,8 @@ export type CompositionBoundaryError =
 
 export type CompositionBoundaryDependencies = {
   readonly startHarnessRuntime: typeof startHarnessRuntime
+  readonly loadApprovedSurfaceRegistry: typeof loadApprovedSurfaceRegistry
+  readonly enforcePureSurfaceContract: typeof enforcePureSurfaceContract
   readonly createHarnessSDKClient: typeof createHarnessSDKClient
   readonly loadDeployedSkills: typeof loadDeployedSkills
 }
@@ -52,6 +63,8 @@ const REQUIRED_SURFACES: ReadonlyArray<CompositionSurfaceID> = [
   "skill-load",
   "sdk-client",
 ]
+
+const DEFAULT_APPROVED_SURFACE_REGISTRY_PATH = "config/approved-opencode-surfaces.json"
 
 export function assertRequiredSurfaces(
   report: CapabilityReport,
@@ -81,6 +94,8 @@ export async function bootstrapCompositionBoundary(
 ): Promise<Result<CompositionBoundaryOutput, CompositionBoundaryError>> {
   const runtimeDeps: CompositionBoundaryDependencies = {
     startHarnessRuntime,
+    loadApprovedSurfaceRegistry,
+    enforcePureSurfaceContract,
     createHarnessSDKClient,
     loadDeployedSkills,
     ...deps,
@@ -91,15 +106,36 @@ export async function bootstrapCompositionBoundary(
     cwd: input.cwd,
     timeoutMs: input.timeoutMs,
     healthPath: input.healthPath,
-    warning: input.warning,
   })
   if (!startup.ok) {
     return startup
   }
 
-  const surfaces = assertRequiredSurfaces(startup.value.report, REQUIRED_SURFACES)
-  if (!surfaces.ok) {
-    return surfaces
+  const approvedRegistry = await runtimeDeps.loadApprovedSurfaceRegistry(DEFAULT_APPROVED_SURFACE_REGISTRY_PATH)
+  if (!approvedRegistry.ok) {
+    return {
+      ok: false,
+      error: {
+        code: "APPROVED_SURFACE_REGISTRY_FAILED",
+        path: DEFAULT_APPROVED_SURFACE_REGISTRY_PATH,
+        error: approvedRegistry.error,
+      },
+    }
+  }
+
+  const gateResult = runtimeDeps.enforcePureSurfaceContract({
+    report: startup.value.report,
+    requiredSurfaces: REQUIRED_SURFACES,
+    approvedRegistry: approvedRegistry.value,
+  })
+  if (!gateResult.ok) {
+    return {
+      ok: false,
+      error: {
+        code: "PURE_SURFACE_CONTRACT_FAILED",
+        error: gateResult.error,
+      },
+    }
   }
 
   const sdk = await runtimeDeps.createHarnessSDKClient({

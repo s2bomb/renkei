@@ -5,11 +5,3 @@ export function requireCompositionServerUrl(): string {
   }
   return value
 }
-
-export function getForkServerUrl(): string | undefined {
-  return process.env.OPENCODE_FORK_SERVER_URL
-}
-
-export function hasForkServer(): boolean {
-  return Boolean(getForkServerUrl())
-}
