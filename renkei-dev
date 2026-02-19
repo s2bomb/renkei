@@ -7,5 +7,5 @@ if [ ! -d "$REPO_ROOT/vendor/opencode/node_modules" ]; then
   bun install --cwd "$REPO_ROOT/vendor/opencode"
 fi
 
-# Run OpenCode from repo root -- it picks up AGENTS.md and .claude/skills/ automatically
-exec bun run --cwd "$REPO_ROOT/vendor/opencode/packages/opencode" --conditions=browser src/index.ts run "$@"
+# Launch OpenCode TUI from repo root -- picks up AGENTS.md and .claude/skills/ automatically
+exec bun run --cwd "$REPO_ROOT/vendor/opencode/packages/opencode" --conditions=browser src/index.ts "$@"
