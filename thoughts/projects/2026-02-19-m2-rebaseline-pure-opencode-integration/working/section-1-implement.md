@@ -15,6 +15,8 @@ Implementation/runtime/config:
 
 - `harness/config/opencode-linkage.json`
 - `harness/config/prettier.json`
+- `harness/.editorconfig`
+- `harness/.prettierignore`
 - `harness/package.json`
 - `harness/src/runtime/repo-path-resolution.ts`
 - `harness/src/runtime/startup-boundary.ts`
@@ -52,6 +54,19 @@ Outcome: all passing.
 Section 1 global gate:
 
 ```bash
+bun test --filter unit
+bun run typecheck
+bun run lint
+```
+
+Outcome: all passing.
+
+Corrective closure gate rerun (symlink removal verification):
+
+```bash
+bun test --filter section-1
+bun test --filter startup-orchestrator
+bun test --filter renkei-dev
 bun test --filter unit
 bun run typecheck
 bun run lint

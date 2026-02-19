@@ -198,6 +198,11 @@ Section 1 establishes repository-native OpenCode linkage via vendored subtree co
 - [x] No tracked runtime/lint/test path references escape repo root.
 - [x] Exit-code and startup discriminant behavior remain unchanged.
 
+### Corrective Closure Note (2026-02-19)
+
+- Replaced `harness/.prettierignore` and `harness/.editorconfig` symlinks with repository-local tracked files to satisfy the no-outside-repo path contract for active lint/editor config inputs.
+- Re-ran Section 1 validation set: `section-1`, `startup-orchestrator`, `renkei-dev`, `unit`, `typecheck`, `lint` -- all passing.
+
 ## Global Validation Gate (Section 1 Signoff)
 
 Run after all IP phases:
