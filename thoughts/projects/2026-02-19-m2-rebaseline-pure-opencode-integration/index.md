@@ -36,6 +36,6 @@ Reset M2 on corrected foundations by integrating the Renkei harness with pure up
   - `section-3-research.md` -- complete
   - `section-3-api-design.md` -- complete
   - `section-3-test-spec.md` -- complete
-  - `section-3-implementation-plan.md` -- complete through TI-0/TI-1/IP-1/TI-2/IP-2/TI-3/IP-3/TI-4/IP-4; live pass-path proof remains blocked on endpoint availability
-  - `section-3-implement.md` -- complete (live pass-path attempt evidence recorded)
-  - `section-3-validate.md` -- complete (verdict: CONDITIONAL-BLOCKED pending real live endpoint pass proof)
+  - `section-3-implementation-plan.md` -- complete through TI-0/TI-1/IP-1/TI-2/IP-2/TI-3/IP-3/TI-4/IP-4 and global gate
+  - `section-3-implement.md` -- complete (live pass-path evidence recorded)
+  - `section-3-validate.md` -- complete (verdict: PASS)
