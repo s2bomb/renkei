@@ -1,0 +1,10 @@
+{
+  "mode": "subtree",
+  "opencodeRoot": "vendor/opencode",
+  "provenance": {
+    "remote": "https://github.com/sst/opencode.git",
+    "branch": "main",
+    "upstreamRef": "origin/main",
+    "syncedAt": "1970-01-01T00:00:00.000Z"
+  }
+}
