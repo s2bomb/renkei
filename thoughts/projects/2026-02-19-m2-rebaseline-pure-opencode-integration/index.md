@@ -23,5 +23,19 @@ Reset M2 on corrected foundations by integrating the Renkei harness with pure up
   - `section-1-api-design.md` -- complete
   - `section-1-test-spec.md` -- complete
   - `section-1-implementation-plan.md` -- complete through TI-1/IP-1/TI-2/IP-2/TI-3/IP-3 and global gate
-  - `section-1-implement.md` -- complete
-- Section 2+ remain pending and are not part of this update.
+  - `section-1-implement.md` -- complete (corrective closure added: vendored upstream OpenCode materialized at `vendor/opencode`)
+  - `section-1-validate.md` -- complete (verdict: PASS; linkage contract now matches live vendored path)
+- Section 2 pipeline status:
+  - `section-2-research.md` -- complete
+  - `section-2-api-design.md` -- complete
+  - `section-2-test-spec.md` -- complete
+  - `section-2-implementation-plan.md` -- complete through TI-1/IP-1/TI-2/IP-2/TI-3/IP-3/IP-4 and global gate
+  - `section-2-implement.md` -- complete
+  - `section-2-validate.md` -- complete (verdict: PASS)
+- Section 3 pipeline status:
+  - `section-3-research.md` -- complete
+  - `section-3-api-design.md` -- complete
+  - `section-3-test-spec.md` -- complete
+  - `section-3-implementation-plan.md` -- complete through TI-0/TI-1/IP-1/TI-2/IP-2/TI-3/IP-3/TI-4/IP-4; live pass-path proof remains blocked on endpoint availability
+  - `section-3-implement.md` -- complete (live pass-path attempt evidence recorded)
+  - `section-3-validate.md` -- complete (verdict: CONDITIONAL-BLOCKED pending real live endpoint pass proof)

@@ -8,6 +8,7 @@ Plan: `thoughts/projects/2026-02-19-m2-rebaseline-pure-opencode-integration/work
 - Implemented Section 1 runtime modules for topology, path safety, vendored subtree update workflow, and startup-boundary verification.
 - Completed sibling-path removal from harness lint configuration with repository-local config contract.
 - Completed Section 1 TI/IP tests and validated Section 1 global gate.
+- Materialized pure upstream OpenCode into `vendor/opencode` as the repository-local vendored dependency and updated linkage provenance metadata.
 
 ## Files Changed (Section 1)
 
@@ -39,6 +40,15 @@ Project tracking artifacts:
 - `thoughts/projects/2026-02-19-m2-rebaseline-pure-opencode-integration/index.md`
 
 ## Validation Evidence
+
+Vendored linkage materialization check:
+
+```bash
+ls vendor/opencode
+bun --cwd vendor/opencode run --help
+```
+
+Outcome: pass; vendored runtime directory exists and upstream CLI help command resolves.
 
 Section 1 targeted suites:
 
