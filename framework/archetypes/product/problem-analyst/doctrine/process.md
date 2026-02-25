@@ -45,6 +45,8 @@ Generate one analyst brief with:
 - assumptions and risks
 - open questions requiring shaper or decision-owner input
 
+Use output-contract field names exactly so shaper can consume the brief without schema translation.
+
 ## Step 7: Hand Off to Shaper
 
 Deliver the brief and supporting evidence paths to shaper. Do not write the final shaped pitch.

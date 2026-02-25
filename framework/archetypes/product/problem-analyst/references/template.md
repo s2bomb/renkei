@@ -4,6 +4,8 @@
 
 - Date: YYYY-MM-DD
 - Analyst: problem-analyst
+- Proposed Item IDs:
+  - item-001
 - Sources:
   - [source path]
 
@@ -21,9 +23,9 @@
 
 ## 3) Scope Decomposition
 
-| Item | In Scope | Out of Scope | Dependencies |
+| Item ID | In Scope | Out of Scope | Dependencies |
 |---|---|---|---|
-| 1 | | | |
+| item-001 | | | |
 
 ## 4) Assumptions Register
 
@@ -44,3 +46,9 @@
 - Item 1:
   - In:
   - Out:
+
+## 8) Citation + Confidence Summary
+
+| Major Claim | Citation(s) | Confidence |
+|---|---|---|
+| | | |

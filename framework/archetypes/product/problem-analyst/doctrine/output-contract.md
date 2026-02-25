@@ -11,12 +11,12 @@ Store analysis artifacts using the active environment's project convention.
 ## Required Structure
 
 1. Intake summary
-2. Validation findings (evidence-backed)
-3. Scope decomposition (items + dependencies)
+2. Problem validation findings
+3. Scoped item list (1..N)
 4. Assumptions register (validity + necessity)
-5. Open risks
-6. Open questions
-7. Recommended boundaries per scoped item (`in` / `out`)
+5. Open risks and unresolved questions
+6. Recommended boundaries per scoped item (`in` / `out`)
+7. Source citations and confidence per major claim
 
 ## Quality Gates
 

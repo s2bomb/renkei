@@ -27,7 +27,10 @@ Required return contract:
 3. Source citations
 4. Confidence per major claim
 
-Use the research capability class that matches the question: internal context, repository/codebase, or external domain.
+Use the research capability that matches the question:
+- `research-codebase` for project-local or repository-internal context
+- `repository-researcher` for repository + official documentation research
+- `web-search-researcher` for external domain research
 
 Example pattern:
 
@@ -37,7 +40,12 @@ Task(
   prompt="""
 STOP. READ THIS BEFORE DOING ANYTHING.
 
-Your FIRST action MUST be to call the Skill tool with skill: '[research skill]' and args: '[target context]'.
+Your FIRST action MUST be to call the Skill tool with exactly one of:
+- 'research-codebase'
+- 'repository-researcher'
+- 'web-search-researcher'
+
+Choose based on the validation question.
 
 DO NOT start exploring before Skill invocation.
 
@@ -57,6 +65,8 @@ When validation questions are independent, delegate in parallel and synthesize r
 ## Retry Rule
 
 If delegated returns miss contract fields, re-delegate with explicit defects before synthesis.
+
+Allow at most two correction retries per delegate. If contract-complete output is still missing, escalate to shaper with blocked fields and defect summary.
 
 ## Verbatim Propagation
 
