@@ -22,4 +22,4 @@ If an assumption is weak and necessary, it becomes a priority risk.
 
 ## Delegate role embodiment correctly
 
-On vanilla OpenCode, delegate through `general` and require first-step Skill invocation for specialist roles.
+On OpenCode, delegate through `general` and require first-step Skill invocation before any exploration.

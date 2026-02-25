@@ -3,14 +3,14 @@
 ## Position
 
 ```
-create-project (container) -> shaper -> problem-analyst -> shaper synthesis -> human decision gate -> technical preparation
+intake capture -> shaper framing -> problem analysis -> shaper synthesis -> decision gate -> technical preparation
 ```
 
 Problem-analyst is a specialist lens inside the product stage, not a commitment authority.
 
 ## Inputs
 
-- Source input files from project `sources/`
+- Source input artifacts
 - Shaper validation prompts/questions
 - Optional constraints from decision owner
 

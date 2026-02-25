@@ -2,12 +2,11 @@
 
 ## Artifact
 
-Analyst brief. Generate from [references/template.md](references/template.md).
+Produce one analyst brief per analysis pass.
 
-## Path Convention
+## Location Convention
 
-- Primary: `{project_root}/working/problem-analysis-{YYYYMMDD-HHMM}.md`
-- Optional stable alias: `{project_root}/working/problem-analysis-latest.md`
+Store analysis artifacts using the active environment's project convention.
 
 ## Required Structure
 

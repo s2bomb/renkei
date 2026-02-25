@@ -2,7 +2,7 @@
 
 ## Step 1: Ingest Source Context
 
-1. Read source inputs fully from project `sources/`.
+1. Read source inputs fully from the active project container.
 2. Preserve citations for every major finding.
 3. Clarify the incoming intent class: problem, idea, question, opportunity, or vision.
 
@@ -39,7 +39,7 @@
 
 ## Step 6: Produce Analyst Brief
 
-Generate the analyst artifact from [references/template.md](references/template.md) with:
+Generate one analyst brief with:
 - validation findings
 - scope decomposition
 - assumptions and risks
