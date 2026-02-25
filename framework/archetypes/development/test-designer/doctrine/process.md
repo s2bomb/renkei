@@ -8,8 +8,14 @@
    - Error cases (Result types, thrown exceptions)
    - Side effects (if any)
    - Module boundaries and composition points
-3. Map requirements to API contracts: which requirements are proven by which contracts?
-4. Identify testability gaps: requirements without corresponding API contracts
+3. Classify each extracted claim:
+   - Behavioral contract (observable runtime behavior)
+   - Structural/static contract (shape, types, imports, signatures)
+   - Representation detail (layout/text/shape claims that may be incidental)
+4. Map requirements to API contracts: which requirements are proven by which contracts?
+5. Identify design-risk gaps:
+   - Requirements without corresponding API contracts
+   - Claimed contracts without requirement-backed behavioral consequence
 
 ## Step 2: Research Existing Test Infrastructure
 
@@ -26,20 +32,24 @@ Delegate in parallel:
 
 Wait for all research to complete before proceeding.
 
-## Step 3: Specify Tests Per Contract
+## Step 3: Specify Proof Obligations Per Contract
 
 For each API contract in the design doc:
 
-1. **Happy path**: What does correct behavior look like? What observable output proves it?
-2. **Error path**: What should fail? Does the error propagate correctly? Is the error type right?
-3. **Boundary conditions** (if relevant): Edge cases at the API boundary
-4. **Composition** (if relevant): Does this compose correctly with other contracts?
-5. **Assertion scope check**: Is the expected assertion narrow and contract-bound, or broad and incidental?
-6. **Allowed variation**: What valid implementation changes should NOT break this test?
+1. **Verifier-of-record**: Assign the cheapest sufficient verifier (compiler/type checker/linter/static analyzer/runtime test).
+2. **Runtime admission check**: Only specify a runtime test if wrong code could pass static verifiers and still violate behavior at execution time.
+3. **Representation-detail gate**: If the claim is representational, require requirement-backed semantic consequence. If absent, do not convert to a runtime test; flag as design-risk.
+4. **Happy path** (runtime obligations only): What does correct behavior look like? What observable output proves it?
+5. **Error path** (runtime obligations only): What should fail? Does the error propagate correctly? Is the error type right?
+6. **Boundary conditions** (if relevant): Edge cases at the API boundary
+7. **Composition** (if relevant): Does this compose correctly with other contracts?
+8. **Assertion scope check**: Is the expected assertion narrow and contract-bound, or broad and incidental?
+9. **Allowed variation**: What valid implementation changes should NOT break this proof?
 
-For each test, specify:
+For each runtime test you specify:
 - **What it proves** (one sentence, traces to API contract)
-- **Test setup** (inputs, preconditions)
+- **Why runtime is required** (what static verifiers cannot prove here)
+- **Test setup** (inputs, preconditions — execute behavior, do not inspect source text)
 - **Expected behavior** (observable output, return value, error type)
 - **Discriminating power** (what wrong implementation would this catch?)
 - **Contract invariant** (the behavior rule being proven)
@@ -56,8 +66,10 @@ For each test, specify:
 ## Step 5: Verify Completeness
 
 Before writing the final spec:
-- Every API contract maps to at least one test
+- Every API contract maps to a verifier-of-record
+- Runtime tests exist only for runtime obligations
 - Error paths have explicit tests
 - Tests would fail on incorrect implementations
 - Any untestable requirement documented as a design gap
+- Any design claim without requirement-backed behavioral consequence documented as design-risk
 - Test count is reasonable for the scope (no spec-creep)

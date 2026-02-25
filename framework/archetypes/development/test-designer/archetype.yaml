@@ -9,6 +9,7 @@ ensemble: development
 
 truth:
   - verification.md
+  - verification-ownership.md
 
 ethos:
   - identity.md

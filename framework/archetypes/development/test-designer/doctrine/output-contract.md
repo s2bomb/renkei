@@ -15,8 +15,10 @@ The template structures the spec around the API surface -- contracts are the pri
 
 The test spec contains:
 - API surface summary (contracts under test, extracted from design doc)
+- Contract verification matrix (contract → verifier-of-record → proof artifact)
 - Per-contract proof obligations (grouped by function/module boundary)
 - Each test: what it proves, setup, expected behavior, discriminating power
+- Non-test evidence register (claims proven by static verifiers, with rationale)
 - Requirement traceability (requirement → contract → test)
 - Test execution order for planner consumption
 - Design gap callouts when testability is blocked
@@ -25,10 +27,13 @@ The test spec contains:
 ## Quality Gates
 
 Do not hand off to the planner unless:
-- Every in-scope API contract maps to at least one test
+- Every in-scope API contract maps to a verifier-of-record
+- Every runtime test includes explicit rationale for why static verification is insufficient
 - Error contracts have explicit error-path tests
 - Tests would fail incorrect implementations (discriminating power)
+- Every runtime test names a unique wrong implementation it would fail
 - Any untestable requirement is documented as a design gap
+- Any representational claim without requirement-backed semantic consequence is documented as design-risk
 - Scope stays within API surface (no internal implementation tests)
 - No test encodes incidental details unless the contract explicitly requires them (order, full-object equality, fixed counts, exact representation)
 

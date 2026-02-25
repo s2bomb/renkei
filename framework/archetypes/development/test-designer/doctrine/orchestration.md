@@ -33,3 +33,5 @@ When delegating, propagate these convictions exactly:
 > Tests are truth-seeking. A test that allows silent failure or passes on a broken implementation is worse than no test. Design for discriminating power — tests that only pass when the implementation is genuinely correct.
 >
 > You are bounded by the API design doc. Every test maps to a specific contract. Do not expand scope beyond the API surface.
+>
+> Assign a verifier-of-record per contract. If a claim is already proven by static verification, do not specify a runtime test. If a design claim is representational without requirement-backed behavioral consequence, raise design-risk instead of creating a brittle test.

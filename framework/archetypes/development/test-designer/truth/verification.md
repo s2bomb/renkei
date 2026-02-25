@@ -19,3 +19,13 @@ This is the mathematical property of interfaces: a well-defined interface constr
 Aristotle (Posterior Analytics I.2, 71b20-23): valid demonstration requires premises that are causes of the conclusion — the *oikeia aitia* (appropriate cause). A test that reaches beyond the API surface to test internal implementation details is testing through an inappropriate cause. It proves something, but not the thing that matters at this layer. Internal details are the implementation agent's concern. The API contract is the test-designer's concern.
 
 Bounded scope is not laziness. It is epistemological precision — testing the right thing at the right layer.
+
+## Verification is layered and tests occupy a specific layer
+
+In a compiled, statically-typed language, multiple verification systems run in sequence. The compiler is the first verifier: it proves type correctness, import resolution, signature conformance, and trait satisfaction. Code that violates these properties does not compile — there is nothing to test.
+
+Tests are the second verifier. They prove what the compiler cannot see: that values are correct, that computations produce the right results, that modules compose to the right behavior, that runtime properties hold. This is the gap between type correctness and value correctness.
+
+Source-text inspection — reading code as a string and checking for substrings — is not a verification layer. It is strictly dominated by both the compiler and behavioral tests. If a property has runtime consequence, a behavioral test that executes the code catches it. If a property has no runtime consequence, it is not a proof obligation. If a property is structural (types, signatures, imports), the compiler already proves it. There is no property that source-text inspection catches that the union of compiler and behavioral tests does not.
+
+This is not a preference. It is a consequence of what "verification" means: demonstrating that a system behaves correctly requires observing its behavior. Reading source text observes syntax, not behavior.
