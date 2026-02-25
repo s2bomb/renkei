@@ -1,0 +1,145 @@
+# Archetypes
+
+How agent archetypes are constructed, maintained, and organized. This is the top-level guide for the `framework/archetypes/` directory.
+
+> For the derivation method (truth → ethos → doctrine), see `docs/framework/AUTHORING.md`.
+> For the decomposition process (converting existing skills into archetypes), see `framework/lib/decompose/AGENTS.md`.
+> For assembly tooling, see `framework/lib/assemble.py` and `framework/AGENTS.md`.
+
+---
+
+## Two Layers Per Archetype
+
+Every archetype has two layers:
+
+### Assembly Layer
+
+The articles that get compiled into the SKILL.md. This is what the agent *becomes*.
+
+```
+truth/        # Domain known goods
+ethos/        # Identity, tenets, principles
+doctrine/     # Process, orchestration, pipeline, output contract
+references/   # Optional supporting material deployed alongside SKILL.md
+archetype.yaml  # Manifest declaring assembly order and metadata
+```
+
+This layer is well-documented in `framework/AGENTS.md` and `docs/framework/AUTHORING.md`.
+
+### Design Layer
+
+The artifacts that explain *why* the archetype is the way it is. This is what you build upon when constructing or maintaining the assembly articles. It is not assembled into the SKILL.md. It is the reasoning trail.
+
+```
+design/
+  why.md              # Why this archetype exists, team fit, separation rationale
+  research/           # Research documents
+    analogs.md        # Real-world analogs -- people, biblical, historical, modern
+    [other research]  # Domain research as needed
+  truths.md           # Unfiltered truth candidates (library, not yet curated)
+  log.md              # Ledger of decisions, changes, lessons learned
+  synthesis.md        # Links everything together; powers article generation
+```
+
+The design layer is **required for every archetype**. Without it:
+- Maintenance is blind (you don't know why things are the way they are)
+- Verification is impossible (you can't check if the archetype is doing its job)
+- The authoring process restarts from scratch every session
+
+---
+
+## Design Layer Files
+
+### `why.md`
+
+Why this archetype exists. How it fits in its team. The separation rationale.
+
+Questions it answers:
+- What problem does this archetype solve?
+- What team does it belong to and what role does it play?
+- Why is this a separate archetype (not combined with another)?
+- What it receives and what it produces
+- What known good grounds the existence of this role?
+
+This is the first file written. Everything else builds on it.
+
+### `research/analogs.md`
+
+Real-world analogs for this archetype. People -- historical, biblical, modern -- who genuinely embody this role. Not tokens. Genuine embodiments.
+
+The purpose: find who has done this well, then ask what drove them. Their truths and convictions become the raw material for the archetype's truth and ethos articles.
+
+Sources to search:
+- **Biblical**: Proverbs, wisdom literature, figures who embody this archetype. If the archetype genuinely exists in scripture, that's a known good that has stood the test of time.
+- **Historical**: People in history who were known for this type of work.
+- **Modern**: Practitioners, authors, leaders who embody this role today.
+- **Domain literature**: Books, frameworks, doctrines where this archetype's work is described.
+
+### `truths.md`
+
+Unfiltered truth candidates gathered from analogs, domain research, scripture, and observation. This is the library -- the raw collection before curation.
+
+Each candidate includes:
+- The truth (stated plainly)
+- The source (person, book, scripture, domain)
+- Negation test: is the negation absurd?
+- Independence test: is this true regardless of whether this agent exists?
+- Which convictions/tenets it would ground
+
+The truth/ articles in the assembly layer are the curated selection from this library.
+
+### `log.md`
+
+Ledger of changes, decisions, and lessons learned. Maintained over time -- every significant change to the archetype gets an entry. This is how you avoid making the same mistakes twice.
+
+### `synthesis.md`
+
+The final document that links everything together. When complete, it is the specification that powers the generation of the actual archetype articles.
+
+It synthesizes why.md + analogs + truths into:
+- Which truths to select for truth/ articles
+- What identity, tenets, and principles to derive for ethos/ articles
+- What process, orchestration, pipeline, and output contract to derive for doctrine/ articles
+- The therefore-chains connecting them
+
+---
+
+## Construction: From Scratch
+
+When building a brand new archetype:
+
+1. **`why.md` first.** Define why this archetype exists and how it fits. This is the foundation.
+2. **Research analogs.** Find real people -- biblical, historical, modern -- who embody this role. Ask what drove them. Write `research/analogs.md`.
+3. **Gather truths.** From the analogs and domain research, extract truth candidates. Write `truths.md`.
+4. **Synthesize.** Write `synthesis.md` -- link the why, analogs, and truths into direction for article writing.
+5. **Write truth articles.** Curate from truths.md into `truth/` articles. Apply negation and independence tests.
+6. **Derive ethos.** Identity, tenets, principles -- each traced to a truth with 1-2 "therefores." Write `ethos/` articles.
+7. **Derive doctrine.** Process, orchestration, pipeline, output contract -- derived from ethos. Write `doctrine/` articles.
+8. **Review.** Adversarial perspectives on truth quality, framework coherence, usability.
+9. **Assemble and verify.** Write `archetype.yaml`, run `--dry-run`, smoke test.
+
+## Construction: From Decomposition
+
+When converting an existing skill file into an archetype, follow the decompose process in `framework/lib/decompose/AGENTS.md`. The decompose workbench artifacts should be stored in `design/` (or `design/workbench/`) so the reasoning trail lives with the archetype.
+
+Additionally, write `design/why.md` -- the decompose process does not produce this, but every archetype needs it.
+
+---
+
+## Organization
+
+```
+framework/archetypes/
+  AGENTS.md               # This file
+  development/            # Development team
+    _shared/              # Shared articles across development archetypes
+    api-designer/
+    test-designer/
+    test-implementer/
+    implement-plan/
+  product/                # Product team
+    shaper/               # Team leader -- synthesis, scoping, output
+    problem-analyst/      # Exploration, validation, research (future)
+```
+
+Each top-level directory is a team. Each subdirectory is an archetype within that team.
