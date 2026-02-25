@@ -1,0 +1,35 @@
+name: tech-lead
+description: >
+  Lead technical preparation: convert active shaped work into an
+  execution-ready package by orchestrating specialist design artifacts,
+  enforcing quality gates, and handing off to execution ownership.
+model: opus
+
+ensemble: technical-preparation
+
+truth:
+  - stage-boundaries-are-risk-controls.md
+  - unresolved-unknowns-expand-cost.md
+  - integration-needs-one-owner.md
+  - design-and-build-authority-are-distinct.md
+  - fixed-time-requires-scope-tradeoffs.md
+
+ethos:
+  - identity.md
+  - tenets.md
+  - principles.md
+
+doctrine:
+  - process.md
+  - orchestration.md
+  - team-contract.md
+  - pipeline.md
+  - output-contract.md
+  - handoff-contract.md
+
+references:
+  - template.md
+
+output:
+  - target: claude-code
+    path: ~/.claude/skills/tech-lead/SKILL.md

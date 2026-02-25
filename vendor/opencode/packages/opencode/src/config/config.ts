@@ -1,6 +1,7 @@
 import { Log } from "../util/log"
 import path from "path"
-import { pathToFileURL } from "url"
+import { pathToFileURL, fileURLToPath } from "url"
+import { createRequire } from "module"
 import os from "os"
 import z from "zod"
 import { Filesystem } from "../util/filesystem"
@@ -28,6 +29,7 @@ import { constants, existsSync } from "fs"
 import { Bus } from "@/bus"
 import { GlobalBus } from "@/bus/global"
 import { Event } from "../server/event"
+import { Glob } from "../util/glob"
 import { PackageRegistry } from "@/bun/registry"
 import { proxied } from "@/util/proxied"
 import { iife } from "@/util/iife"
@@ -275,7 +277,6 @@ export namespace Config {
       "@opencode-ai/plugin": targetVersion,
     }
     await Filesystem.writeJson(pkg, json)
-    await new Promise((resolve) => setTimeout(resolve, 3000))
 
     const gitignore = path.join(dir, ".gitignore")
     const hasGitIgnore = await Filesystem.exists(gitignore)
@@ -288,10 +289,12 @@ export namespace Config {
       [
         "install",
         // TODO: get rid of this case (see: https://github.com/oven-sh/bun/issues/19936)
-        ...(proxied() ? ["--no-cache"] : []),
+        ...(proxied() || process.env.CI ? ["--no-cache"] : []),
       ],
       { cwd: dir },
-    ).catch(() => {})
+    ).catch((err) => {
+      log.warn("failed to install dependencies", { dir, error: err })
+    })
   }
 
   async function isWritable(dir: string) {
@@ -339,10 +342,11 @@ export namespace Config {
   }
 
   function rel(item: string, patterns: string[]) {
+    const normalizedItem = item.replaceAll("\\", "/")
     for (const pattern of patterns) {
-      const index = item.indexOf(pattern)
+      const index = normalizedItem.indexOf(pattern)
       if (index === -1) continue
-      return item.slice(index + pattern.length)
+      return normalizedItem.slice(index + pattern.length)
     }
   }
 
@@ -351,14 +355,13 @@ export namespace Config {
     return ext.length ? file.slice(0, -ext.length) : file
   }
 
-  const COMMAND_GLOB = new Bun.Glob("{command,commands}/**/*.md")
   async function loadCommand(dir: string) {
     const result: Record<string, Command> = {}
-    for await (const item of COMMAND_GLOB.scan({
-      absolute: true,
-      followSymlinks: true,
-      dot: true,
+    for (const item of await Glob.scan("{command,commands}/**/*.md", {
       cwd: dir,
+      absolute: true,
+      dot: true,
+      symlink: true,
     })) {
       const md = await ConfigMarkdown.parse(item).catch(async (err) => {
         const message = ConfigMarkdown.FrontmatterError.isInstance(err)
@@ -390,15 +393,14 @@ export namespace Config {
     return result
   }
 
-  const AGENT_GLOB = new Bun.Glob("{agent,agents}/**/*.md")
   async function loadAgent(dir: string) {
     const result: Record<string, Agent> = {}
 
-    for await (const item of AGENT_GLOB.scan({
-      absolute: true,
-      followSymlinks: true,
-      dot: true,
+    for (const item of await Glob.scan("{agent,agents}/**/*.md", {
       cwd: dir,
+      absolute: true,
+      dot: true,
+      symlink: true,
     })) {
       const md = await ConfigMarkdown.parse(item).catch(async (err) => {
         const message = ConfigMarkdown.FrontmatterError.isInstance(err)
@@ -430,14 +432,13 @@ export namespace Config {
     return result
   }
 
-  const MODE_GLOB = new Bun.Glob("{mode,modes}/*.md")
   async function loadMode(dir: string) {
     const result: Record<string, Agent> = {}
-    for await (const item of MODE_GLOB.scan({
-      absolute: true,
-      followSymlinks: true,
-      dot: true,
+    for (const item of await Glob.scan("{mode,modes}/*.md", {
       cwd: dir,
+      absolute: true,
+      dot: true,
+      symlink: true,
     })) {
       const md = await ConfigMarkdown.parse(item).catch(async (err) => {
         const message = ConfigMarkdown.FrontmatterError.isInstance(err)
@@ -467,15 +468,14 @@ export namespace Config {
     return result
   }
 
-  const PLUGIN_GLOB = new Bun.Glob("{plugin,plugins}/*.{ts,js}")
   async function loadPlugin(dir: string) {
     const plugins: string[] = []
 
-    for await (const item of PLUGIN_GLOB.scan({
-      absolute: true,
-      followSymlinks: true,
-      dot: true,
+    for (const item of await Glob.scan("{plugin,plugins}/*.{ts,js}", {
       cwd: dir,
+      absolute: true,
+      dot: true,
+      symlink: true,
     })) {
       plugins.push(pathToFileURL(item).href)
     }
@@ -1333,7 +1333,16 @@ export namespace Config {
           const plugin = data.plugin[i]
           try {
             data.plugin[i] = import.meta.resolve!(plugin, options.path)
-          } catch (err) {}
+          } catch (e) {
+            try {
+              // import.meta.resolve sometimes fails with newly created node_modules
+              const require = createRequire(options.path)
+              const resolvedPath = require.resolve(plugin)
+              data.plugin[i] = pathToFileURL(resolvedPath).href
+            } catch {
+              // Ignore, plugin might be a generic string identifier like "mcp-server"
+            }
+          }
         }
       }
       return data

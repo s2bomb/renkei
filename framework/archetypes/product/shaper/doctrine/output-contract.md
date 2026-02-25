@@ -76,7 +76,9 @@ Do not hand off an `active` item unless:
 
 ## Downstream Contract
 
-For confirmed `active` items, the shaped artifact must be handoff-ready for `architect-opencode` without additional reframing.
+For confirmed `active` items, the shaped artifact must be handoff-ready for `tech-lead` without additional reframing.
+
+`tech-lead` is responsible for downstream interim handoff to `architect-opencode` after technical-preparation package synthesis.
 
 Required handoff payload:
 - active workspace path

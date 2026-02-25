@@ -34,6 +34,40 @@ Scope: An ensemble is the unit of collaboration. It may contain sub-ensembles (e
 
 Not to be confused with: pipeline (one possible topology within an ensemble, not the ensemble itself).
 
+**Team**
+
+An operational grouping of archetypes with explicit role relationships. In Renkei practice, a team typically has one leader archetype and one or more member archetypes.
+
+Scope: Team is the collaboration unit most authors reason with when defining handoffs, delegation, and ownership. A team is a practical expression of an ensemble slice.
+
+Not to be confused with: ensemble (broader composition concept that can include multiple teams and topologies).
+
+**Team Leader**
+
+The archetype accountable for team-level synthesis, quality gates, and stage handoff. A team leader delegates specialist work to members, aggregates artifacts, and publishes the package that leaves the team boundary.
+
+Scope: Leadership responsibility, not title prestige. A team leader may also be a stage owner when the team corresponds to a process stage.
+
+**Team Member**
+
+An archetype that produces bounded specialist artifacts for its parent leader. Team members do not own cross-member synthesis unless explicitly assigned.
+
+Scope: Member outputs return to the parent leader by default.
+
+**Stage**
+
+A bounded segment of an organizational process with explicit entry criteria, ownership, and exit contract. A stage is often implemented by one leader-led team, but not every team maps one-to-one with a stage.
+
+Scope: Stage defines process ownership and handoff contracts between teams.
+
+Not to be confused with: pipeline as topology (structure of flow) or process steps (internal sequence inside a stage).
+
+**Satellite Team**
+
+A reusable support team that can be invoked by multiple other teams and is not anchored to a single stage boundary.
+
+Scope: Satellites provide specialist artifacts on demand and return outputs to the requesting parent leader.
+
 **Article**
 
 A discrete, self-contained compositional piece within a pillar. From Latin *articulus* (small joint) -- a unit that is independent yet structurally connected to the larger body. Articles are the atomic authoring units: each is authored, reviewed, and maintained independently.
