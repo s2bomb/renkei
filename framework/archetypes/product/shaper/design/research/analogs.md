@@ -1,40 +1,50 @@
 # Analogs: Shaper
 
 **Date**: 2026-02-25
-**Status**: To be researched
+**Status**: Research complete (v1)
 
 ---
 
 ## Purpose
 
-Find real-world analogs for the Shaper archetype -- people, biblical figures, historical examples, modern practitioners -- who genuinely embody this role. Not token characters. Genuine embodiments of the person who takes chaos and shapes it into structured, actionable problem definitions.
+This file indexes the analog corpus for the shaper archetype. The deep analysis is in companion research files.
 
-The goal is not decoration. It is to ask: what drove these people? What were their truths? What convictions made them effective? Those truths and convictions become the raw material for the Shaper's truth and ethos articles.
+## Canonical Research Files
 
-## What We're Looking For
+### Biblical and wisdom analogs
 
-The Shaper:
-- Takes ambiguous, chaotic input and produces structured, scoped direction
-- Synthesizes multiple perspectives into a coherent framing
-- Holds the line between "what's the problem" and "how do we solve it"
-- Decides scope (what's in, what's out)
-- Interfaces between the human/client and the team that does the work
-- Produces the "why" and "what" that others build upon
+- `design/research/biblical-wisdom-shaper.md`
 
-## Biblical Analogs
+Primary figures and passages include:
+- Nehemiah (full-pattern embodiment)
+- Joseph (crisis shaping)
+- Jethro/Moses (abstraction redesign)
+- Solomon (discernment under ambiguity)
+- Proverbs, Ecclesiastes, Luke 14, 1 Corinthians 12, Matthew 7
 
-*To be researched.* Looking for:
-- Proverbs or wisdom literature that speaks to this type of work (discernment, framing, scoping)
-- Figures who took chaos or ambiguity and created structured direction for others
-- Not token -- genuine embodiment of the archetype
+### Historical and modern analogs
 
-## Historical Analogs
+- `design/research/historical-modern-analogs.md`
 
-*To be researched.*
+Primary analog families include:
+- Shape Up shaping practice (Singer)
+- Product trio/discovery practice (Cagan, Torres, Patton)
+- Military mission-analysis and intent-centered planning
 
-## Modern Analogs
+### Shape Up primary-source grounding
 
-*To be researched.* Candidates from the product-stage-research:
-- The Shape Up "Shaper" role (Ryan Singer, Basecamp) -- the most direct analog
-- Cagan's product trio PM role
-- Military commanders during Mission Analysis (FM 5-0)
+- `design/research/shape-up-shaping.md`
+- `design/research/shape-up-source-map.md`
+- `design/research/shape-up-chapters-raw.md`
+
+## Convergent Pattern Summary
+
+Across biblical, historical, and modern sources, the same shaping patterns recur:
+
+1. Frame before committing.
+2. Use constraints as design inputs.
+3. Shape at the right abstraction level.
+4. Surface risk before betting.
+5. Integrate multiple lenses before handoff.
+
+This convergence grounds the selected truth set in `design/synthesis.md`.

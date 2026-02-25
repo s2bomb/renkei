@@ -11,3 +11,60 @@ Ledger of changes, decisions, and lessons learned during construction and mainte
 - Assembly directories created but empty: truth/, ethos/, doctrine/
 - Grounding: product-stage-team.md (v1), product-stage-io.md (v2), product-stage-research.md
 - Construction approach: bottom-up (truths first, then ethos, then doctrine). Analog research drives truth discovery.
+
+## 2026-02-25 -- Research and truth extraction v1
+
+- Added Shape Up source research:
+  - `design/research/shape-up-shaping.md` (analysis)
+  - `design/research/shape-up-chapters-raw.md` (curated direct excerpts)
+- Added deep research artifacts:
+  - `design/research/biblical-wisdom-shaper.md`
+  - `design/research/historical-modern-analogs.md`
+- Added repeatable extraction method: `design/truth-extraction-method.md`
+- Populated `design/truths.md` with 7 initial truth candidates (T-01..T-07) including evidence, tests, and likely ethos hooks.
+
+## 2026-02-25 -- Shape Up source map
+
+- Added explicit traceability map: `design/research/shape-up-source-map.md`
+- Mapped T-01..T-07 truth candidates to foreword-through-conclusion chapter evidence.
+- Added Shape Up -> Renkei stage translation notes (shaping track, betting gate, build team).
+
+## 2026-02-25 -- Synthesis + assembly articles v1
+
+- Completed `design/synthesis.md` with:
+  - selected truth set (5 final truths)
+  - explicit compression decisions (T-01+T-04, T-02+T-06)
+  - ethos and doctrine derivation directions
+  - truth -> ethos -> doctrine therefore chains
+- Updated `design/research/analogs.md` from placeholder to index of completed research corpus.
+- Wrote assembly-layer articles for shaper:
+  - `truth/` (5 files)
+  - `ethos/` (identity, tenets, principles)
+  - `doctrine/` (process, orchestration, pipeline, output-contract)
+- Added `references/template.md` for shaped output artifact generation.
+- Added `archetype.yaml` manifest for shaper assembly and deployment target.
+
+## 2026-02-25 -- Post-compaction audit against full Shape Up reread
+
+- Re-read Shape Up non-appendix chapters (`0.1` through `3.7`) from local markdown corpus.
+- Added explicit self-audit document:
+  - `design/audit-2026-02-25-shape-up-reread.md`
+- Audit judgment: shaper v1 is directionally usable but not yet faithful enough to Shape Up commitment/output semantics.
+- Identified concrete remediation targets:
+  - tighten pitch/output contract language
+  - encode betting-gate boundary explicitly
+  - narrow shaper authority to shaping/recommendation before commitment
+  - strengthen citation density in truth articles
+
+## 2026-02-25 -- Role-boundary and delegation semantics correction
+
+- Applied role-boundary correction: commitment authority is external to shaper team (human decision gate).
+- Updated doctrine pipeline/process/output contract to reflect:
+  - shaper produces recommendation + artifacts
+  - decision owner confirms activation unless explicit executive directive
+- Re-aligned output schema to Shape Up core contract terms:
+  - Problem, Appetite, Solution, Rabbit Holes, No-Gos
+  - optional Intent as Renkei extension
+- Updated orchestration semantics for vanilla OpenCode runtime:
+  - delegate via `general` subagent
+  - require first-step Skill invocation for role embodiment (e.g., problem-analyst)

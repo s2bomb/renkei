@@ -1,0 +1,32 @@
+name: problem-analyst
+description: >
+  Validate and decompose incoming intent into evidence-backed problem
+  findings, scoped items, and assumption/risk registers for shaper
+  synthesis.
+model: opus
+
+ensemble: product
+
+truth:
+  - discovery-precedes-commitment.md
+  - problem-claims-require-evidence.md
+  - scope-is-discovered-not-assumed.md
+  - assumptions-are-risk-inventory.md
+
+ethos:
+  - identity.md
+  - tenets.md
+  - principles.md
+
+doctrine:
+  - process.md
+  - orchestration.md
+  - pipeline.md
+  - output-contract.md
+
+references:
+  - template.md
+
+output:
+  - target: claude-code
+    path: ~/.claude/skills/problem-analyst/SKILL.md
