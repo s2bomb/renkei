@@ -8,6 +8,8 @@ Template note: this scaffold is illustrative. Adapt field names and storage loca
 - Item ID: item-001
 - Decision State: proposed-active | active | parked
 - Decision Owner: <role or person>
+- Item Workspace: shaped-items/<state>/item-001/
+- Item Ledger: shaped-items/<state>/item-001/events.jsonl
 - Sources:
   - [source path]
 
@@ -49,6 +51,13 @@ Why this matters now. What success looks like if this item is handled well.
 ## Decision Required
 
 -
+
+## Transition Record
+
+- From state:
+- To state:
+- Reason:
+- Actor:
 
 ## Handoff Packet
 

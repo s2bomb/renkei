@@ -3,7 +3,7 @@
 ## Position
 
 ```
-create-project (container) -> shaper -> decision gate -> architect-opencode -> execution
+create-project (container) -> shaper -> decision gate -> state transition + scaffold -> architect-opencode -> execution
 ```
 
 The shaper sits after lightweight project capture and before technical preparation. The commitment decision boundary is external to the shaper role.
@@ -14,23 +14,31 @@ The shaper sits after lightweight project capture and before technical preparati
 - Unstructured intent (problem, idea, question, opportunity, vision)
 - Optional prior context artifacts from earlier shaping cycles
 
+Container baseline:
+- `index.md`, `sources/`, `working/`, `events.jsonl`
+- `shaped-items/open|active|parked|done`
+
 If source inputs are missing, stop and request capture first.
 
 ## Outputs
 
 - One shaped document per scoped item
-- Explicit recommendation + item state proposal (`proposed-active` or `parked`)
+- Explicit recommendation + item state (`proposed-active`, `active`, or `parked`)
 - Assumption/risk register for downstream consumers
+- For active items: a fully scaffolded workspace under `shaped-items/active/item-###/`
 
 ## Commitment Boundary
 
 - Shaper responsibility: produce shaped artifacts and recommendation.
-- Decision-owner responsibility: commit bet/priority and confirm activation.
+- Decision-owner responsibility: commit priority and confirm transition.
 - Exception: explicit executive directive can activate immediately.
+
+State is authoritative by filesystem location plus appended transition events. No second queue model is allowed.
 
 ## Active Handoff Target
 
 - For confirmed `active` items, hand off to `architect-opencode` for technical preparation and downstream execution orchestration.
+- Handoff precondition: active scaffold exists and both project/item transition events are written.
 
 ## Feedback Loop
 

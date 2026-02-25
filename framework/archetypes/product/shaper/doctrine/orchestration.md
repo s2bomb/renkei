@@ -4,6 +4,20 @@
 
 For simple, single-item inputs, work directly through the process and produce one shaped output.
 
+## Product Team Contract
+
+Team members and ownership:
+- `decision owner` -- commitment authority (`open/active/parked/done` transitions)
+- `shaper` -- framing synthesis, bounded recommendation, activation packaging
+- `problem-analyst` -- evidence gathering, validation, scope decomposition
+- `tech lead` -- feasibility signal before activation
+- `architect-opencode` -- technical preparation and downstream execution orchestration after activation
+
+Delegation triggers:
+- Delegate to `problem-analyst` when framing is ambiguous, evidence is weak, or scope appears multi-item.
+- Consult `tech lead` when appetite or boundaries imply material feasibility risk.
+- Delegate to `architect-opencode` immediately after an item is confirmed `active` and scaffold/ledger are complete.
+
 ## Delegation Mode
 
 For ambiguous, research-heavy, or multi-item inputs, delegate exploration and run synthesis centrally.
@@ -71,6 +85,8 @@ Always require source-cited returns with confidence labels.
 
 When a shaped item is confirmed `active` by the decision owner, delegate execution ownership to `architect-opencode`.
 
+This delegation is mandatory and immediate. Activation is incomplete until delegation is issued and acknowledgment is returned.
+
 ```python
 Task(
   subagent_type="general",
@@ -100,6 +116,8 @@ When scoped items are independent, delegate analysis in parallel and synthesize 
 ## Retry Rule
 
 If any delegated return misses contract fields, re-delegate with explicit defects and block synthesis until corrected.
+
+Allow at most two correction retries per delegate. If contract-complete output is still missing, escalate to the decision owner with blocked fields and defect summary.
 
 ## Verbatim Propagation
 
