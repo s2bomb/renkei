@@ -135,3 +135,8 @@ Ledger of changes, decisions, and lessons learned during construction and mainte
   - `doctrine/team-contract.md`
   - `doctrine/output-contract.md`
   - `references/template.md`
+
+## 2026-02-26 -- Team topology codification
+
+- Added `design/team-map.md` so parent/member handoff direction is explicit.
+- Codified that shaper member outputs return to `shaper` for synthesis and active-stage handoff goes to `tech-lead`.

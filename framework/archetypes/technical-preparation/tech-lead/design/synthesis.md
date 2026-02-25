@@ -79,6 +79,14 @@ Preferred archetype name: `tech-lead`.
 
 Team path: `framework/archetypes/technical-preparation/tech-lead/`.
 
+## Team Topology Decision
+
+- Role type: team leader and stage owner.
+- Parent leader: `shaper`.
+- Member delegates: `spec-writer`, `research-codebase`, `api-designer`, `test-designer`, `create-plan`.
+- Member outputs return to `tech-lead` by default.
+- Cross-stage handoff leaves the team only from `tech-lead` to `architect-opencode` (interim).
+
 ## Therefore Chains
 
 Best-of-N validation source:

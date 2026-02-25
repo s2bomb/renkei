@@ -34,6 +34,7 @@ The artifacts that explain *why* the archetype is the way it is. This is what yo
 ```
 design/
   why.md              # Why this archetype exists, team fit, separation rationale
+  team-map.md         # Role topology: leader/member/satellite, parent/child handoffs
   research/           # Research documents
     analogs.md        # Real-world analogs -- people, biblical, historical, modern
     [other research]  # Domain research as needed
@@ -63,6 +64,22 @@ Questions it answers:
 - What known good grounds the existence of this role?
 
 This is the first file written. Everything else builds on it.
+
+### `team-map.md`
+
+Operational topology contract for this archetype.
+
+Questions it answers:
+- Is this archetype a team leader, team member, or satellite specialist?
+- Who is its parent leader?
+- Who are its member delegates (if leader)?
+- Where do member artifacts return by default?
+- If it is a leader, what stage package leaves the team and who receives it?
+
+Default rule:
+- Team members hand outputs to their parent leader.
+- Team leaders synthesize member outputs and hand stage packages downstream.
+- Satellite teams return outputs to the requesting parent leader.
 
 ### `research/analogs.md`
 
@@ -153,12 +170,13 @@ When building a brand new archetype:
 1. **`why.md` first.** Define why this archetype exists and how it fits.
 2. **Map sources.** Write `research/source-map.md` so future runs know exactly where to look.
 3. **Research analogs and domain evidence.** Write `research/analogs.md` and supporting research files.
-4. **Gather truths.** Extract truth candidates into `truths.md` with negation and independence tests.
-5. **Run best-of-N.** Create independent perspective passes under `best-of-n/` and a convergence synthesis.
-6. **Synthesize direction.** Update `synthesis.md` with v1 decisions and therefore-chains.
-7. **Write first assembly pass.** Create `archetype.yaml` and write v1 `truth/`, `ethos/`, `doctrine/` articles.
-8. **Propagate interface updates.** Update neighboring archetypes if role boundaries changed.
-9. **Assemble and verify.** Run `--dry-run` for new and affected archetypes.
+4. **Write team topology contract.** Add `team-map.md` with explicit parent/member handoffs.
+5. **Gather truths.** Extract truth candidates into `truths.md` with negation and independence tests.
+6. **Run best-of-N.** Create independent perspective passes under `best-of-n/` and a convergence synthesis.
+7. **Synthesize direction.** Update `synthesis.md` with v1 decisions and therefore-chains.
+8. **Write first assembly pass.** Create `archetype.yaml` and write v1 `truth/`, `ethos/`, `doctrine/` articles.
+9. **Propagate interface updates.** Update neighboring archetypes if role boundaries changed.
+10. **Assemble and verify.** Run `--dry-run` for new and affected archetypes.
 
 Use `docs/framework/ARCHETYPE_WORKFLOW.md` as the canonical phase-by-phase runbook.
 
@@ -189,3 +207,5 @@ framework/archetypes/
 ```
 
 Each top-level directory is a team. Each subdirectory is an archetype within that team.
+
+Team structure is operational, not cosmetic: leaders delegate to members, members return artifacts to parent leaders, and leaders own cross-team stage handoffs.

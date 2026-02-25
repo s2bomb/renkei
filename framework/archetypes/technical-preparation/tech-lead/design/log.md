@@ -9,6 +9,7 @@ Ledger of construction and maintenance decisions.
 - Created draft archetype scaffold at `framework/archetypes/technical-preparation/tech-lead/`.
 - Added required design-layer foundation:
   - `design/why.md`
+  - `design/team-map.md`
   - `design/truths.md`
   - `design/synthesis.md`
   - `design/log.md`
@@ -16,6 +17,7 @@ Ledger of construction and maintenance decisions.
   - `design/research/naming.md`
   - `design/research/shape-up-book-review.md`
   - `design/research/architect-opencode-split.md`
+  - `design/research/source-map.md`
 - Reviewed full Shape Up corpus (foreword, chapters 1-15, conclusion, appendices 1-3, glossary) and extracted stage-specific implications for technical preparation leadership.
 - Set working role name to `tech-lead` pending later naming review.
 - Chose staged split strategy: move technical preparation orchestration first; keep execution orchestration in `architect-opencode` temporarily.
@@ -31,6 +33,15 @@ Ledger of construction and maintenance decisions.
 - Added convergence synthesis:
   - `design/best-of-n/2026-02-26-synthesis.md`
 - Locked v1 naming decision to `tech-lead`.
+
+## 2026-02-26 -- Topology clarification pass
+
+- Made leader/member topology explicit in doctrine and design.
+- Added `design/team-map.md` defining parent, child members, stage entry/exit, and handoff direction defaults.
+- Updated doctrine to codify member outputs returning to parent leader before cross-stage handoff:
+  - `doctrine/process.md`
+  - `doctrine/team-contract.md`
+  - `doctrine/handoff-contract.md`
 
 ## 2026-02-26 -- First assembly pass (v1)
 

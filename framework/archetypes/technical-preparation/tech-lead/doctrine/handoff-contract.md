@@ -4,6 +4,8 @@
 
 This contract governs interim transfer from `tech-lead` (technical preparation owner) to `architect-opencode` (execution owner).
 
+Member-level specialist artifacts do not cross this boundary directly. They are aggregated by `tech-lead` first.
+
 ## Required Handoff Payload
 
 1. active item workspace path

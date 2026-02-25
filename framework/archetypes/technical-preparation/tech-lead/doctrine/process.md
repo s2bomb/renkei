@@ -31,6 +31,8 @@ Delegate technical preparation work to specialists:
 
 Run independent work in parallel where possible. Serialize dependent stages.
 
+All specialist outputs return to `tech-lead` for synthesis. Specialists do not hand off directly to downstream stage owners.
+
 ## Step 4: Evaluate and Iterate
 
 After each delegated return:
@@ -50,6 +52,8 @@ Assemble one execution-ready package containing:
 - implementation plan
 - unresolved decisions
 - accepted risks
+
+As stage owner, `tech-lead` is accountable for cross-artifact coherence and package completeness.
 
 ## Step 6: Handoff to Execution Owner (Interim)
 

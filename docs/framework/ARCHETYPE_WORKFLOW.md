@@ -14,7 +14,8 @@ A successful run produces:
 1. A complete design layer (`why`, `research`, `truths`, `synthesis`, `log`)
 2. A complete first assembly layer (`truth/`, `ethos/`, `doctrine/`, `archetype.yaml`, optional `references/`)
 3. Explicit upstream/downstream interface updates where role boundaries changed
-4. Dry-run assembly proof for changed archetypes
+4. Explicit team topology contract (leader, members, parent/child handoffs)
+5. Dry-run assembly proof for changed archetypes
 
 If any one of these is missing, the workflow is incomplete.
 
@@ -31,11 +32,14 @@ Convert raw request into an explicit role boundary and research scope.
 1. Name the role candidate and stage position.
 2. State what this role owns and what it explicitly does not own.
 3. Identify upstream/downstream contracts likely to change.
-4. Create the archetype directory and `design/` scaffold.
+4. Classify role type: `team-leader`, `team-member`, or `satellite-team` member.
+5. Declare parent/child handoff direction.
+6. Create the archetype directory and `design/` scaffold.
 
 ### Required artifact
 
 - `design/why.md`
+- `design/team-map.md`
 
 `why.md` must answer:
 - why this role exists
@@ -43,6 +47,18 @@ Convert raw request into an explicit role boundary and research scope.
 - what it receives
 - what it produces
 - who it hands off to
+
+`team-map.md` must answer:
+- Is this archetype a team leader, team member, or satellite specialist?
+- Who is the parent leader?
+- Who are the member delegates (if leader)?
+- Default handoff rule for produced artifacts
+- Stage ownership and next-stage handoff target (if leader)
+
+Default handoff rule:
+- Team members hand outputs to their parent leader.
+- Team leaders hand stage packages to the next-stage owner.
+- Satellite teams hand outputs back to the requesting parent leader.
 
 ---
 
@@ -58,12 +74,14 @@ Ground the role in established truths before writing ethos.
 2. Read source material completely (not excerpts only).
 3. Record durable analogs (biblical, historical, modern, domain).
 4. Audit neighboring runtime roles that this split will affect.
+5. Audit parent and child contracts that this role must interoperate with.
 
 ### Required artifacts
 
 - `design/research/source-map.md` (recommended)
 - `design/research/analogs.md`
 - role-specific research files (book review, split audit, domain notes)
+- parent/child contract audit notes (recommended)
 
 ### Rule
 
@@ -146,6 +164,7 @@ Collapse multiple perspectives into one v1 decision set.
 2. Identify contested decisions and choose one with rationale.
 3. Record anti-drift controls.
 4. Record required adjacent updates (other archetypes/contracts).
+5. Record team topology decisions (parent, members, stage handoff).
 
 ### Required artifacts
 
@@ -167,6 +186,7 @@ Materialize v1 archetype from design synthesis.
 3. Derive and write `ethos/identity.md`, `ethos/tenets.md`, `ethos/principles.md`.
 4. Derive and write doctrine articles (process + orchestration + pipeline + output contract at minimum).
 5. Add `references/` artifacts where useful.
+6. Ensure doctrine encodes leader/member handoff semantics.
 
 ### Required output minimum
 
@@ -193,6 +213,7 @@ Keep the system coherent when a role boundary changes.
 2. Update downstream ownership expectations.
 3. Update templates and team-contract references.
 4. Log interface changes in relevant design logs.
+5. Verify team member outputs now route to the intended parent leader.
 
 ### Rule
 
@@ -222,6 +243,7 @@ All changed archetypes assemble cleanly with `--dry-run`.
 3. **Boundary gate**: ownership and non-ownership are explicit.
 4. **Contract gate**: handoff payload and acknowledgment semantics are explicit.
 5. **Coherence gate**: adjacent archetypes reflect the new boundary.
+6. **Topology gate**: team leader/member/satellite relationships are explicit and consistent.
 
 Failure at any gate blocks progression.
 
@@ -234,6 +256,7 @@ Failure at any gate blocks progression.
 3. Leaving neighboring archetypes unmodified after boundary split.
 4. Over-specifying doctrine due to weak ethos.
 5. Under-specifying handoff contracts ("just delegate") with no acknowledgment rule.
+6. Leaving member handoff direction implicit.
 
 ---
 
@@ -263,5 +286,20 @@ Before handing off, verify:
 - [ ] best-of-N passes + synthesis on disk
 - [ ] v1 assembly articles written
 - [ ] interface updates applied to neighboring archetypes
+- [ ] team topology contract written (`design/team-map.md`)
 - [ ] dry-run assembly clean for changed archetypes
 - [ ] design logs updated with decisions
+
+---
+
+## Future Harness Integration Note
+
+Today, team topology is authored in markdown (`design/team-map.md`, team contracts, pipeline docs).
+
+Planned evolution: promote topology to machine-readable structured data so harnesses can enforce delegation boundaries deterministically:
+
+- team leaders can delegate only to declared team members
+- team members return artifacts to declared parent leaders
+- satellite teams remain globally invocable support units
+
+Until that structured format exists, keep topology contracts explicit and consistent in markdown artifacts.
