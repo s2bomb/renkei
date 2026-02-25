@@ -167,6 +167,7 @@ python framework/lib/assemble.py --push --force --all framework/archetypes/devel
 
 | Archetype | Team | Role |
 |---|---|---|
+| `api-designer` | development | Design module boundaries and API contracts from section spec and research. |
 | `test-designer` | development | Design test specifications from API contracts. Scope-bounded by API surface. |
 | `test-implementer` | development | Write executable test code from test specs. TDD red phase only. |
 | `implement-plan` | development | Execute approved plan phases. Make existing tests pass. Propagate issues upward. |

@@ -1,0 +1,31 @@
+name: api-designer
+description: >
+  Design technical modules and API contracts from section spec and research.
+  Produces durable, testable interface designs with clear semantic boundaries.
+model: opus
+
+ensemble: development
+
+truth:
+  - format-design.md
+  - semantics-and-structure.md
+  - boundaries-and-replaceability.md
+
+ethos:
+  - identity.md
+  - tenets.md
+  - principles.md
+
+doctrine:
+  - process.md
+  - clone-contract.md
+  - orchestration.md
+  - pipeline.md
+  - output-contract.md
+
+references:
+  - template.md
+
+output:
+  - target: claude-code
+    path: ~/.claude/skills/api-designer/SKILL.md
