@@ -68,3 +68,26 @@ Ledger of changes, decisions, and lessons learned during construction and mainte
 - Updated orchestration semantics for vanilla OpenCode runtime:
   - delegate via `general` subagent
   - require first-step Skill invocation for role embodiment (e.g., problem-analyst)
+
+## 2026-02-25 -- Best-of-N critique pass and portability cleanup
+
+- Ran three independent critiques under `design/best-of-n/` with explicit non-contamination instructions:
+  - `2026-02-25-review-a.md`
+  - `2026-02-25-review-b.md`
+  - `2026-02-25-review-c.md`
+- Added aggregation record: `design/best-of-n/2026-02-25-synthesis.md`.
+- Applied convergent fixes:
+  - removed repo-path/source-file anchors from assembled truth articles
+  - converted host-specific delegation language to host-neutral role contracts
+  - normalized decision state vocabulary to `proposed-active | active | parked`
+  - tightened output quality gates and template fields for evidence + decision clarity
+
+## 2026-02-26 -- Runtime-specific delegation reinstated (OpenCode)
+
+- User clarified that delegation mechanics must remain explicit for current runtime.
+- Reinstated OpenCode-specific orchestration semantics in assembled doctrine:
+  - `Task(subagent_type="general")`
+  - first-step Skill invocation requirement
+  - explicit delegation to `problem-analyst` for exploration
+  - explicit post-decision delegation to `architect-opencode` for active items
+- Kept portability fixes that removed repo-local source-path leakage from assembled truth text.

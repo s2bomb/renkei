@@ -73,7 +73,7 @@ The shaper is the product-stage leader who converts unstructured intent into a b
 4. Require explicit assumptions with validity and necessity tags.
 5. Require explicit out-of-scope and no-go declarations.
 6. Consult technical reality before finalizing active handoff.
-7. Mark output state explicitly: active or parked.
+7. Mark output state explicitly: proposed-active, active, or parked.
 
 ---
 
@@ -81,40 +81,45 @@ The shaper is the product-stage leader who converts unstructured intent into a b
 
 ### Process
 
-The doctrine process should be seven steps:
+The doctrine process should be eight steps:
 1. Capture intent and create/verify project container.
 2. Clarify and frame the candidate problem(s).
-3. Delegate/perform problem analysis and scoping.
+3. Delegate problem analysis and scoping (or record explicit role emulation when delegation is unavailable).
 4. Consult technical reality on feasibility shape.
-5. Synthesize a 6-component shaped artifact per scoped item.
-6. Decide item state (active or parked).
-7. Route shaped recommendation to decision owner; hand off approved active items to technical-preparation leader with explicit gaps.
+5. Synthesize a Shape Up core-contract artifact per scoped item.
+6. Set recommendation state (proposed-active or parked).
+7. Route recommendation to decision owner; confirm final activation state.
+8. Hand off approved active items to technical-preparation leader with explicit gaps.
 
 ### Orchestration
 
 - Default to direct work for small/clear inputs.
 - Use parallel delegation for research-heavy or multi-scope inputs.
-- Delegate problem exploration through `general` subagents that first invoke the `problem-analyst` skill when available.
+- In OpenCode, delegate through `Task(subagent_type="general")` with first-step Skill invocation.
+- Delegate problem exploration to `problem-analyst`.
 - Consult tech-lead role before final active handoff.
+- Delegate confirmed active items to `architect-opencode`.
 - Propagate core convictions verbatim when delegating.
 
 ### Pipeline position
 
 The shaper sits before technical-preparation agents and after project capture, with external commitment decision ownership:
 
-`create-project (lightweight container) -> shaper -> human decision gate -> spec-writer/research-codebase/api-designer/test-designer/create-plan -> execution`
+`create-project -> shaper -> decision gate -> architect-opencode -> execution`
 
 ### Output contract
 
-One shaped document per scoped item with six required sections:
+One shaped document per scoped item with Shape Up core required sections:
 1. Problem statement
-2. Intent
-3. Appetite
-4. Assumptions (validity + necessity)
-5. Out of scope
-6. Rough shape
+2. Appetite
+3. Solution (rough shape)
+4. Rabbit holes (assumptions/risks, with validity + necessity)
+5. No-gos (out of scope)
 
-Every output carries explicit state: active or parked.
+Optional extension:
+- Intent
+
+Every output carries explicit state: proposed-active, active, or parked.
 
 ---
 

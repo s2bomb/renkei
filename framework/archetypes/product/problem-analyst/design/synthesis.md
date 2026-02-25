@@ -42,7 +42,7 @@ Process direction:
 6. deliver analyst brief for shaper synthesis
 
 Orchestration direction:
-- delegate via `general` with first-step skill invocation when specialist skills are needed
+- in OpenCode, delegate via `Task(subagent_type="general")` with first-step Skill invocation
 - parallelize independent research threads
 
 Output direction:
