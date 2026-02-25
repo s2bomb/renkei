@@ -88,6 +88,19 @@ Each candidate includes:
 
 The truth/ articles in the assembly layer are the curated selection from this library.
 
+#### Truth Extraction Protocol (required)
+
+When populating `truths.md`, use a repeatable extraction method:
+
+1. Build a claim pool from research sources.
+2. Cluster equivalent claims.
+3. Apply gates: convergence (2+ independent source families), actionability, non-tautology.
+4. Apply tests: negation test, independence test.
+5. Write truth cards with citations and likely ethos hooks.
+6. Select 3-5 final truths for `truth/` articles based on convergence + leverage + low overlap.
+
+Do not skip this. Truth quality determines everything downstream.
+
 ### `log.md`
 
 Ledger of changes, decisions, and lessons learned. Maintained over time -- every significant change to the archetype gets an entry. This is how you avoid making the same mistakes twice.
@@ -139,7 +152,7 @@ framework/archetypes/
     implement-plan/
   product/                # Product team
     shaper/               # Team leader -- synthesis, scoping, output
-    problem-analyst/      # Exploration, validation, research (future)
+    problem-analyst/      # Exploration, validation, research
 ```
 
 Each top-level directory is a team. Each subdirectory is an archetype within that team.
