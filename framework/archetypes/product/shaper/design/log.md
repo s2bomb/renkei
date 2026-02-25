@@ -91,3 +91,33 @@ Ledger of changes, decisions, and lessons learned during construction and mainte
   - explicit delegation to `problem-analyst` for exploration
   - explicit post-decision delegation to `architect-opencode` for active items
 - Kept portability fixes that removed repo-local source-path leakage from assembled truth text.
+
+## 2026-02-26 -- Final production pass (state machine + team clarity)
+
+- Added live-usage source artifact:
+  - `design/research/2026-02-26-first-live-usage-conversation.md`
+- Ran independent best-of-n final-pass reviews:
+  - `design/best-of-n/2026-02-26-final-pass-a.md`
+  - `design/best-of-n/2026-02-26-final-pass-b.md`
+  - `design/best-of-n/2026-02-26-final-pass-c.md`
+- Updated shaper doctrine with single-queue activation workflow (`shaped-items`), required active scaffold, and transition-ledger requirements.
+- Added explicit team contract doctrine article for deterministic delegation boundaries.
+- Strengthened orchestration with mandatory immediate `architect-opencode` delegation after activation and bounded retry escalation.
+
+## 2026-02-26 -- Finalization pass: state machine + team contract + activation handoff
+
+- Added live-usage source capture:
+  - `design/research/2026-02-26-first-live-usage-conversation.md`
+- Ran independent best-of-n final-pass reviews:
+  - `design/best-of-n/2026-02-26-final-pass-a.md`
+  - `design/best-of-n/2026-02-26-final-pass-b.md`
+  - `design/best-of-n/2026-02-26-final-pass-c.md`
+- Updated doctrine for explicit single-queue state transitions and activation scaffolding:
+  - `doctrine/process.md`
+  - `doctrine/pipeline.md`
+  - `doctrine/output-contract.md`
+- Added explicit product-team role contract:
+  - `doctrine/team-contract.md`
+- Strengthened orchestration determinism:
+  - mandatory immediate `architect-opencode` delegation on activation
+  - bounded retry + escalation rule

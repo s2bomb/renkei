@@ -43,8 +43,9 @@ Process direction:
 
 Orchestration direction:
 - in OpenCode, delegate via `Task(subagent_type="general")` with first-step Skill invocation
+- route delegation using concrete capabilities: `research-codebase`, `repository-researcher`, `web-search-researcher`
 - parallelize independent research threads
 
 Output direction:
 - one analyst brief per request/scope pass
-- mandatory sections for findings, scope decomposition, assumptions, risks, and open questions
+- mandatory sections aligned to shaper intake schema

@@ -81,15 +81,16 @@ The shaper is the product-stage leader who converts unstructured intent into a b
 
 ### Process
 
-The doctrine process should be eight steps:
+The doctrine process should include explicit queue transition and activation scaffold steps:
 1. Capture intent and create/verify project container.
 2. Clarify and frame the candidate problem(s).
 3. Delegate problem analysis and scoping (or record explicit role emulation when delegation is unavailable).
 4. Consult technical reality on feasibility shape.
 5. Synthesize a Shape Up core-contract artifact per scoped item.
-6. Set recommendation state (proposed-active or parked).
-7. Route recommendation to decision owner; confirm final activation state.
-8. Hand off approved active items to technical-preparation leader with explicit gaps.
+6. Write uncommitted items to `shaped-items/open/` queue.
+7. Route recommendation to decision owner and confirm transition.
+8. On activation, materialize active item workspace scaffold.
+9. Hand off active workspace to technical-preparation leader with explicit gaps.
 
 ### Orchestration
 
@@ -101,11 +102,19 @@ The doctrine process should be eight steps:
 - Delegate confirmed active items to `architect-opencode`.
 - Propagate core convictions verbatim when delegating.
 
+### Team contract
+
+- decision owner: commitment authority
+- shaper: synthesis + activation packaging
+- problem-analyst: validation and scope decomposition
+- tech lead: feasibility signal
+- architect-opencode: technical preparation + execution orchestration
+
 ### Pipeline position
 
 The shaper sits before technical-preparation agents and after project capture, with external commitment decision ownership:
 
-`create-project -> shaper -> decision gate -> architect-opencode -> execution`
+`create-project -> shaper -> decision gate -> state transition + scaffold -> architect-opencode -> execution`
 
 ### Output contract
 
