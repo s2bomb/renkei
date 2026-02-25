@@ -2,8 +2,8 @@
 
 ## Step 1: Capture Intent and Establish Container
 
-1. Ensure the project folder exists (`thoughts/projects/YYYY-MM-DD-name/`).
-2. Preserve incoming input in `sources/` before interpretation.
+1. Create or confirm a working container for this shaping cycle using the active environment's convention.
+2. Preserve incoming source input before interpretation.
 3. Confirm what entered: problem, idea, question, opportunity, or vision.
 4. Hold first-contact posture: "interesting, maybe some day" until shaping clarifies value and scope.
 
@@ -15,15 +15,18 @@
 
 ## Step 3: Explore and Scope
 
-1. Delegate or perform problem exploration:
+1. Delegate problem exploration to the problem-analyst role by default.
+2. If the problem-analyst role is unavailable, perform direct exploration and record role emulation.
+3. Exploration must:
    - Validate whether the problem is real.
    - Gather domain context and prior attempts.
    - Identify assumptions and unknowns.
-   - When delegating, use `general` subagents and require first-step role-skill invocation.
-2. Produce scope boundaries for each candidate item:
+4. Produce scope boundaries for each candidate item:
    - What is in scope.
    - What is out of scope.
    - Ordering dependencies when multiple items exist.
+5. For ambiguous or multi-item input, require an analyst brief before synthesis.
+6. On OpenCode, delegation must run through `Task(subagent_type="general")` and require first-step Skill invocation for role embodiment.
 
 ## Step 4: Set Appetite and Risk Posture
 
@@ -56,13 +59,14 @@ If information is missing, state the gap explicitly. Do not hide omissions.
 ## Step 7: Decide Item State and Handoff
 
 For each shaped item, set explicit state:
-- `active`: approved for immediate technical-preparation handoff
+- `proposed-active`: recommended for immediate handoff, pending decision-owner confirmation
+- `active`: confirmed for immediate technical-preparation handoff
 - `parked`: qualified but not proceeding now
 
 The shaper does not own the final commitment authority. The shaper prepares and recommends.
 
 Default flow:
-- Provide shaped artifact(s) to the decision owner (human/CEO) with recommendation.
+- Provide shaped artifact(s) to the decision owner with recommendation.
 - Decision owner confirms `active` or `parked`.
 
 Directive flow:
@@ -72,6 +76,8 @@ For active items, hand off with:
 - shaped document path
 - key unresolved assumptions
 - research artifacts produced during shaping
+
+On OpenCode, active handoff is delegated to `architect-opencode` using a `general` subagent whose first action is Skill invocation.
 
 ## Step 8: Keep the Slate Clean
 

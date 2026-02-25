@@ -2,14 +2,13 @@
 
 ## Artifact
 
-Shaped pitch document. Generate from [references/template.md](references/template.md).
+Produce one shaped pitch document per scoped item.
 
-One document per scoped item.
+A template may be used as a convenience, but the contract fields are mandatory regardless of format.
 
-## Path Convention
+## Location Convention
 
-- Primary: `{project_root}/working/shaped-item-{N}.md`
-- Single-item shortcut: `{project_root}/working/shaped-problem.md`
+Store artifacts using the active environment's project convention.
 
 ## Required Structure
 
@@ -33,12 +32,19 @@ Plus required metadata:
 
 Do not hand off an `active` item unless:
 - Problem statement is solution-agnostic and specific
+- Each major problem claim includes evidence or an explicit uncertainty label
 - Appetite is explicit
 - Rabbit holes are explicit and tagged (validity + necessity where applicable)
+- Each rabbit hole includes consequence if wrong
 - No-gos are explicit
 - Solution constrains direction without technical prescription
 - Major unresolved risks are visible
 - Decision state is explicit
+- Decision-owner acknowledgment is explicit
+
+## Downstream Contract
+
+For confirmed `active` items, the shaped artifact must be handoff-ready for `architect-opencode` without additional reframing.
 
 ## Completion Report
 

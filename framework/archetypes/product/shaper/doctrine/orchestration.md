@@ -8,11 +8,16 @@ For simple, single-item inputs, work directly through the process and produce on
 
 For ambiguous, research-heavy, or multi-item inputs, delegate exploration and run synthesis centrally.
 
+### OpenCode Delegation Protocol (current runtime)
+
+In the current OpenCode runtime, delegation is explicit and mandatory:
+- Use `Task(subagent_type="general")`.
+- Delegate's first action is Skill invocation for the target role.
+- No pre-skill exploration.
+
 ### Problem exploration delegation
 
-Delegate using a `general` subagent and have it invoke the role skill.
-
-Preferred pattern (when `problem-analyst` skill is deployed):
+Delegate problem exploration to `problem-analyst` with strict return contract.
 
 ```python
 Task(
@@ -22,7 +27,7 @@ STOP. READ THIS BEFORE DOING ANYTHING.
 
 Your FIRST action MUST be to call the Skill tool with skill: 'problem-analyst' and args: '[project path and source paths]'.
 
-DO NOT start exploring on your own first. Step 1 is invoking the skill so you embody the role correctly.
+DO NOT start exploring on your own first. Step 1 is invoking the skill.
 
 Return:
 1. Problem validation findings
@@ -34,7 +39,19 @@ Return:
 )
 ```
 
-If `problem-analyst` skill is not yet available, delegate to `general` with the same return contract and explicit role framing, then record role emulation in notes.
+Required delegation inputs:
+- source inputs
+- shaping questions
+- constraints and decision context
+
+Required return contract:
+1. Problem validation findings
+2. Scoped item list (1..N)
+3. Assumptions with validity/necessity tags
+4. Open risks and unresolved questions
+5. Recommended in-scope and out-of-scope boundaries per item
+
+If the specialist role is unavailable, run role emulation and record that collapse explicitly.
 
 ### Feasibility consultation
 
@@ -43,11 +60,46 @@ Consultation is advisory at this stage, not design ownership.
 
 ### Research satellite delegation
 
-When deeper research is needed, delegate via `general` and require first-step skill invocation (`research-codebase`, `repository-researcher`, or `web-search-researcher`) according to the question.
+When deeper research is needed, delegate through `general` and require first-step skill invocation for the appropriate capability class:
+- internal context research
+- repository/codebase research
+- external domain research
+
+Always require source-cited returns with confidence labels.
+
+### Technical preparation delegation (post-decision)
+
+When a shaped item is confirmed `active` by the decision owner, delegate execution ownership to `architect-opencode`.
+
+```python
+Task(
+  subagent_type="general",
+  prompt="""
+STOP. READ THIS BEFORE DOING ANYTHING.
+
+Your FIRST action MUST be to call the Skill tool with skill: 'architect-opencode' and args: '[active shaped artifact path(s)]'.
+
+DO NOT start planning or coding before Skill invocation.
+
+Context:
+- Decision owner confirmed these items as active.
+- Shaped artifacts are the ground truth for product intent and boundaries.
+
+Return:
+1. Confirmation of received shaped artifacts
+2. Initial execution orchestration plan
+3. Any critical blockers requiring decision-owner clarification
+"""
+)
+```
 
 ## Parallelism Rule
 
 When scoped items are independent, delegate analysis in parallel and synthesize after all returns are complete.
+
+## Retry Rule
+
+If any delegated return misses contract fields, re-delegate with explicit defects and block synthesis until corrected.
 
 ## Verbatim Propagation
 

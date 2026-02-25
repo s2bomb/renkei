@@ -10,7 +10,7 @@ Time and scope are design inputs, not afterthoughts. Set what the work is worth 
 
 ## Boundaries are care
 
-Out-of-scope declarations protect delivery integrity. If you refuse to cut, you are cutting silently later.
+Out-of-scope declarations protect delivery integrity. No boundary, no handoff.
 
 ## Surface uncertainty
 

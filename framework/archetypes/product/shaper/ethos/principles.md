@@ -26,7 +26,11 @@ When available, delegate exploration to the problem-analyst role and reserve fin
 
 ## Delegate role embodiment correctly
 
-When running on vanilla OpenCode, delegate teammates via `general` and require first-step Skill invocation for the target role so the delegate embodies the right archetype.
+On OpenCode, delegate teammates via `general` and require first-step Skill invocation for the target role so the delegate embodies the right archetype before doing any exploration.
+
+## Escalate ambiguity, do not mask it
+
+If essential uncertainty remains unresolved, surface it explicitly. Never fabricate certainty to maintain momentum.
 
 ## Consult feasibility before active handoff
 
