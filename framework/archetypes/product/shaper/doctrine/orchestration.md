@@ -10,13 +10,13 @@ Team members and ownership:
 - `decision owner` -- commitment authority (`open/active/parked/done` transitions)
 - `shaper` -- framing synthesis, bounded recommendation, activation packaging
 - `problem-analyst` -- evidence gathering, validation, scope decomposition
-- `tech lead` -- feasibility signal before activation
-- `architect-opencode` -- technical preparation and downstream execution orchestration after activation
+- `tech-lead` -- feasibility signal before activation; technical-preparation ownership after activation
+- `architect-opencode` -- interim execution orchestration after technical-preparation handoff
 
 Delegation triggers:
 - Delegate to `problem-analyst` when framing is ambiguous, evidence is weak, or scope appears multi-item.
-- Consult `tech lead` when appetite or boundaries imply material feasibility risk.
-- Delegate to `architect-opencode` immediately after an item is confirmed `active` and scaffold/ledger are complete.
+- Consult `tech-lead` when appetite or boundaries imply material feasibility risk.
+- Delegate to `tech-lead` immediately after an item is confirmed `active` and scaffold/ledger are complete.
 
 ## Delegation Mode
 
@@ -69,7 +69,7 @@ If the specialist role is unavailable, run role emulation and record that collap
 
 ### Feasibility consultation
 
-Consult tech lead for feasibility signal before marking any item `active`.
+Consult tech-lead for feasibility signal before marking any item `active`.
 Consultation is advisory at this stage, not design ownership.
 
 ### Research satellite delegation
@@ -83,7 +83,7 @@ Always require source-cited returns with confidence labels.
 
 ### Technical preparation delegation (post-decision)
 
-When a shaped item is confirmed `active` by the decision owner, delegate execution ownership to `architect-opencode`.
+When a shaped item is confirmed `active` by the decision owner, delegate technical-preparation ownership to `tech-lead`.
 
 This delegation is mandatory and immediate. Activation is incomplete until delegation is issued and acknowledgment is returned.
 
@@ -93,7 +93,7 @@ Task(
   prompt="""
 STOP. READ THIS BEFORE DOING ANYTHING.
 
-Your FIRST action MUST be to call the Skill tool with skill: 'architect-opencode' and args: '[active shaped artifact path(s)]'.
+Your FIRST action MUST be to call the Skill tool with skill: 'tech-lead' and args: '[active shaped artifact path(s)]'.
 
 DO NOT start planning or coding before Skill invocation.
 
@@ -103,8 +103,8 @@ Context:
 
 Return:
 1. Confirmation of received shaped artifacts
-2. Initial execution orchestration plan
-3. Any critical blockers requiring decision-owner clarification
+2. Initial technical-preparation orchestration plan
+3. Any critical blockers requiring shaper or decision-owner clarification
 """
 )
 ```

@@ -3,7 +3,7 @@
 ## Position
 
 ```
-create-project (container) -> shaper -> decision gate -> state transition + scaffold -> architect-opencode -> execution
+create-project (container) -> shaper -> decision gate -> state transition + scaffold -> tech-lead -> architect-opencode (interim) -> execution
 ```
 
 The shaper sits after lightweight project capture and before technical preparation. The commitment decision boundary is external to the shaper role.
@@ -37,7 +37,8 @@ State is authoritative by filesystem location plus appended transition events. N
 
 ## Active Handoff Target
 
-- For confirmed `active` items, hand off to `architect-opencode` for technical preparation and downstream execution orchestration.
+- For confirmed `active` items, hand off to `tech-lead` for technical preparation orchestration.
+- After technical-preparation package acknowledgment, `tech-lead` hands off to `architect-opencode` (interim) for execution orchestration.
 - Handoff precondition: active scaffold exists and both project/item transition events are written.
 
 ## Feedback Loop

@@ -109,7 +109,7 @@ For active items, hand off with:
 - key unresolved assumptions
 - analyst brief and research artifacts
 
-On OpenCode, delegation target is `architect-opencode` via `Task(subagent_type="general")` with first-step Skill invocation.
+On OpenCode, delegation target is `tech-lead` via `Task(subagent_type="general")` with first-step Skill invocation.
 
 ## Step 9: Keep the Slate Clean
 

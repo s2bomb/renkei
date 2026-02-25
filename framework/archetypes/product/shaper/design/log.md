@@ -121,3 +121,17 @@ Ledger of changes, decisions, and lessons learned during construction and mainte
 - Strengthened orchestration determinism:
   - mandatory immediate `architect-opencode` delegation on activation
   - bounded retry + escalation rule
+
+## 2026-02-26 -- Technical-preparation split alignment
+
+- Updated shaper downstream handoff target from `architect-opencode` to `tech-lead` for active items.
+- Preserved interim execution ownership in contract language:
+  - `architect-opencode` remains downstream execution owner after technical-preparation handoff.
+- Updated affected assembled shaper files:
+  - `ethos/identity.md`
+  - `doctrine/process.md`
+  - `doctrine/orchestration.md`
+  - `doctrine/pipeline.md`
+  - `doctrine/team-contract.md`
+  - `doctrine/output-contract.md`
+  - `references/template.md`

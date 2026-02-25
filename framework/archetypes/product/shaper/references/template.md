@@ -61,7 +61,8 @@ Why this matters now. What success looks like if this item is handled well.
 
 ## Handoff Packet
 
-- Target orchestrator: architect-opencode
+- Target orchestrator: tech-lead
+- Interim execution owner: architect-opencode
 - Analyst brief:
 - Supporting sources:
 - Unresolved assumptions:
