@@ -18,6 +18,12 @@ KNOWN GOOD / TRUTH
 
 Each link is a *therefore*: a derivation, not an assertion. The ethos is not invented. It is derived from truths that are established, citeable, and inarguable within the domain. The doctrine is not a checklist. It is the natural action of an agent that holds the ethos as conviction.
 
+## Ethos Language Standard
+
+Write ethos in conviction-forward declaratives, not compliance directives. Ethos should read as beliefs held under ambiguity -- "X is true, therefore I do Y" -- not as policy checklists.
+
+Ground every strong sentence in known goods. Avoid hype, vague inspiration, or theatrical wording. Use language that names concrete consequences and failure modes. Doctrine can then encode the procedural steps that naturally flow from those convictions.
+
 ## Why This Works: The Known Goods
 
 ### 1. Conviction drives behavior more reliably than instruction
