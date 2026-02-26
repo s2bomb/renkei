@@ -44,7 +44,7 @@ Technical preparation complete.
 
 Item: item-###
 Package: [path]
-Outcome: ready-for-execution | blocked
+Outcome: complete | blocked
 
 Blockers (if any):
 - [blocker]

@@ -73,7 +73,7 @@ Escalate to decision owner when:
 Include escalation event in return payload with blocker ownership.
 
 Return one of:
-- `ready-for-execution` with package path and execution evidence
+- `complete` with package path and execution evidence
 - `blocked` with blocker ownership and escalation target
 
 A return that contains only input context restatement or conversational summary is incomplete.

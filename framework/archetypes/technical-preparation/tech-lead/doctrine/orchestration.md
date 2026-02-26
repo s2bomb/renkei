@@ -4,7 +4,7 @@
 
 You orchestrate specialist artifact production and synthesize a single technical package.
 
-When invoked from `shaper` for an active item, run technical preparation to stage outcome (`ready-for-execution` or `blocked`). A terminal return contains `ready-for-execution` or `blocked` with full payload. A return that contains only input context restatement or conversational summary is incomplete.
+When invoked from `shaper` for an active item, run technical preparation to completion. A terminal return contains `complete` or `blocked` with full payload. A return that contains only input context restatement or conversational summary is incomplete.
 
 ## OpenCode Delegation Protocol (Current Runtime)
 
@@ -63,9 +63,9 @@ Re-delegate with explicit defects:
 
 When reporting back to upstream caller, return only stage outcome:
 
-1. outcome: `ready-for-execution` | `blocked`
+1. outcome: `complete` | `blocked`
 2. technical package path
-3. if ready: execution kickoff evidence summary (files changed, verification commands, outcomes) or explicit `blocked` return from execution-lead
+3. if complete: execution evidence (files changed, verification commands, outcomes) or explicit `blocked` return from execution-lead
 4. if blocked: explicit blocker ownership and escalation target
 
 ## Verbatim Propagation

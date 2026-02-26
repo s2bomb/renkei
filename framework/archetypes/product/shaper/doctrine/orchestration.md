@@ -87,7 +87,7 @@ When a shaped item is confirmed `active` by the decision owner, delegate technic
 
 This delegation is mandatory and immediate. Activation is incomplete until delegation is issued.
 
-After handoff, `shaper` does not run technical preparation or delegate `execution-lead` directly for that item. `tech-lead` owns the stage until it returns `ready-for-execution` or `blocked`.
+After handoff, `shaper` does not run technical preparation or delegate `execution-lead` directly for that item. `tech-lead` owns the stage until it returns `complete` or `blocked`.
 
 ```python
 Task(
@@ -108,9 +108,9 @@ Execution requirement:
 - Delegate required members (`spec-writer`, `research-codebase`, `api-designer`, `test-designer`, `create-plan`) and synthesize package.
 
 Return:
-1. Technical-preparation outcome: `ready-for-execution` | `blocked`
+1. Technical-preparation outcome: `complete` | `blocked`
 2. Technical package artifact path(s)
-3. If `ready-for-execution`: execution kickoff evidence summary from `execution-lead`
+3. If `complete`: execution evidence (files changed, verification outcomes)
 4. If `blocked`: blockers requiring shaper or decision-owner clarification
 """
 )
