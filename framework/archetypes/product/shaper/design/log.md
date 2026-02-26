@@ -140,3 +140,13 @@ Ledger of changes, decisions, and lessons learned during construction and mainte
 
 - Added `design/team-map.md` so parent/member handoff direction is explicit.
 - Codified that shaper member outputs return to `shaper` for synthesis and active-stage handoff goes to `tech-lead`.
+
+## 2026-02-26 -- Execution owner rename propagation
+
+- Updated downstream execution-owner references from `architect-opencode` to `execution-lead` in assembled shaper artifacts:
+  - `ethos/identity.md`
+  - `doctrine/orchestration.md`
+  - `doctrine/pipeline.md`
+  - `doctrine/team-contract.md`
+  - `doctrine/output-contract.md`
+  - `references/template.md`

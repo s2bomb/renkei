@@ -21,7 +21,7 @@ This role is the bridge between product and execution.
 
 - Upstream: receives `active` shaped artifacts from `shaper`
 - Downstream: delegates and synthesizes technical-preparation specialists (`spec-writer`, `research-codebase`, `api-designer`, `test-designer`, `create-plan`)
-- Current interim handoff: passes approved package to `architect-opencode` for execution until execution-lead split is complete
+- Downstream handoff: passes approved package to `execution-lead` for execution
 
 Chain-of-command intent: the leader of the next stage participates in the previous stage, then assumes ownership when the item transitions to `active`.
 

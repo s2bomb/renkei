@@ -4,7 +4,7 @@
 
 1. Read the plan completely. Check for existing checkmarks (`- [x]`) -- trust completed work is done unless something seems off.
 2. Read `test_spec_source` and `design_source` from plan frontmatter when present.
-3. If `test_spec_source` is missing for section work, stop and route back through architect for `/test-designer`.
+3. If `test_spec_source` is missing for section work, stop and route back through `execution-lead` for `/test-designer`.
 4. Skip test phases -- those are owned by `/test-implementer` and should already be completed.
 5. Identify which phases are your responsibility (implementation phases, not test phases).
 6. Read all referenced documents fully -- spec, research, design doc, test spec. Never use limit/offset; you need complete context.
@@ -74,7 +74,7 @@ Why this matters: [explanation]
 How should I proceed?
 ```
 
-If the issue is with tests or design -- do not fix it. Propagate to the architect with specifics: which test, which design assumption, what doesn't fit. The test-designer and api-designer own those concerns.
+If the issue is with tests or design -- do not fix it. Propagate to `execution-lead` with specifics: which test, which design assumption, what doesn't fit. The test-designer and api-designer own those concerns.
 
 If the issue is with implementation approach -- re-delegate the clone with clarified instructions, or present the mismatch to the user.
 

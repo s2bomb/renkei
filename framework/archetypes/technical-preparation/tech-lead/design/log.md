@@ -66,3 +66,18 @@ Ledger of construction and maintenance decisions.
   - `doctrine/handoff-contract.md`
 - Added references template:
   - `references/template.md`
+
+## 2026-02-26 -- Execution-stage owner propagation
+
+- Updated downstream execution owner references from `architect-opencode` to `execution-lead`:
+  - `ethos/identity.md`
+  - `doctrine/process.md`
+  - `doctrine/pipeline.md`
+  - `doctrine/handoff-contract.md`
+  - `doctrine/team-contract.md`
+  - `doctrine/output-contract.md`
+  - `references/template.md`
+- Updated design-layer topology references:
+  - `design/synthesis.md`
+  - `design/team-map.md`
+  - `design/research/source-map.md`

@@ -21,7 +21,7 @@ Produce one technical-preparation package per active item.
 8. unresolved decisions (explicit `none` if empty)
 9. accepted risks (explicit `none` if empty)
 10. must-have and nice-to-have separation for execution planning
-11. handoff record status
+11. handoff record status (`tech-lead -> execution-lead`)
 
 ## Quality Gates
 

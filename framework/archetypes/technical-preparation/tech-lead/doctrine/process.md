@@ -55,9 +55,9 @@ Assemble one execution-ready package containing:
 
 As stage owner, `tech-lead` is accountable for cross-artifact coherence and package completeness.
 
-## Step 6: Handoff to Execution Owner (Interim)
+## Step 6: Handoff to Execution Owner
 
-Delegate package to `architect-opencode` and require acknowledgment.
+Delegate package to `execution-lead` and require acknowledgment.
 
 Execution ownership transfer is valid only after acknowledgment returns:
 - receipt confirmed

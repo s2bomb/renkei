@@ -41,9 +41,9 @@
 
 -
 
-## Interim Handoff
+## Handoff
 
-- Target execution owner: architect-opencode
+- Target execution owner: execution-lead
 - Receipt confirmed: true|false
 - Sufficiency for execution: true|false
 - Blocking gaps:

@@ -3,7 +3,7 @@
 ## Position
 
 ```
-shaper (active item) -> tech-lead (technical preparation) -> architect-opencode (execution, interim)
+shaper (active item) -> tech-lead (technical preparation) -> execution-lead (execution)
 ```
 
 The tech-lead sits between product activation and execution ownership.
@@ -25,6 +25,6 @@ The tech-lead sits between product activation and execution ownership.
 
 - Product framing stays with `shaper`.
 - Technical preparation stays with `tech-lead`.
-- Execution orchestration stays with `architect-opencode` (interim).
+- Execution orchestration stays with `execution-lead`.
 
 If technical preparation exposes product-stage defects, route back to `shaper`. Do not patch around framing defects in downstream design.

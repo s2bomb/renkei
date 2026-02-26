@@ -2,7 +2,7 @@
 
 ## Contract
 
-This contract governs interim transfer from `tech-lead` (technical preparation owner) to `architect-opencode` (execution owner).
+This contract governs transfer from `tech-lead` (technical preparation owner) to `execution-lead` (execution owner).
 
 Member-level specialist artifacts do not cross this boundary directly. They are aggregated by `tech-lead` first.
 

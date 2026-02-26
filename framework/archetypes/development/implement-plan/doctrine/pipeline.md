@@ -16,7 +16,7 @@ After `/test-implementer`. Before `/validate-plan`.
 - API design document (for function signatures and types)
 - Research document (for codebase context)
 
-If the plan is missing, ask for one. If `test_spec_source` is missing for section work, stop and route back through architect for `/test-designer`.
+If the plan is missing, ask for one. If `test_spec_source` is missing for section work, stop and route back through `execution-lead` for `/test-designer`.
 
 ## Outputs
 

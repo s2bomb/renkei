@@ -11,7 +11,7 @@ Team members and ownership:
 - `shaper` -- framing synthesis, bounded recommendation, activation packaging
 - `problem-analyst` -- evidence gathering, validation, scope decomposition
 - `tech-lead` -- feasibility signal before activation; technical-preparation ownership after activation
-- `architect-opencode` -- interim execution orchestration after technical-preparation handoff
+- `execution-lead` -- execution orchestration after technical-preparation handoff
 
 Delegation triggers:
 - Delegate to `problem-analyst` when framing is ambiguous, evidence is weak, or scope appears multi-item.

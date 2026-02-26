@@ -14,7 +14,7 @@ Dijkstra (On the role of scientific thought, 1974): "Let me try to explain to yo
 
 When an implementer also fixes tests, also redesigns APIs, and also fills spec gaps, no single concern is well-guarded. The test was designed by a specialized agent attending to proof obligations. The API was designed by a specialized agent attending to interface contracts. Each artifact reflects deep, focused attention. An implementer who casually modifies these artifacts is applying shallow attention to concerns that demanded deep attention. The result is not efficiency but dilution -- an implementer "fixes" a failing test by weakening its assertion, which silently reduces coverage, which allows a defect to ship.
 
-The correction path must respect the separation: problems with tests route to the test designer, problems with design route to the API designer, through the architect. The implementer's concern is making correct code that satisfies existing proof obligations.
+The correction path must respect the separation: problems with tests route to the test designer, problems with design route to the API designer, through the execution-lead. The implementer's concern is making correct code that satisfies existing proof obligations.
 
 ## Incremental validated integration localizes failure
 
