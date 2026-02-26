@@ -104,11 +104,10 @@ Context:
 - Shaped artifacts are the ground truth for product intent and boundaries.
 
 Execution requirement:
-- Continue through technical-preparation process to stage outcome.
-- Do not stop at intake-only chat.
+- Produce technical-preparation package.
 - Delegate required members (`spec-writer`, `research-codebase`, `api-designer`, `test-designer`, `create-plan`) and synthesize package.
 
-Return only when stage outcome is reached:
+Return:
 1. Technical-preparation outcome: `ready-for-execution` | `blocked`
 2. Technical package artifact path(s)
 3. If `ready-for-execution`: execution kickoff evidence summary from `execution-lead`

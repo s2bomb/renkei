@@ -23,35 +23,30 @@ Member-level specialist artifacts do not cross this boundary directly. They are 
 - Execution worktree path is for code/test implementation activity.
 - Do not rebase planning artifact paths into execution worktree unless explicitly instructed.
 
-## Required Transfer Outcome
+## Required Return
 
 Execution owner returns one of:
 
-1. `outcome`: `running`
-2. concrete first-phase progress evidence:
-   - files changed
-   - verification commands run
-   - outcomes
+1. `outcome`: `complete`
+2. evidence demonstrating execution work occurred (e.g., files changed, verification commands executed, outcomes observed)
 
-or, if blocked at intake/preflight:
+or, if blocked:
 
 1. `outcome`: `blocked`
 2. `blockers[]`: explicit blocker list with ownership
 3. `recommended_next_action`
 
-## Transfer Rule
+## Invocation Rule
 
 Execution ownership is transferred when payload fields are complete and transfer is issued.
 
-After transfer, execution-lead immediately runs execution stage unless blocked by a contract defect.
+Validation-only results are not complete. A complete return includes evidence of execution work beyond input validation.
 
-Intake/preflight pass alone is not a terminal return for execution-lead in this handoff.
+If blocked, tech-lead processes the blockers: correct and re-invoke, or escalate.
 
-If blocked, ownership returns to `tech-lead` for correction or escalation.
+## Escalation Convention
 
-## Escalation Rule
-
-If two correction cycles fail to clear transfer blockers, escalate to decision owner with:
+If two re-invocations fail to clear blockers, escalate to decision owner with:
 - blocked fields
 - impact on appetite and delivery integrity
 - recommended decision options

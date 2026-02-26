@@ -19,7 +19,7 @@ The tech-lead sits between product activation and execution ownership.
 
 - technical-preparation package with execution-ready artifacts
 - unresolved decision list and accepted-risk register
-- transfer record to execution owner (`running` or `blocked`)
+- transfer record to execution owner (`complete-with-evidence` or `blocked`)
 
 ## Boundary Rules
 

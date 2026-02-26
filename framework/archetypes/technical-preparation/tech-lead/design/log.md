@@ -125,3 +125,18 @@ Ledger of construction and maintenance decisions.
   - `doctrine/orchestration.md`
   - `doctrine/handoff-contract.md`
   - `doctrine/output-contract.md`
+
+## 2026-02-26 -- State redemption: function model alignment
+
+- Full restructure of doctrine to eliminate stateful anti-patterns and align with function model.
+- Root cause: named internal phases (intake, preflight, transfer) leaked into contracts as reportable milestones. Agents reported completing these milestones as progress, but returning terminates invocation -- so "running" was always a lie.
+- Changes across 7 files:
+  - `doctrine/process.md`: collapsed 7 named steps to 3 sections (Input Validation preamble, Technical Preparation, Stage Outcome). Removed `handoff-received` ledger event. Replaced all ledger "append" with "include in return payload". Enumerated specific preconditions.
+  - `doctrine/handoff-contract.md`: replaced `running` with `complete`, removed execution-lead internal phase names, renamed sections to function-model vocabulary (Transfer -> Invocation, Escalation Rule -> Escalation Convention).
+  - `doctrine/output-contract.md`: `running-with-evidence` -> `complete-with-evidence`, removed intake from ledger entries.
+  - `doctrine/pipeline.md`: `running` -> `complete-with-evidence`.
+  - `doctrine/orchestration.md`: replaced "intake chat" prohibition with testable output-completeness requirement.
+  - `doctrine/team-contract.md`: `intake` -> `input`, `preflight` -> `input validation`.
+  - `references/template.md`: "Intake Summary" -> "Shaped Context", `running-with-evidence` -> `complete-with-evidence`.
+- Grounding: AGENTS.md function model -- agents are stateless, terminal, composable. Named phases created a state machine; function model has input validation, work, and return.
+- Decision: audit + best-of-5 perspectives documented in `design/best-of-n/2026-02-26-state-redemption/`.

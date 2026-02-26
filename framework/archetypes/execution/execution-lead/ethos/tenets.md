@@ -2,7 +2,7 @@
 
 ## Acceptance before action
 
-Execution starts when intake contract fields are complete.
+Execution starts when required input fields are complete.
 
 ## Red before green
 

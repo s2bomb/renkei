@@ -1,27 +1,24 @@
 # Process
 
-## Step 1: Intake Active Shape
+## Input Validation
 
-1. Receive active item context from `shaper`:
-   - active workspace path
-   - `shape.md`
-   - source and analyst artifact paths
-   - appetite, no-gos, and open assumptions
-2. Confirm active-state scaffold and ledgers exist.
-3. Append intake event to project and item ledgers (`handoff-received`, actor: `tech-lead`).
-4. Stop if intake packet is incomplete.
+Receive active item context from `shaper`:
+- active workspace path
+- `shape.md`
+- source and analyst artifact paths
+- appetite, no-gos, and open assumptions
 
-## Step 2: Preflight Quality Gate
+Preconditions -- all must hold before any delegation:
 
-Verify shaped intent is execution-preparable:
-- problem and boundaries are explicit
-- appetite is explicit
-- no-gos are explicit
-- major uncertainties are visible
+1. Active-state scaffold and ledgers exist.
+2. Problem statement is explicit.
+3. Appetite is explicit.
+4. No-gos are explicit.
+5. Major uncertainties are visible.
 
-If product-framing defects are found, route to `shaper` with explicit defect notes.
+If any precondition fails, return error to `shaper` with explicit defect notes.
 
-## Step 3: Orchestrate Specialist Artifacts
+## 1. Technical Preparation
 
 Delegate technical preparation work to specialists:
 - `spec-writer`
@@ -36,8 +33,6 @@ All specialist outputs return to `tech-lead` for synthesis. Specialists do not h
 
 `tech-lead` does not author member-owned artifacts in normal operation. If member delegation is unavailable, escalate for explicit role-collapse authorization before proceeding.
 
-## Step 4: Evaluate and Iterate
-
 After each delegated return:
 1. Check required contract fields.
 2. Check boundary compliance (no silent scope or intent drift).
@@ -46,8 +41,6 @@ After each delegated return:
 Allow at most two correction retries per failed artifact.
 
 If specialist outputs remain unavailable after retries, mark stage `blocked` and escalate rather than silently self-producing all artifacts.
-
-## Step 5: Synthesize Technical Package
 
 Assemble one execution-ready package containing:
 - enriched spec
@@ -60,27 +53,27 @@ Assemble one execution-ready package containing:
 
 As stage owner, `tech-lead` is accountable for cross-artifact coherence and package completeness.
 
-## Step 6: Transfer to Execution Owner
+## 2. Stage Outcome
 
 Delegate package to `execution-lead`.
 
 Execution ownership transfer is valid when handoff payload fields are complete and transfer is issued.
 
-Execution-lead behavior after invocation:
-- proceed immediately with execution stage and attempt first execution phase work with evidence, or
-- return `blocked` with explicit blocker ownership.
+Execution-lead returns either `complete` with evidence of execution work (e.g. files changed, verification commands executed, outcomes observed), or `blocked` with explicit blocker ownership.
 
 Do not return execution-start responsibility to `shaper` after package readiness. Cross-stage handoff is `tech-lead -> execution-lead`.
 
-Append transfer events to project and item ledgers:
-- `handoff-issued` (to `execution-lead`)
-- `handoff-result` (`running-with-evidence` or `blocked`)
-
-## Step 7: Escalate When Blocked
+Include transfer event in return payload: type, target, outcome, evidence or blockers.
 
 Escalate to decision owner when:
 - retries are exhausted
 - required decisions block correctness
 - unresolved ambiguity would force unsafe execution
 
-Record escalation events in project and item ledgers with blocker ownership.
+Include escalation event in return payload with blocker ownership.
+
+Return one of:
+- `ready-for-execution` with package path and execution evidence
+- `blocked` with blocker ownership and escalation target
+
+A return that contains only input context restatement or conversational summary is incomplete.

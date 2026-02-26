@@ -177,3 +177,13 @@ Ledger of changes, decisions, and lessons learned during construction and mainte
 
 - Replaced `status` field wording with `outcome` in technical-preparation stage return contract to reduce status-chat interpretation drift.
 - Updated `doctrine/orchestration.md`.
+
+## 2026-02-26 -- State redemption: function model alignment
+
+- Removed stateful anti-patterns from tech-lead delegation prompt in `doctrine/orchestration.md`:
+  - Replaced process narration ("Continue through technical-preparation process to stage outcome") with deliverable specification ("Produce technical-preparation package").
+  - Deleted intake-as-named-state prohibition ("Do not stop at intake-only chat") -- redundant given return contract.
+  - Simplified return qualifier ("Return only when stage outcome is reached:") to direct return specification ("Return:").
+- Root cause: delegation prompt contained function body (how to traverse callee's process) instead of function signature (what to return). Fix converts call site to contract-only.
+- Grounding: AGENTS.md function model -- "Agents are non-deterministic functions -- stateless, terminal, composable." Delegation prompt is a call site, not a function body.
+- Decision: audit + best-of-5 perspectives documented in `design/best-of-n/2026-02-26-state-redemption/`.

@@ -1,5 +1,7 @@
 # Output Contract
 
+Input fields and preconditions are defined in handoff-contract.md.
+
 ## Artifact
 
 Produce one execution-stage report per active item.
@@ -24,13 +26,13 @@ Produce one execution-stage report per active item.
 11. escalations (explicit `none` if empty)
 12. execution outcome (`complete` | `blocked` | `escalated`)
 13. recommended next decision
-14. project/item event ledger entries for intake, stage outcome, and escalation (if any)
+14. project/item event ledger entries for stage outcome and escalation (if any)
 
 ## Quality Gates
 
 No stage-complete publication when any gate fails:
 
-- Intake contract fields are complete and stage started
+- Required input fields are present
 - test-first gate passed (unless explicit exception is declared)
 - implementation evidence is complete and verifiable
 - validation report exists and is consistent with evidence

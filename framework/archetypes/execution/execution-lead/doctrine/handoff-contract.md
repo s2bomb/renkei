@@ -2,11 +2,11 @@
 
 ## Contract
 
-This contract governs transfer from `tech-lead` (technical-preparation owner) to `execution-lead` (execution owner).
+This contract defines the invocation interface for `tech-lead` (technical-preparation owner) to `execution-lead` (execution owner).
 
 Member artifacts from technical-preparation specialists do not cross directly to execution members. `tech-lead` aggregates first.
 
-## Required Intake Payload
+## Required Input Fields
 
 1. active item workspace path
 2. shaped artifact path
@@ -20,31 +20,33 @@ Member artifacts from technical-preparation specialists do not cross directly to
 
 ## Path Semantics
 
-- Planning/package artifacts are read from the paths supplied in the handoff payload.
+- Planning/package artifacts are read from the paths supplied in the input fields.
 - Execution worktree path is used for code and test implementation activity.
 - Do not rebase planning artifact paths into execution worktree unless explicitly instructed.
 
-## Required Transfer Outcome
+## Return Contract
 
-Execution owner starts immediately when intake contract fields are complete.
+Execution-lead owns all work from invocation to return.
 
-Intake/preflight pass is non-terminal. Return only after first execution phase attempt with evidence, or blocked.
-
-If intake contract is incomplete, return:
+If input validation fails, return:
 
 1. `outcome`: `blocked`
 2. `blockers[]`: explicit blocker list with ownership
 3. `recommended_next_action`
 
-## Transfer Rule
+Return execution evidence with verification results, or `blocked` with explicit blocker ownership.
 
-Execution ownership transfers when handoff payload fields are complete and invocation occurs.
+For the return value on successful execution, see output-contract.md.
 
-If intake is blocked, ownership returns to `tech-lead`.
+## Ownership
 
-## Escalation Rule
+Execution-lead owns all work from invocation to return.
 
-If two correction cycles fail to clear intake blockers, escalate to decision owner with:
+If input validation fails, the caller (`tech-lead`) retains ownership and decides whether to correct and reinvoke.
+
+## Escalation Convention
+
+If two correction cycles fail to clear input validation failures, escalate to decision owner with:
 
 - blocked fields
 - impact on appetite and delivery integrity

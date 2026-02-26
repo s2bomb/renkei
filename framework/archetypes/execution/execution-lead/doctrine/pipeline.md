@@ -10,7 +10,7 @@ Execution-lead owns work after technical-preparation handoff and before decision
 
 ## Inputs
 
-- intake package from `tech-lead`
+- input package from `tech-lead`
 - plan path
 - test specification path(s)
 - unresolved decisions and accepted risks

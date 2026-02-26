@@ -83,11 +83,13 @@ Default rule:
 
 Leader invocation rule:
 - Invocation triggers immediate stage execution.
-- No waiting/conversational intake state.
+- No waiting/conversational state. No named internal phases as reportable milestones.
 - Leader returns only terminal stage outcome (`ready/complete` or `blocked/escalated`).
+- Input validation is not a terminal outcome. A return that contains only input context restatement is incomplete.
 
-Leader ledger rule:
-- Stage leaders append project/item events for intake, transfer, outcome, and escalation.
+Leader event rule:
+- Stage leaders include project/item events for transfer, outcome, and escalation in their return payload.
+- No acknowledgment events (e.g., no "handoff-received"). The invocation itself is evidence of receipt.
 
 ### `research/analogs.md`
 

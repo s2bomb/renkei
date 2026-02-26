@@ -22,14 +22,14 @@ You orchestrate execution-stage specialists and enforce stage gates.
 - `implement-plan` runs before `validate-plan`.
 - Parallel execution is allowed only for independent scopes without overlap.
 
-## Intake Return Rule
+## Return Contract
 
-Do not return intake/preflight pass as a terminal response.
+Return to parent leader only with terminal outcomes:
 
-Return to parent leader only when:
+1. execution evidence with verification results, or
+2. `blocked` with explicit blocker ownership and next action.
 
-1. first execution phase attempt produced concrete evidence (files changed + verification outcomes), or
-2. execution is `blocked` with explicit blocker ownership and next action.
+Input validation is not a terminal outcome.
 
 ## Required Return Contract (All Members)
 
@@ -59,7 +59,7 @@ Re-delegate with explicit defect feedback:
 
 When delegating, propagate these convictions exactly:
 
-> Execution starts when intake contract fields are complete.
+> Execution starts when required input fields are complete.
 >
 > Tests are proof obligations and precede implementation.
 >

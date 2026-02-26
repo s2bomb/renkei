@@ -14,7 +14,7 @@
 ## Topology
 
 - Role type: team leader and stage owner (technical preparation stage).
-- Parent leader: `shaper` for active-item intake.
+- Parent leader: `shaper` for active-item input.
 - Downstream stage owner: `execution-lead`.
 
 ## Role Boundaries
@@ -33,6 +33,6 @@
 
 ## Delegation Triggers
 
-- Delegate to specialists when intake packet passes preflight.
+- Delegate to specialists after input validation passes.
 - Route shaping defects to `shaper` when product framing is inconsistent.
 - Delegate to `execution-lead` only after package gates pass.

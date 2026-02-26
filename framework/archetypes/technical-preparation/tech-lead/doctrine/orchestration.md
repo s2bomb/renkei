@@ -4,7 +4,7 @@
 
 You orchestrate specialist artifact production and synthesize a single technical package.
 
-When invoked from `shaper` for an active item, run technical preparation to stage outcome (`ready-for-execution` or `blocked`). Intake chat is not a completion state.
+When invoked from `shaper` for an active item, run technical preparation to stage outcome (`ready-for-execution` or `blocked`). A terminal return contains `ready-for-execution` or `blocked` with full payload. A return that contains only input context restatement or conversational summary is incomplete.
 
 ## OpenCode Delegation Protocol (Current Runtime)
 
@@ -22,7 +22,7 @@ When invoked from `shaper` for an active item, run technical preparation to stag
 
 ## Dependency Rules
 
-- `spec-writer` and `research-codebase` may run in parallel when intake context is complete.
+- `spec-writer` and `research-codebase` may run in parallel once input is validated.
 - `api-designer` depends on enriched spec + research.
 - `test-designer` depends on API design + spec + research.
 - `create-plan` depends on spec + research + design + test spec.

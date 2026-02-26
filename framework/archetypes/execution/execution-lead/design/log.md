@@ -108,3 +108,20 @@ Ledger of construction and maintenance decisions.
 - Replaced intake-blocker return key from `status` to `outcome` in handoff contract.
 - Updated:
   - `doctrine/handoff-contract.md`
+
+## 2026-02-26 -- State redemption: function model alignment
+
+- Full restructure of doctrine and ethos to eliminate stateful anti-patterns and align with function model.
+- Root cause: named internal phases (intake, preflight) leaked into contracts as reportable milestones. "intake" was overloaded -- used for both input validation (fine) and a named state (anti-pattern). Template baked in status reporting (`running-with-evidence`, `If running:`). Safeguards patched symptoms, not causes.
+- Changes across 9 files:
+  - `ethos/tenets.md`: ROOT CHANGE -- "intake contract fields" -> "required input fields" (propagates verbatim to sub-agents).
+  - `ethos/principles.md`: "cross-stage status" -> "cross-stage outcome".
+  - `references/template.md`: full redesign -- eliminated `## Intake` section, `running-with-evidence`, `If running:` conditional. New 7-section structure: Metadata, Work Performed, Evidence Bundle, Issues, Scope, Outcome, Event Ledger.
+  - `doctrine/process.md`: collapsed named steps to unnumbered preambles (Input Validation, Preconditions) + numbered work steps. Removed `handoff-received` ledger event. Added idempotency instruction.
+  - `doctrine/orchestration.md`: "Intake Return Rule" -> "Return Contract" with positive whitelist replacing prohibition.
+  - `doctrine/handoff-contract.md`: full invocation-interface rewrite -- "transfer" -> "invocation", removed all internal phase names, added cross-reference to output-contract.md.
+  - `doctrine/output-contract.md`: removed "intake" from ledger entries and quality gates, added cross-reference to handoff-contract.md.
+  - `doctrine/team-contract.md`: "intake" -> "input"/"invocation" vocabulary throughout.
+  - `doctrine/pipeline.md`: "intake package" -> "input package".
+- Grounding: AGENTS.md function model -- agents are stateless, terminal, composable. Named phases created a state machine; function model has input validation, work, and return.
+- Decision: audit + best-of-5 perspectives documented in `design/best-of-n/2026-02-26-state-redemption/`.

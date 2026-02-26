@@ -8,7 +8,7 @@
 - Shape artifact: shaped-items/active/item-###/shape.md
 - Package artifact: shaped-items/active/item-###/working/technical-package.md
 
-## Intake Summary
+## Shaped Context
 
 - Appetite:
 - No-gos:
@@ -45,12 +45,12 @@
 
 - Target execution owner: execution-lead
 - Execution worktree path:
-- Transfer result: running-with-evidence | blocked
+- Transfer result: complete-with-evidence | blocked
 - Blocking gaps (if blocked):
   -
 - Recommended next action (if blocked):
 
-If running:
+If complete:
 - files changed:
   -
 - verification commands:

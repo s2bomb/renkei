@@ -7,25 +7,30 @@
 - Active workspace: shaped-items/active/item-###/
 - Execution report: shaped-items/active/item-###/working/execution-report.md
 - Execution worktree path:
+- Input source: `tech-lead`
+- Handoff issuer:
 
-## Intake
+## Work Performed
 
-- Package source (`tech-lead`):
-- Handoff issuer role:
-- Transfer outcome: running-with-evidence | blocked
-- Blocking gaps (if blocked):
-  -
-- Recommended next action (if blocked):
+- Test implementation:
+  - Delegate: `test-implementer`
+  - Files changed:
+  - Commits:
+  - Verification result:
+- Implementation:
+  - Delegate: `implement-plan`
+  - Files changed:
+  - Commits:
+  - Verification result:
+- Validation:
+  - Delegate: `validate-plan`
+  - Validation report:
+  - Requirement coverage: full | partial
+- Phases not attempted:
+  - Phase:
+  - Reason:
 
-If running:
-- files changed:
-  -
-- verification commands:
-  -
-- outcomes:
-  -
-
-## Evidence
+## Evidence Bundle
 
 - Plan path:
 - Test spec path(s):
@@ -33,18 +38,19 @@ If running:
 - Implementation commits:
 - Validation report:
 
-## Coverage and Quality
+## Issues
 
-- Requirement coverage: full | partial
 - Critical issues:
   -
+- Unresolved decisions:
+  -
+- Upstream defects routed:
+  -
 
-## Scope and Risk
+## Scope
 
 - Must-have outcome:
 - Nice-to-have deferrals:
-  -
-- Unresolved decisions:
   -
 - Accepted risks:
   -
@@ -52,7 +58,8 @@ If running:
 ## Outcome
 
 - Execution outcome: complete | blocked | escalated
-- Recommended next decision:
+- Blocker ownership (if blocked/escalated):
+- Recommended next action:
 
 ## Event Ledger
 
