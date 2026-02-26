@@ -117,3 +117,11 @@ Ledger of construction and maintenance decisions.
   - `doctrine/handoff-contract.md`
   - `doctrine/output-contract.md`
   - `references/template.md`
+
+## 2026-02-26 -- Inter-leader key semantics tightening
+
+- Replaced `status` with `outcome` in leader-to-leader transfer/return fields to reduce false "still running" interpretation.
+- Updated:
+  - `doctrine/orchestration.md`
+  - `doctrine/handoff-contract.md`
+  - `doctrine/output-contract.md`

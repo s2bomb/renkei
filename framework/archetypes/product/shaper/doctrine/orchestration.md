@@ -105,11 +105,11 @@ Context:
 
 Execution requirement:
 - Continue through technical-preparation process to stage outcome.
-- Do not stop at intake-only status chat.
+- Do not stop at intake-only chat.
 - Delegate required members (`spec-writer`, `research-codebase`, `api-designer`, `test-designer`, `create-plan`) and synthesize package.
 
 Return only when stage outcome is reached:
-1. Technical-preparation status: `ready-for-execution` | `blocked`
+1. Technical-preparation outcome: `ready-for-execution` | `blocked`
 2. Technical package artifact path(s)
 3. If `ready-for-execution`: execution kickoff evidence summary from `execution-lead`
 4. If `blocked`: blockers requiring shaper or decision-owner clarification

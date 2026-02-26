@@ -102,3 +102,9 @@ Ledger of construction and maintenance decisions.
   - `doctrine/orchestration.md`
   - `doctrine/handoff-contract.md`
   - `references/template.md`
+
+## 2026-02-26 -- Inter-leader key semantics tightening
+
+- Replaced intake-blocker return key from `status` to `outcome` in handoff contract.
+- Updated:
+  - `doctrine/handoff-contract.md`

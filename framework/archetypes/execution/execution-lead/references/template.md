@@ -12,7 +12,7 @@
 
 - Package source (`tech-lead`):
 - Handoff issuer role:
-- Transfer status: running-with-evidence | blocked
+- Transfer outcome: running-with-evidence | blocked
 - Blocking gaps (if blocked):
   -
 - Recommended next action (if blocked):
@@ -41,7 +41,7 @@ If running:
 
 ## Scope and Risk
 
-- Must-have status:
+- Must-have outcome:
 - Nice-to-have deferrals:
   -
 - Unresolved decisions:
@@ -51,7 +51,7 @@ If running:
 
 ## Outcome
 
-- Execution status: complete | blocked | escalated
+- Execution outcome: complete | blocked | escalated
 - Recommended next decision:
 
 ## Event Ledger

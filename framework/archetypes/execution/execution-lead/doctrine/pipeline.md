@@ -19,7 +19,7 @@ Execution-lead owns work after technical-preparation handoff and before decision
 ## Outputs
 
 - execution evidence bundle (tests, implementation, validation)
-- stage outcome status (`complete` | `blocked` | `escalated`)
+- stage outcome (`complete` | `blocked` | `escalated`)
 - explicit unresolved issues and escalation routes
 
 ## Boundary Rules

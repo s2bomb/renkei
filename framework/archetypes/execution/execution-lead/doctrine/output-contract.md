@@ -22,7 +22,7 @@ Produce one execution-stage report per active item.
 9. requirement coverage status (`full` | `partial`)
 10. unresolved issues (explicit `none` if empty)
 11. escalations (explicit `none` if empty)
-12. execution status (`complete` | `blocked` | `escalated`)
+12. execution outcome (`complete` | `blocked` | `escalated`)
 13. recommended next decision
 14. project/item event ledger entries for intake, stage outcome, and escalation (if any)
 
@@ -43,7 +43,7 @@ No stage-complete publication when any gate fails:
 Execution stage complete.
 
 Item: item-###
-Status: complete | blocked | escalated
+Outcome: complete | blocked | escalated
 Execution report: [path]
 
 Open issues (if any):

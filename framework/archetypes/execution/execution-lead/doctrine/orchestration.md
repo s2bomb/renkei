@@ -36,7 +36,7 @@ Return to parent leader only when:
 Every member return includes:
 
 1. output artifact paths
-2. completion status by owned phase
+2. completion outcome by owned phase
 3. explicit blockers or defect findings
 4. evidence references (files, commits, reports)
 

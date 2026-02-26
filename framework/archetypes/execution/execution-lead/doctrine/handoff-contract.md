@@ -32,7 +32,7 @@ Intake/preflight pass is non-terminal. Return only after first execution phase a
 
 If intake contract is incomplete, return:
 
-1. `status`: `blocked`
+1. `outcome`: `blocked`
 2. `blockers[]`: explicit blocker list with ownership
 3. `recommended_next_action`
 

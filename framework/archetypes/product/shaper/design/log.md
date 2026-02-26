@@ -172,3 +172,8 @@ Ledger of changes, decisions, and lessons learned during construction and mainte
 
 - Tightened active-item downstream return expectation so `ready-for-execution` includes execution kickoff evidence, not status-only transfer chat.
 - Updated `doctrine/orchestration.md` technical-preparation delegation snippet.
+
+## 2026-02-26 -- Inter-leader contract key tightening
+
+- Replaced `status` field wording with `outcome` in technical-preparation stage return contract to reduce status-chat interpretation drift.
+- Updated `doctrine/orchestration.md`.

@@ -22,7 +22,7 @@ Produce one technical-preparation package per active item.
 9. accepted risks (explicit `none` if empty)
 10. must-have and nice-to-have separation for execution planning
 11. execution worktree path (when execution tree differs from planning tree)
-12. transfer record status (`tech-lead -> execution-lead`: `running-with-evidence` | `blocked`)
+12. transfer record outcome (`tech-lead -> execution-lead`: `running-with-evidence` | `blocked`)
 13. project/item event ledger entries for intake, handoff, and escalation (if any)
 
 ## Quality Gates
@@ -44,7 +44,7 @@ Technical preparation complete.
 
 Item: item-###
 Package: [path]
-Status: ready-for-execution | blocked
+Outcome: ready-for-execution | blocked
 
 Blockers (if any):
 - [blocker]

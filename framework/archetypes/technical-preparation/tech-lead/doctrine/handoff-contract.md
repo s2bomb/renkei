@@ -27,7 +27,7 @@ Member-level specialist artifacts do not cross this boundary directly. They are 
 
 Execution owner returns one of:
 
-1. `status`: `running`
+1. `outcome`: `running`
 2. concrete first-phase progress evidence:
    - files changed
    - verification commands run
@@ -35,7 +35,7 @@ Execution owner returns one of:
 
 or, if blocked at intake/preflight:
 
-1. `status`: `blocked`
+1. `outcome`: `blocked`
 2. `blockers[]`: explicit blocker list with ownership
 3. `recommended_next_action`
 

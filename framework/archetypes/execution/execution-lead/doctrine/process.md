@@ -37,7 +37,7 @@ Verify plan is execution-usable:
 
 If preflight fails, return defects to `tech-lead`.
 
-If preflight passes, continue immediately to Step 3 in this invocation. Do not return intake/preflight status-only responses.
+If preflight passes, continue immediately to Step 3 in this invocation. Do not return intake/preflight-only responses.
 
 ## Step 3: Delegate Test Implementation
 

@@ -237,6 +237,7 @@ It does not return intake-status chat as a completion condition.
 - `shaper` does not directly delegate execution for active items once `tech-lead` handoff is issued (except explicit decision-owner override).
 - `tech-lead` does not bypass member artifact ownership in normal operation.
 - `execution-lead` does not return intake/preflight pass as terminal status; first return after transfer must include concrete execution-phase evidence or `blocked`.
+- Leader-to-leader terminal contracts use `outcome` semantics instead of `status` chat semantics.
 
 **Reference**:
 - `framework/archetypes/product/shaper/doctrine/orchestration.md`
