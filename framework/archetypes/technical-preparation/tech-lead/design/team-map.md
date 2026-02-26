@@ -19,7 +19,7 @@
 ## Stage Boundary
 
 - Stage entry: item is `active` and intake packet is complete.
-- Stage exit: technical package acknowledged as sufficient by downstream execution owner.
+- Stage exit: technical package transfer issued to downstream execution owner.
 
 ## Handoff Direction Rules
 

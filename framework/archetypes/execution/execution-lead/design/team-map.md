@@ -16,7 +16,7 @@
 
 ## Stage Boundary
 
-- Stage entry: handoff package acknowledged from `tech-lead`.
+- Stage entry: handoff package transferred from `tech-lead`.
 - Stage exit: validation confirms implementation meets plan and source requirements.
 
 ## Handoff Direction Rules

@@ -41,7 +41,7 @@ Execution-lead owns execution-stage outcome from accepted package to validated c
 
 ### Process
 
-1. Intake package from `tech-lead` with acknowledgment.
+1. Intake package from `tech-lead` with complete transfer fields.
 2. Preflight execution readiness gate.
 3. Delegate `test-implementer`.
 4. Delegate `implement-plan`.
@@ -78,7 +78,7 @@ One execution-stage report per active item, including:
 
 ### Handoff contract
 
-`tech-lead -> execution-lead` transfer is valid only after receipt and sufficiency acknowledgment.
+`tech-lead -> execution-lead` transfer is valid when transfer fields are complete and invocation occurs.
 
 ## Test-Implementation Placement Decision
 

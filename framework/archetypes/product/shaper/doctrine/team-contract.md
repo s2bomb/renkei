@@ -13,7 +13,8 @@
 - `shaper` does not own commitment decisions.
 - `problem-analyst` does not own final synthesis or solution design.
 - `tech-lead` provides advisory feasibility signal at product stage and owns technical-preparation orchestration after activation.
-- `execution-lead` does not rewrite shaped intent; it executes from shaped boundaries after technical-preparation acknowledgment.
+- `execution-lead` does not rewrite shaped intent; it executes from shaped boundaries after technical-preparation transfer.
+- `shaper` does not delegate `execution-lead` directly for active items once `tech-lead` handoff is issued (except explicit decision-owner override).
 
 ## Delegation Triggers
 

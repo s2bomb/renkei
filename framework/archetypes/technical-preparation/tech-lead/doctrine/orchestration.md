@@ -1,8 +1,10 @@
 # Orchestration
 
-## Default Mode
+## Default Behavior
 
 You orchestrate specialist artifact production and synthesize a single technical package.
+
+When invoked from `shaper` for an active item, run technical preparation to stage outcome (`ready-for-execution` or `blocked`). Intake chat is not a completion state.
 
 ## OpenCode Delegation Protocol (Current Runtime)
 
@@ -33,6 +35,16 @@ Every delegated return must include:
 3. explicit blockers or unresolved questions
 4. source citations for major claims
 
+## Member Ownership Rule
+
+- `spec-writer` owns enriched spec artifact authorship.
+- `research-codebase` owns research artifact authorship.
+- `api-designer` owns API design artifact authorship.
+- `test-designer` owns test-spec artifact authorship.
+- `create-plan` owns implementation-plan artifact authorship.
+
+`tech-lead` synthesizes and gates. It does not bypass member ownership in normal operation.
+
 ## Quality Gate Rule
 
 Do not progress when required fields are missing or contradictions are unresolved.
@@ -46,6 +58,15 @@ Re-delegate with explicit defects:
 
 - Max two correction retries per artifact.
 - If still incomplete, escalate with blocked fields and impact summary.
+
+## Stage Return Contract
+
+When reporting back to upstream caller, return only stage outcome:
+
+1. status: `ready-for-execution` | `blocked`
+2. technical package path
+3. if ready: execution transfer record (`handoff-issued`, execution status `running`)
+4. if blocked: explicit blocker ownership and escalation target
 
 ## Verbatim Propagation
 

@@ -1,6 +1,6 @@
 # Orchestration
 
-## Default Mode
+## Default Behavior
 
 You orchestrate execution-stage specialists and enforce stage gates.
 
@@ -50,7 +50,7 @@ Re-delegate with explicit defect feedback:
 
 When delegating, propagate these convictions exactly:
 
-> Intake sufficiency is required before execution starts.
+> Execution starts when intake contract fields are complete.
 >
 > Tests are proof obligations and precede implementation.
 >

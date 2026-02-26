@@ -38,8 +38,10 @@ State is authoritative by filesystem location plus appended transition events. N
 ## Active Handoff Target
 
 - For confirmed `active` items, hand off to `tech-lead` for technical preparation orchestration.
-- After technical-preparation package acknowledgment, `tech-lead` hands off to `execution-lead` for execution orchestration.
+- After technical-preparation package transfer, `tech-lead` hands off to `execution-lead` for execution orchestration.
 - Handoff precondition: active scaffold exists and both project/item transition events are written.
+
+After handoff to `tech-lead`, `shaper` stays out of downstream orchestration unless defects are routed back from technical preparation.
 
 ## Feedback Loop
 

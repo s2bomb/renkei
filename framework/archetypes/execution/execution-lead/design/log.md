@@ -54,3 +54,41 @@ Ledger of construction and maintenance decisions.
 - Updated member escalation wording in execution-facing development archetypes:
   - `framework/archetypes/development/test-implementer/doctrine/pipeline.md`
   - `framework/archetypes/development/implement-plan/**`
+
+## 2026-02-26 -- Runtime behavior hardening (path and issuer ambiguity fix)
+
+- Clarified execution intake path semantics in doctrine:
+  - planning/package artifact paths are consumed as provided
+  - execution worktree path is code-change target only
+- Added explicit intake issuer requirement:
+  - default issuer must be `tech-lead`
+  - direct `shaper` intake requires explicit decision-owner override
+- Updated contracts/templates accordingly:
+  - `doctrine/process.md`
+  - `doctrine/handoff-contract.md`
+  - `doctrine/output-contract.md`
+  - `doctrine/pipeline.md`
+  - `doctrine/team-contract.md`
+  - `references/template.md`
+
+## 2026-02-26 -- Event-ledger hardening
+
+- Added explicit event-ledger duties for execution-lead stage actions:
+  - intake events
+  - stage outcome events
+  - escalation events
+- Updated:
+  - `doctrine/process.md`
+  - `doctrine/output-contract.md`
+  - `references/template.md`
+
+## 2026-02-26 -- Invocation semantics tightening
+
+- Removed acknowledgment-style intake/transfer semantics from execution assembly artifacts.
+- Locked rule: invocation with complete transfer fields means immediate stage execution; otherwise `blocked` with explicit blocker ownership.
+- Updated:
+  - `ethos/identity.md`
+  - `ethos/tenets.md`
+  - `doctrine/process.md`
+  - `doctrine/handoff-contract.md`
+  - `doctrine/output-contract.md`

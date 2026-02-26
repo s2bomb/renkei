@@ -44,8 +44,19 @@
 ## Handoff
 
 - Target execution owner: execution-lead
-- Receipt confirmed: true|false
-- Sufficiency for execution: true|false
-- Blocking gaps:
+- Execution worktree path:
+- Transfer result: running | blocked
+- Blocking gaps (if blocked):
   -
-- First execution step:
+- Recommended next action (if blocked):
+
+## Event Ledger
+
+- Project event entries:
+  -
+- Item event entries:
+  -
+
+Path rule:
+- Planning/package artifacts remain authoritative at the paths listed above.
+- Execution worktree is the code-change target and does not replace planning artifact roots.

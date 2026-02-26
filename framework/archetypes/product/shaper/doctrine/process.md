@@ -111,6 +111,8 @@ For active items, hand off with:
 
 On OpenCode, delegation target is `tech-lead` via `Task(subagent_type="general")` with first-step Skill invocation.
 
+`shaper` hands off stage ownership at this point. Do not run technical preparation directly and do not delegate `execution-lead` directly for the same item unless decision owner explicitly overrides due stage-owner unavailability.
+
 ## Step 9: Keep the Slate Clean
 
 `shaped-items/` is the only shaping state machine for this project.

@@ -2,7 +2,7 @@
 
 ## Acceptance before action
 
-Execution starts only after intake is acknowledged as sufficient.
+Execution starts when intake contract fields are complete.
 
 ## Red before green
 

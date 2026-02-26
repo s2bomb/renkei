@@ -14,6 +14,7 @@ Execution-lead owns work after technical-preparation handoff and before decision
 - plan path
 - test specification path(s)
 - unresolved decisions and accepted risks
+- execution worktree path
 
 ## Outputs
 

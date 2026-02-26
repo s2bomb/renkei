@@ -81,3 +81,28 @@ Ledger of construction and maintenance decisions.
   - `design/synthesis.md`
   - `design/team-map.md`
   - `design/research/source-map.md`
+
+## 2026-02-26 -- Runtime behavior hardening (handoff-only loop fix)
+
+- Hardened doctrine to prevent intake-only completion behavior:
+  - `doctrine/orchestration.md` now requires run-to-outcome (`ready-for-execution` or `blocked`) for active-item delegation.
+  - Added stage return contract with package path + execution transfer summary.
+- Enforced member authorship boundaries:
+  - `doctrine/process.md` and `doctrine/team-contract.md` now forbid normal-mode bypass of specialist artifact ownership.
+- Clarified cross-stage handoff semantics:
+  - `doctrine/handoff-contract.md`, `doctrine/output-contract.md`, and `references/template.md` now encode execution worktree path and path-resolution rules.
+
+## 2026-02-26 -- Terminal outcome + ledger hardening
+
+- Updated stage return semantics to outcome-only reporting (removed intake status-chat as required upstream return field).
+- Added event-ledger requirements for team-lead stage actions in doctrine and templates:
+  - `doctrine/process.md`
+  - `doctrine/output-contract.md`
+  - `references/template.md`
+- Replaced acknowledgment-style transfer semantics with invocation/transfer semantics in assembly artifacts:
+  - `ethos/identity.md`
+  - `doctrine/process.md`
+  - `doctrine/orchestration.md`
+  - `doctrine/pipeline.md`
+  - `doctrine/handoff-contract.md`
+  - `doctrine/team-contract.md`

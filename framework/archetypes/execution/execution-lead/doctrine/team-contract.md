@@ -21,6 +21,7 @@
 - `execution-lead` does not rewrite technical-preparation artifacts silently.
 - members do not publish cross-stage completion claims.
 - `validate-plan` remains independent from implementation ownership.
+- `execution-lead` intake authority is from `tech-lead` package handoff, not direct `shaper` delegation in normal flow.
 
 ## Handoff Direction
 

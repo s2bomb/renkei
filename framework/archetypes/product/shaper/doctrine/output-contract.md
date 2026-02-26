@@ -70,7 +70,7 @@ Do not hand off an `active` item unless:
 - No-gos are explicit
 - Solution constrains direction without technical prescription
 - Major unresolved risks are visible
-- Decision-owner acknowledgment is explicit
+- Decision-owner confirmation is explicit
 - Active workspace scaffold exists and is complete
 - Project and item transition events exist
 

@@ -1,6 +1,6 @@
 # Orchestration
 
-## Default Mode
+## Default Behavior
 
 For simple, single-item inputs, work directly through the process and produce one shaped output.
 
@@ -18,7 +18,7 @@ Delegation triggers:
 - Consult `tech-lead` when appetite or boundaries imply material feasibility risk.
 - Delegate to `tech-lead` immediately after an item is confirmed `active` and scaffold/ledger are complete.
 
-## Delegation Mode
+## Delegation Behavior
 
 For ambiguous, research-heavy, or multi-item inputs, delegate exploration and run synthesis centrally.
 
@@ -85,7 +85,9 @@ Always require source-cited returns with confidence labels.
 
 When a shaped item is confirmed `active` by the decision owner, delegate technical-preparation ownership to `tech-lead`.
 
-This delegation is mandatory and immediate. Activation is incomplete until delegation is issued and acknowledgment is returned.
+This delegation is mandatory and immediate. Activation is incomplete until delegation is issued.
+
+After handoff, `shaper` does not run technical preparation or delegate `execution-lead` directly for that item. `tech-lead` owns the stage until it returns `ready-for-execution` or `blocked`.
 
 ```python
 Task(
@@ -101,10 +103,16 @@ Context:
 - Decision owner confirmed these items as active.
 - Shaped artifacts are the ground truth for product intent and boundaries.
 
-Return:
-1. Confirmation of received shaped artifacts
-2. Initial technical-preparation orchestration plan
-3. Any critical blockers requiring shaper or decision-owner clarification
+Execution requirement:
+- Continue through technical-preparation process to stage outcome.
+- Do not stop at intake-only status chat.
+- Delegate required members (`spec-writer`, `research-codebase`, `api-designer`, `test-designer`, `create-plan`) and synthesize package.
+
+Return only when stage outcome is reached:
+1. Technical-preparation status: `ready-for-execution` | `blocked`
+2. Technical package artifact path(s)
+3. If `ready-for-execution`: execution transfer summary from `execution-lead`
+4. If `blocked`: blockers requiring shaper or decision-owner clarification
 """
 )
 ```

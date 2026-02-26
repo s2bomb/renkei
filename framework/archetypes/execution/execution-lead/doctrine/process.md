@@ -1,6 +1,6 @@
 # Process
 
-## Step 1: Intake and Acknowledge
+## Step 1: Intake and Start
 
 1. Receive package from `tech-lead`.
 2. Verify required intake fields exist:
@@ -9,13 +9,21 @@
    - plan path
    - test specification path(s)
    - unresolved decisions and accepted risks
-3. Return acknowledgment:
-   - `receipt_confirmed`
-   - `sufficiency_for_execution`
-   - `blocking_gaps[]`
-   - `first_execution_step`
+   - execution worktree path
+   - handoff issuer (`tech-lead` by default; explicit decision-owner override required otherwise)
+3. Start execution stage immediately when intake fields are complete.
 
-Do not start execution when sufficiency is false.
+Append intake event to project and item ledgers (`handoff-received`, actor: `execution-lead`).
+
+If intake is incomplete, return `blocked` with explicit blocker ownership.
+
+If direct delegation comes from `shaper` without explicit decision-owner override, return `blocked` and route to `tech-lead` for proper handoff.
+
+Path-resolution rule:
+
+- Consume planning/package artifacts at the exact paths provided by `tech-lead`.
+- Use execution worktree path for code/test implementation activity.
+- Missing planning artifacts inside execution worktree is not, by itself, an intake blocker.
 
 ## Step 2: Preflight Execution Gate
 
@@ -25,6 +33,7 @@ Verify plan is execution-usable:
 - implementation phases are explicit
 - must-have and nice-to-have scope is explicit
 - known risks and unresolved decisions are explicit
+- execution worktree path exists and is usable for code changes
 
 If preflight fails, return defects to `tech-lead`.
 
@@ -75,6 +84,8 @@ Publish exactly one execution-stage outcome:
 
 Include evidence bundle and unresolved issues.
 
+Append stage outcome event to project and item ledgers (`stage-complete`, `stage-blocked`, or `stage-escalated`).
+
 ## Step 7: Escalate When Required
 
 Escalate with explicit defect ownership when:
@@ -83,3 +94,5 @@ Escalate with explicit defect ownership when:
 - upstream package defects block safe execution
 - validation fails on critical requirements
 - strategic scope tradeoffs require decision-owner judgment
+
+Record escalation events in project and item ledgers with blocker ownership and recommended options.

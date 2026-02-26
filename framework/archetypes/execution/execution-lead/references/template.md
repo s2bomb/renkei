@@ -6,14 +6,16 @@
 - Item ID: item-###
 - Active workspace: shaped-items/active/item-###/
 - Execution report: shaped-items/active/item-###/working/execution-report.md
+- Execution worktree path:
 
 ## Intake
 
 - Package source (`tech-lead`):
-- Receipt confirmed: true|false
-- Sufficiency for execution: true|false
-- Blocking gaps:
+- Handoff issuer role:
+- Transfer status: running | blocked
+- Blocking gaps (if blocked):
   -
+- Recommended next action (if blocked):
 
 ## Evidence
 
@@ -43,3 +45,14 @@
 
 - Execution status: complete | blocked | escalated
 - Recommended next decision:
+
+## Event Ledger
+
+- Project event entries:
+  -
+- Item event entries:
+  -
+
+Path rule:
+- Planning/package artifacts are consumed at their supplied source paths.
+- Execution worktree is the code-change target; it does not redefine artifact source paths.
