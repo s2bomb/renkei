@@ -173,6 +173,124 @@ Rules:
 
 ---
 
+## Contract Design Rules
+
+Agents are functions. Their contracts -- how they receive input, how they return output, how they communicate errors -- must follow the function model. This section codifies lessons learned from observed failures.
+
+> For the full grounding, see `AGENTS.md` root: "Agents are non-deterministic functions -- stateless, terminal, composable."
+
+### Agents are functions, not services
+
+An agent is invoked, does work, and returns. It is not a server waiting for requests. It is not a process with observable internal state. Returning a message terminates the invocation.
+
+This means:
+- There is no "running" state. If the agent returned, it is done.
+- There is no "intake" phase. Input validation is the first lines of the function body -- invisible to callers.
+- There is no "preflight" phase. Precondition checking is input validation -- invisible to callers.
+- There is no "acknowledgment." The invocation itself is evidence of receipt.
+
+An agent either returns its result (success) or returns an error (blocked). There is no third option.
+
+### Do not name internal phases in contracts
+
+When internal process steps get names ("intake", "preflight", "transfer"), agents treat them as reportable milestones and return after completing a milestone as if that is progress. But returning terminates the invocation, so reporting an internal milestone is indistinguishable from failing to complete the work.
+
+Rules:
+- **Input validation is unnamed.** It either passes (function proceeds) or fails (error return with specific defects).
+- **Internal work steps are implementation, not milestones.** A process.md may describe steps for the agent's own guidance, but these steps should not appear in output contracts, handoff contracts, or delegation prompts as externally visible states.
+- **Return values describe what was produced, not where the agent stopped.** `complete-with-evidence` (done, here's proof) not `running-with-evidence` (I'm partway through). `blocked` (cannot proceed, here's why) not `intake-blocked` (I stopped at a named internal phase).
+
+### Delegation prompts are call sites, not function bodies
+
+When one agent delegates to another, the delegation prompt specifies:
+1. **Input**: what the delegate receives (paths, context, constraints)
+2. **Return contract**: what the delegate must return (outcome enum + payload)
+
+The delegation prompt does NOT specify:
+- How the delegate should traverse its internal process
+- Which internal phases to complete
+- What to do at intermediate checkpoints
+- What NOT to return (prohibition-style guardrails)
+
+The callee's own archetype governs its internal behavior. The caller specifies what goes in and what comes back. That is all.
+
+**Bad**: "Continue through technical-preparation process to stage outcome. Do not stop at intake-only chat."
+**Good**: "Produce technical-preparation package. Return: `ready-for-execution` | `blocked`."
+
+### Return values are terminal and honest
+
+Every return value must be:
+- **Terminal**: describes a completed state, not an ongoing process
+- **Honest**: if the agent returned, it is done -- the return value cannot claim otherwise
+- **Discriminated**: success and error are distinct shapes, not status fields on the same shape
+
+Positive return contracts (whitelist what to return) are stronger than prohibition contracts (list what not to return). If the return type is well-specified, no prohibition is needed.
+
+### Events are return data, not side effects
+
+Agents do not append to external ledgers during execution. Events accumulated during work are returned as structured data in the return payload. The caller (or harness) persists them. This keeps the function pure and avoids orphaned intermediate events on failure.
+
+---
+
+## Project Context and Observability
+
+Every agent operates within a project. The project provides the shared context, event ledger, and artifact structure that makes agent work observable.
+
+### Project structure
+
+When an agent is invoked, it must know which project (and sub-project/item) it is working within. The project structure provides:
+
+```
+project/
+  index.md              # Project control plane
+  sources/              # Input evidence
+  working/              # Execution artifacts
+  events.jsonl          # Append-only project-level event ledger
+  shaped-items/
+    active/item-###/
+      shape.md          # Shaped artifact
+      index.md          # Item control plane
+      sources/          # Item evidence
+      working/          # Item execution artifacts
+      events.jsonl      # Append-only item-level event ledger
+```
+
+### Event ledger (`events.jsonl`)
+
+The event ledger is the observability backbone. Every significant action by any agent within the project should produce an event entry. Between the event ledger and atomic commits, you get a complete timeline of what happened, when, and by whom.
+
+Required event fields:
+- `ts` -- ISO 8601 timestamp
+- `actor` -- which agent/role produced the event
+- `type` -- what happened (e.g., `stage-complete`, `delegation-issued`, `artifact-produced`, `error-returned`)
+- `item` -- which item this relates to (if applicable)
+- `detail` -- structured payload specific to the event type
+
+Events are accumulated during execution and included in the agent's return payload. The caller persists them to the appropriate `events.jsonl` file(s).
+
+### Atomic commits
+
+Any agent that produces committed code changes must use atomic commits:
+- Each commit represents one logical unit of work
+- Commit messages describe what changed and why
+- The combination of commits + event ledger entries creates a complete audit trail
+
+### What this means for archetype construction
+
+When building an archetype:
+
+1. **Doctrine must specify event production.** The output contract should list which event types this agent produces. The process should describe when events are generated (as return data, not side effects).
+
+2. **Delegation prompts must pass project context.** When delegating, include:
+   - Project path
+   - Item path (if item-scoped)
+   - Event ledger path(s)
+   - Execution worktree path
+
+3. **Every archetype contributes to observability.** Whether it's a leader orchestrating stages or a member writing tests, every agent's return includes events that the caller persists. No agent is exempt.
+
+---
+
 ## Construction: From Scratch
 
 When building a brand new archetype:
@@ -213,7 +331,7 @@ framework/archetypes/
     shaper/               # Team leader -- synthesis, scoping, output
     problem-analyst/      # Exploration, validation, research
   technical-preparation/  # Technical-preparation team
-    tech-lead/            # Team leader -- active-shape intake and solution design orchestration
+    tech-lead/            # Team leader -- active-shape input and solution design orchestration
   execution/              # Execution team
     execution-lead/       # Team leader -- test-first implementation and validation orchestration
 ```
