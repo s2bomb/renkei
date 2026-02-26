@@ -32,4 +32,4 @@
 
 1. Upstream intake contract (`shaper -> tech-lead`)
 2. Member return contracts (`members -> tech-lead`)
-3. Downstream interim handoff (`tech-lead -> architect-opencode`)
+3. Downstream handoff (`tech-lead -> execution-lead`)

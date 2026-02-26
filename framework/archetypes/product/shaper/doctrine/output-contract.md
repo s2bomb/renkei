@@ -70,7 +70,7 @@ Do not hand off an `active` item unless:
 - No-gos are explicit
 - Solution constrains direction without technical prescription
 - Major unresolved risks are visible
-- Decision-owner acknowledgment is explicit
+- Decision-owner confirmation is explicit
 - Active workspace scaffold exists and is complete
 - Project and item transition events exist
 
@@ -78,7 +78,7 @@ Do not hand off an `active` item unless:
 
 For confirmed `active` items, the shaped artifact must be handoff-ready for `tech-lead` without additional reframing.
 
-`tech-lead` is responsible for downstream interim handoff to `architect-opencode` after technical-preparation package synthesis.
+`tech-lead` is responsible for downstream handoff to `execution-lead` after technical-preparation package synthesis.
 
 Required handoff payload:
 - active workspace path

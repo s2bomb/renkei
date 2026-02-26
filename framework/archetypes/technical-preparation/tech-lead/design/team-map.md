@@ -19,14 +19,14 @@
 ## Stage Boundary
 
 - Stage entry: item is `active` and intake packet is complete.
-- Stage exit: technical package acknowledged as sufficient by downstream execution owner.
+- Stage exit: technical package transfer issued to downstream execution owner.
 
 ## Handoff Direction Rules
 
 1. Child member artifacts return to `tech-lead`.
 2. `tech-lead` synthesizes one package.
 3. Only `tech-lead` hands off across stage boundary.
-4. Interim downstream stage owner: `architect-opencode`.
+4. Downstream stage owner: `execution-lead`.
 
 ## Satellite Usage
 

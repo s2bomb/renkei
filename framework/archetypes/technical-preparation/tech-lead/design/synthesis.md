@@ -48,7 +48,7 @@ The tech lead is the leader of technical preparation. This role receives active 
 3. Delegate specialist work (spec/research/api/test/plan) with explicit contracts.
 4. Evaluate outputs against gates; iterate until contract-complete.
 5. Assemble implementation-ready package and unresolved decisions.
-6. Hand off to execution owner with explicit acknowledgment contract.
+6. Hand off to execution owner with explicit transfer contract.
 
 ### Orchestration
 
@@ -59,7 +59,7 @@ The tech lead is the leader of technical preparation. This role receives active 
 
 ### Pipeline
 
-`shaper (active item) -> tech-lead (technical preparation) -> architect-opencode (execution, interim) -> validation`
+`shaper (active item) -> tech-lead (technical preparation) -> execution-lead (execution) -> validation`
 
 ### Output contract
 
@@ -71,7 +71,7 @@ Per active item, output package includes:
 4. test specification
 5. implementation plan
 6. unresolved decisions + accepted risks
-7. handoff acknowledgment record
+7. handoff transfer record
 
 ## Naming Decision
 
@@ -85,7 +85,7 @@ Team path: `framework/archetypes/technical-preparation/tech-lead/`.
 - Parent leader: `shaper`.
 - Member delegates: `spec-writer`, `research-codebase`, `api-designer`, `test-designer`, `create-plan`.
 - Member outputs return to `tech-lead` by default.
-- Cross-stage handoff leaves the team only from `tech-lead` to `architect-opencode` (interim).
+- Cross-stage handoff leaves the team only from `tech-lead` to `execution-lead`.
 
 ## Therefore Chains
 

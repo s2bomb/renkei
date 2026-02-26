@@ -140,3 +140,30 @@ Ledger of changes, decisions, and lessons learned during construction and mainte
 
 - Added `design/team-map.md` so parent/member handoff direction is explicit.
 - Codified that shaper member outputs return to `shaper` for synthesis and active-stage handoff goes to `tech-lead`.
+
+## 2026-02-26 -- Execution owner rename propagation
+
+- Updated downstream execution-owner references from `architect-opencode` to `execution-lead` in assembled shaper artifacts:
+  - `ethos/identity.md`
+  - `doctrine/orchestration.md`
+  - `doctrine/pipeline.md`
+  - `doctrine/team-contract.md`
+  - `doctrine/output-contract.md`
+  - `references/template.md`
+
+## 2026-02-26 -- Runtime behavior hardening (stage-ownership leak fix)
+
+- Hardened active-item delegation contract so `tech-lead` must run to stage outcome, not stop at intake status chat.
+- Added explicit boundary rule:
+  - after `tech-lead` handoff, `shaper` does not delegate `execution-lead` directly in normal flow.
+- Updated affected assembled artifacts:
+  - `doctrine/orchestration.md`
+  - `doctrine/process.md`
+  - `doctrine/pipeline.md`
+  - `doctrine/team-contract.md`
+
+## 2026-02-26 -- Terminal return contract tightening
+
+- Tightened technical-preparation delegation return contract to stage-outcome only (removed intake-plan chat semantics).
+- Updated `doctrine/orchestration.md` delegation snippet accordingly.
+- Removed acknowledgment wording from active-item downstream transfer semantics in assembled doctrine where stage transfer is sufficient.

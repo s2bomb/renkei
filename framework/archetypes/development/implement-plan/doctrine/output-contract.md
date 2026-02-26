@@ -41,7 +41,7 @@ Implementation complete.
 - ...
 
 **Test status**: All existing tests passing
-**Issues propagated**: [if any -- which tests/designs were flagged to architect]
+**Issues propagated**: [if any -- which tests/designs were flagged to execution-lead]
 
 Ready for `/validate-plan`.
 ```

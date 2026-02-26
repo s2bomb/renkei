@@ -15,7 +15,7 @@ After `/create-plan`. Before `/implement-plan`.
 - API design document (for function signatures and types)
 - Research document (for test infrastructure patterns)
 
-If the test spec is missing, stop and route back through architect for `/test-designer`.
+If the test spec is missing, stop and route back through `execution-lead` for `/test-designer`.
 
 ## Outputs
 

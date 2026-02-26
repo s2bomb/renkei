@@ -215,6 +215,52 @@ Renkei exists to **define and audit agent archetypes from the most fundamental l
 
 ---
 
+## Stage Ownership Semantics
+
+**Decision**: Stage-leader invocation implies immediate stage execution. There is no conversational waiting state.
+
+When a leader delegates to a downstream stage leader, the downstream leader either:
+
+1. runs immediately to stage outcome, or
+2. returns `blocked` with explicit blocker ownership.
+
+It does not return intake-status chat as a completion condition.
+
+**Grounding**:
+- Renkei system truth: agents behave more like stateless, non-deterministic functions than humans-in-chat; invocation is execution context, not optional invitation.
+- Observed runtime failures (item-004/item-005 flows): receipt/plan return contracts produced handoff-only loops, stage-ownership leaks, and direct downstream delegation by the wrong leader.
+- One-stage-owner principle from team topology: parent leader hands off ownership; downstream leader owns the stage until terminal outcome or blocked escalation.
+
+**Operational consequences**:
+- Parent-to-child contracts are terminal (`ready-for-execution` or `blocked`), not receipt-style.
+- `shaper` does not directly delegate execution for active items once `tech-lead` handoff is issued (except explicit decision-owner override).
+- `tech-lead` does not bypass member artifact ownership in normal operation.
+
+**Reference**:
+- `framework/archetypes/product/shaper/doctrine/orchestration.md`
+- `framework/archetypes/technical-preparation/tech-lead/doctrine/process.md`
+- `framework/archetypes/execution/execution-lead/doctrine/process.md`
+
+### Leader Event-Ledger Duty
+
+**Decision**: Team leaders append project and item ledger events for stage actions as part of their output contract.
+
+Required stage actions to log:
+- intake received
+- handoff issued / transfer result
+- stage outcome (`complete`/`blocked`/`escalated`)
+- escalation records (with blocker ownership)
+
+**Grounding**:
+- State authority in this system is path + append-only events.
+- Missing ledger writes make stage transitions non-auditable and break maintenance handoff.
+
+**Reference**:
+- `framework/archetypes/technical-preparation/tech-lead/doctrine/output-contract.md`
+- `framework/archetypes/execution/execution-lead/doctrine/output-contract.md`
+
+---
+
 ## Critical Path
 
 Strict dependency order:

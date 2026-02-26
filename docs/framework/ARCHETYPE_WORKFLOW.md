@@ -60,6 +60,11 @@ Default handoff rule:
 - Team leaders hand stage packages to the next-stage owner.
 - Satellite teams hand outputs back to the requesting parent leader.
 
+Invocation rule:
+- Leader invocation is a trigger to execute stage responsibilities immediately.
+- No waiting or conversational intake mode.
+- Leader returns only terminal stage outcome (`complete`/`ready` or `blocked`/`escalated`).
+
 ---
 
 ## Phase 1: Source Mapping and Research
@@ -241,9 +246,10 @@ All changed archetypes assemble cleanly with `--dry-run`.
 1. **Grounding gate**: claims are source-grounded.
 2. **Derivation gate**: truth -> ethos -> doctrine links are explicit.
 3. **Boundary gate**: ownership and non-ownership are explicit.
-4. **Contract gate**: handoff payload and acknowledgment semantics are explicit.
+4. **Contract gate**: handoff payload and transfer semantics are explicit.
 5. **Coherence gate**: adjacent archetypes reflect the new boundary.
 6. **Topology gate**: team leader/member/satellite relationships are explicit and consistent.
+7. **Outcome gate**: stage-owner delegation contracts require run-to-outcome, not intake acknowledgment only.
 
 Failure at any gate blocks progression.
 
@@ -255,8 +261,9 @@ Failure at any gate blocks progression.
 2. Treating best-of-N as popularity voting.
 3. Leaving neighboring archetypes unmodified after boundary split.
 4. Over-specifying doctrine due to weak ethos.
-5. Under-specifying handoff contracts ("just delegate") with no acknowledgment rule.
+5. Under-specifying handoff contracts ("just delegate") with no transfer rule.
 6. Leaving member handoff direction implicit.
+7. Delegation prompts that request only receipt + initial plan, which creates handoff-only loops and no downstream artifact production.
 
 ---
 

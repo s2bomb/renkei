@@ -81,6 +81,14 @@ Default rule:
 - Team leaders synthesize member outputs and hand stage packages downstream.
 - Satellite teams return outputs to the requesting parent leader.
 
+Leader invocation rule:
+- Invocation triggers immediate stage execution.
+- No waiting/conversational intake state.
+- Leader returns only terminal stage outcome (`ready/complete` or `blocked/escalated`).
+
+Leader ledger rule:
+- Stage leaders append project/item events for intake, transfer, outcome, and escalation.
+
 ### `research/analogs.md`
 
 Real-world analogs for this archetype. People -- historical, biblical, modern -- who genuinely embody this role. Not tokens. Genuine embodiments.
@@ -204,6 +212,8 @@ framework/archetypes/
     problem-analyst/      # Exploration, validation, research
   technical-preparation/  # Technical-preparation team
     tech-lead/            # Team leader -- active-shape intake and solution design orchestration
+  execution/              # Execution team
+    execution-lead/       # Team leader -- test-first implementation and validation orchestration
 ```
 
 Each top-level directory is a team. Each subdirectory is an archetype within that team.
