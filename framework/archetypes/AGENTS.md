@@ -204,6 +204,8 @@ framework/archetypes/
     problem-analyst/      # Exploration, validation, research
   technical-preparation/  # Technical-preparation team
     tech-lead/            # Team leader -- active-shape intake and solution design orchestration
+  execution/              # Execution team
+    execution-lead/       # Team leader -- test-first implementation and validation orchestration
 ```
 
 Each top-level directory is a team. Each subdirectory is an archetype within that team.
