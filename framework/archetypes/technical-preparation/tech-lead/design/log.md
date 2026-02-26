@@ -106,3 +106,14 @@ Ledger of construction and maintenance decisions.
   - `doctrine/pipeline.md`
   - `doctrine/handoff-contract.md`
   - `doctrine/team-contract.md`
+
+## 2026-02-26 -- Execution kickoff evidence hardening
+
+- Tightened downstream transfer contract so execution return cannot be intake/preflight pass-only.
+- Required first execution-phase evidence when transfer result is running.
+- Updated:
+  - `doctrine/process.md`
+  - `doctrine/orchestration.md`
+  - `doctrine/handoff-contract.md`
+  - `doctrine/output-contract.md`
+  - `references/template.md`

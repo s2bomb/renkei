@@ -12,10 +12,18 @@
 
 - Package source (`tech-lead`):
 - Handoff issuer role:
-- Transfer status: running | blocked
+- Transfer status: running-with-evidence | blocked
 - Blocking gaps (if blocked):
   -
 - Recommended next action (if blocked):
+
+If running:
+- files changed:
+  -
+- verification commands:
+  -
+- outcomes:
+  -
 
 ## Evidence
 

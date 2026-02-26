@@ -22,6 +22,15 @@ You orchestrate execution-stage specialists and enforce stage gates.
 - `implement-plan` runs before `validate-plan`.
 - Parallel execution is allowed only for independent scopes without overlap.
 
+## Intake Return Rule
+
+Do not return intake/preflight pass as a terminal response.
+
+Return to parent leader only when:
+
+1. first execution phase attempt produced concrete evidence (files changed + verification outcomes), or
+2. execution is `blocked` with explicit blocker ownership and next action.
+
 ## Required Return Contract (All Members)
 
 Every member return includes:

@@ -249,7 +249,7 @@ All changed archetypes assemble cleanly with `--dry-run`.
 4. **Contract gate**: handoff payload and transfer semantics are explicit.
 5. **Coherence gate**: adjacent archetypes reflect the new boundary.
 6. **Topology gate**: team leader/member/satellite relationships are explicit and consistent.
-7. **Outcome gate**: stage-owner delegation contracts require run-to-outcome, not intake acknowledgment only.
+7. **Outcome gate**: stage-owner delegation contracts require run-to-outcome, not intake-status chat.
 
 Failure at any gate blocks progression.
 
@@ -264,6 +264,7 @@ Failure at any gate blocks progression.
 5. Under-specifying handoff contracts ("just delegate") with no transfer rule.
 6. Leaving member handoff direction implicit.
 7. Delegation prompts that request only receipt + initial plan, which creates handoff-only loops and no downstream artifact production.
+8. Delegation prompts that allow intake/preflight-pass returns with no execution-phase evidence.
 
 ---
 

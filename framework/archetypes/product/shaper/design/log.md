@@ -167,3 +167,8 @@ Ledger of changes, decisions, and lessons learned during construction and mainte
 - Tightened technical-preparation delegation return contract to stage-outcome only (removed intake-plan chat semantics).
 - Updated `doctrine/orchestration.md` delegation snippet accordingly.
 - Removed acknowledgment wording from active-item downstream transfer semantics in assembled doctrine where stage transfer is sufficient.
+
+## 2026-02-26 -- Downstream kickoff evidence requirement
+
+- Tightened active-item downstream return expectation so `ready-for-execution` includes execution kickoff evidence, not status-only transfer chat.
+- Updated `doctrine/orchestration.md` technical-preparation delegation snippet.

@@ -28,6 +28,8 @@ Member artifacts from technical-preparation specialists do not cross directly to
 
 Execution owner starts immediately when intake contract fields are complete.
 
+Intake/preflight pass is non-terminal. Return only after first execution phase attempt with evidence, or blocked.
+
 If intake contract is incomplete, return:
 
 1. `status`: `blocked`

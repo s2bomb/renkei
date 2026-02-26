@@ -25,7 +25,15 @@ Member-level specialist artifacts do not cross this boundary directly. They are 
 
 ## Required Transfer Outcome
 
-Execution owner returns only if blocked at intake/preflight:
+Execution owner returns one of:
+
+1. `status`: `running`
+2. concrete first-phase progress evidence:
+   - files changed
+   - verification commands run
+   - outcomes
+
+or, if blocked at intake/preflight:
 
 1. `status`: `blocked`
 2. `blockers[]`: explicit blocker list with ownership
@@ -36,6 +44,8 @@ Execution owner returns only if blocked at intake/preflight:
 Execution ownership is transferred when payload fields are complete and transfer is issued.
 
 After transfer, execution-lead immediately runs execution stage unless blocked by a contract defect.
+
+Intake/preflight pass alone is not a terminal return for execution-lead in this handoff.
 
 If blocked, ownership returns to `tech-lead` for correction or escalation.
 

@@ -45,10 +45,18 @@
 
 - Target execution owner: execution-lead
 - Execution worktree path:
-- Transfer result: running | blocked
+- Transfer result: running-with-evidence | blocked
 - Blocking gaps (if blocked):
   -
 - Recommended next action (if blocked):
+
+If running:
+- files changed:
+  -
+- verification commands:
+  -
+- outcomes:
+  -
 
 ## Event Ledger
 

@@ -65,7 +65,7 @@ When reporting back to upstream caller, return only stage outcome:
 
 1. status: `ready-for-execution` | `blocked`
 2. technical package path
-3. if ready: execution transfer record (`handoff-issued`, execution status `running`)
+3. if ready: execution kickoff evidence summary (files changed, verification commands, outcomes) or explicit `blocked` return from execution-lead
 4. if blocked: explicit blocker ownership and escalation target
 
 ## Verbatim Propagation

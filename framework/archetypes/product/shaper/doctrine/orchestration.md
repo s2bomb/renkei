@@ -111,7 +111,7 @@ Execution requirement:
 Return only when stage outcome is reached:
 1. Technical-preparation status: `ready-for-execution` | `blocked`
 2. Technical package artifact path(s)
-3. If `ready-for-execution`: execution transfer summary from `execution-lead`
+3. If `ready-for-execution`: execution kickoff evidence summary from `execution-lead`
 4. If `blocked`: blockers requiring shaper or decision-owner clarification
 """
 )

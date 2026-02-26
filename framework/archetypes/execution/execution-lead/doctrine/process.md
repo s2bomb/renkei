@@ -37,6 +37,8 @@ Verify plan is execution-usable:
 
 If preflight fails, return defects to `tech-lead`.
 
+If preflight passes, continue immediately to Step 3 in this invocation. Do not return intake/preflight status-only responses.
+
 ## Step 3: Delegate Test Implementation
 
 Delegate `test-implementer` first.
@@ -49,6 +51,8 @@ Require return evidence:
 - test commit hashes
 
 Block progression until test gate passes.
+
+First return to `tech-lead` after successful transfer must include concrete execution evidence from this step (files changed and verification outcomes), or `blocked` if this step cannot proceed.
 
 ## Step 4: Delegate Implementation
 

@@ -92,3 +92,13 @@ Ledger of construction and maintenance decisions.
   - `doctrine/process.md`
   - `doctrine/handoff-contract.md`
   - `doctrine/output-contract.md`
+
+## 2026-02-26 -- Kickoff evidence hardening
+
+- Fixed execution status-chat leak where intake/preflight pass could return `running` with no execution-phase evidence.
+- Locked rule: after transfer, first non-blocked return must include concrete first-phase evidence (files changed + verification outcomes).
+- Updated:
+  - `doctrine/process.md`
+  - `doctrine/orchestration.md`
+  - `doctrine/handoff-contract.md`
+  - `references/template.md`

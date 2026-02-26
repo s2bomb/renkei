@@ -67,14 +67,14 @@ Delegate package to `execution-lead`.
 Execution ownership transfer is valid when handoff payload fields are complete and transfer is issued.
 
 Execution-lead behavior after invocation:
-- proceed immediately with execution stage, or
+- proceed immediately with execution stage and attempt first execution phase work with evidence, or
 - return `blocked` with explicit blocker ownership.
 
 Do not return execution-start responsibility to `shaper` after package readiness. Cross-stage handoff is `tech-lead -> execution-lead`.
 
 Append transfer events to project and item ledgers:
 - `handoff-issued` (to `execution-lead`)
-- `handoff-result` (`running` or `blocked`)
+- `handoff-result` (`running-with-evidence` or `blocked`)
 
 ## Step 7: Escalate When Blocked
 

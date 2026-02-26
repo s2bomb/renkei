@@ -229,12 +229,14 @@ It does not return intake-status chat as a completion condition.
 **Grounding**:
 - Renkei system truth: agents behave more like stateless, non-deterministic functions than humans-in-chat; invocation is execution context, not optional invitation.
 - Observed runtime failures (item-004/item-005 flows): receipt/plan return contracts produced handoff-only loops, stage-ownership leaks, and direct downstream delegation by the wrong leader.
+- Observed execution leak: intake/preflight pass returned `running` with no execution-phase evidence, causing false progress signals.
 - One-stage-owner principle from team topology: parent leader hands off ownership; downstream leader owns the stage until terminal outcome or blocked escalation.
 
 **Operational consequences**:
 - Parent-to-child contracts are terminal (`ready-for-execution` or `blocked`), not receipt-style.
 - `shaper` does not directly delegate execution for active items once `tech-lead` handoff is issued (except explicit decision-owner override).
 - `tech-lead` does not bypass member artifact ownership in normal operation.
+- `execution-lead` does not return intake/preflight pass as terminal status; first return after transfer must include concrete execution-phase evidence or `blocked`.
 
 **Reference**:
 - `framework/archetypes/product/shaper/doctrine/orchestration.md`
