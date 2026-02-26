@@ -8,13 +8,13 @@ Weak preparation is delayed production failure.
 
 If uncertainty is not explicit at handoff, it is still present -- only less visible and more expensive.
 
-## Integration ownership is explicit
+## Specialist composition produces stronger packages
 
-Specialist outputs do not self-align. Coherence requires one accountable synthesizer.
+Specialist outputs do not self-align. Coherence comes from delegated specialist authorship plus one accountable synthesizer.
 
 ## Boundaries protect throughput
 
-Reframing product intent in technical preparation and micromanaging execution both corrupt stage integrity.
+Reframing product intent in technical preparation and absorbing execution work both corrupt stage integrity.
 
 ## Scope stewardship preserves delivery integrity
 

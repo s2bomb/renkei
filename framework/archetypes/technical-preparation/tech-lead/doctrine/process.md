@@ -4,8 +4,8 @@
 
 Receive active item context from `shaper`:
 - active workspace path
-- `shape.md`
-- source and analyst artifact paths
+- shaped intent artifact locator
+- source and analyst artifact locators
 - appetite, no-gos, and open assumptions
 
 Preconditions -- all must hold before any delegation:
@@ -16,9 +16,9 @@ Preconditions -- all must hold before any delegation:
 4. No-gos are explicit.
 5. Major uncertainties are visible.
 
-If any precondition fails, return error to `shaper` with explicit defect notes.
+If any precondition fails, return `blocked` to `shaper` with explicit defect notes and ownership.
 
-## 1. Technical Preparation
+## 1. Delegate and Gate Specialist Artifacts
 
 Delegate technical preparation work to specialists:
 - `spec-writer`
@@ -31,7 +31,9 @@ Run independent work in parallel where possible. Serialize dependent stages.
 
 All specialist outputs return to `tech-lead` for synthesis. Specialists do not hand off directly to downstream stage owners.
 
-`tech-lead` does not author member-owned artifacts in normal operation. If member delegation is unavailable, escalate for explicit role-collapse authorization before proceeding.
+`tech-lead` does not author specialist-owned artifacts.
+
+If specialist delegation is unavailable, return `blocked` and escalate for explicit decision-owner role-collapse authorization. Do not silently substitute specialist authorship.
 
 After each delegated return:
 1. Check required contract fields.
@@ -42,28 +44,45 @@ Allow at most two correction retries per failed artifact.
 
 If specialist outputs remain unavailable after retries, mark stage `blocked` and escalate rather than silently self-producing all artifacts.
 
-Assemble one execution-ready package containing:
-- enriched spec
-- research record
-- API design
-- test specification
-- implementation plan
+Drift interruption rule:
+
+- If you begin drafting specialist-owned artifacts, stop immediately.
+- Re-delegate to owning specialist role with explicit defects.
+- If delegation still cannot satisfy ownership, escalate and return `blocked`.
+
+Delegation-integrity checkpoint (required before synthesis):
+
+- For each required artifact class, verify delegated return includes:
+  - `artifact_class`
+  - `artifact_locator`
+  - `owner_role`
+  - unresolved questions or blockers
+  - source citations for major claims
+
+If any required class is missing delegated ownership evidence, return `blocked`.
+
+## 2. Synthesize Package Directory
+
+Synthesize one execution-ready package directory that indexes specialist-owned artifacts and records:
+
 - unresolved decisions
 - accepted risks
+- must-have and nice-to-have scope partition
+- transfer metadata
 
 As stage owner, `tech-lead` is accountable for cross-artifact coherence and package completeness.
 
-## 2. Stage Outcome
+## 3. Stage Outcome
 
-Delegate package to `execution-lead`.
+Delegate package directory to `execution-lead`.
 
-Execution ownership transfer is valid when handoff payload fields are complete and transfer is issued.
+Execution ownership transfer is valid when required handoff fields are complete and transfer is issued.
 
-Execution-lead returns either `complete` with evidence of execution work (e.g. files changed, verification commands executed, outcomes observed), or `blocked` with explicit blocker ownership.
+If `execution-lead` returns `blocked`, route correction to the owning role, re-invoke, or escalate.
 
 Do not return execution-start responsibility to `shaper` after package readiness. Cross-stage handoff is `tech-lead -> execution-lead`.
 
-Include transfer event in return payload: type, target, outcome, evidence or blockers.
+Include transfer event in return payload: type, target, outcome, and blockers when blocked.
 
 Escalate to decision owner when:
 - retries are exhausted
@@ -73,7 +92,7 @@ Escalate to decision owner when:
 Include escalation event in return payload with blocker ownership.
 
 Return one of:
-- `complete` with package path and execution evidence
+- `complete` with item workspace path, package directory path, package index locator, and transfer record (`issued`)
 - `blocked` with blocker ownership and escalation target
 
 A return that contains only input context restatement or conversational summary is incomplete.

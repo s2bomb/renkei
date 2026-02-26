@@ -104,13 +104,13 @@ Context:
 - Shaped artifacts are the ground truth for product intent and boundaries.
 
 Execution requirement:
-- Produce technical-preparation package.
-- Delegate required members (`spec-writer`, `research-codebase`, `api-designer`, `test-designer`, `create-plan`) and synthesize package.
+- Produce technical-preparation package directory.
+- Delegate required members (`spec-writer`, `research-codebase`, `api-designer`, `test-designer`, `create-plan`) and synthesize package index.
 
 Return:
 1. Technical-preparation outcome: `complete` | `blocked`
-2. Technical package artifact path(s)
-3. If `complete`: execution evidence (files changed, verification outcomes)
+2. Technical package directory path
+3. If `complete`: transfer record (`tech-lead -> execution-lead`: `issued` | `blocked`)
 4. If `blocked`: blockers requiring shaper or decision-owner clarification
 """
 )

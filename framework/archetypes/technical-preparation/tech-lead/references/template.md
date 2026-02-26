@@ -1,27 +1,31 @@
-# Technical Preparation Package
+# Technical Preparation Package Index
 
 ## Metadata
 
 - Date: YYYY-MM-DD
 - Item ID: item-###
-- Active workspace: shaped-items/active/item-###/
-- Shape artifact: shaped-items/active/item-###/shape.md
-- Package artifact: shaped-items/active/item-###/working/technical-package.md
+- Item workspace path:
+- Package directory path:
+- Package index locator:
 
-## Shaped Context
+## Input Context
 
+- Shaped intent artifact locator:
+- Source and analyst artifact locators:
 - Appetite:
 - No-gos:
 - Open assumptions:
 
-## Artifact Paths
+## Delegated Artifact Index
 
-- Enriched spec:
-- Research:
-- API design:
-- Test specification:
-- Plan:
-- Traceability matrix:
+For each required artifact class, record delegated ownership evidence:
+
+- Artifact class:
+  - Owner role:
+  - Artifact locator:
+  - Delegate outcome:
+  - Unresolved questions or blockers:
+  - Source citations:
 
 ## Unresolved Decisions
 
@@ -41,22 +45,14 @@
 
 -
 
-## Handoff
+## Transfer Record
 
-- Target execution owner: execution-lead
+- Target stage owner: `execution-lead`
 - Execution worktree path:
-- Transfer result: complete-with-evidence | blocked
+- Transfer result: `issued` | `blocked`
 - Blocking gaps (if blocked):
   -
 - Recommended next action (if blocked):
-
-If complete:
-- files changed:
-  -
-- verification commands:
-  -
-- outcomes:
-  -
 
 ## Event Ledger
 
@@ -66,5 +62,6 @@ If complete:
   -
 
 Path rule:
-- Planning/package artifacts remain authoritative at the paths listed above.
-- Execution worktree is the code-change target and does not replace planning artifact roots.
+- Package directory is the boundary contract root.
+- Package internals are resolved from this index/manifest.
+- Execution worktree is the code-change target and does not replace package internal locators.

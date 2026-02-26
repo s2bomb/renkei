@@ -10,16 +10,16 @@ The tech-lead sits between product activation and execution ownership.
 
 ## Inputs
 
-- active shaped artifact (`shape.md`)
+- active shaped intent artifact locator
 - active workspace scaffold and ledgers
 - source and analyst evidence artifacts
 - appetite, no-gos, and open assumptions
 
 ## Outputs
 
-- technical-preparation package with execution-ready artifacts
+- technical-preparation package directory with delegated artifact index
 - unresolved decision list and accepted-risk register
-- transfer record to execution owner (`complete-with-evidence` or `blocked`)
+- transfer record to execution owner (`issued` or `blocked`)
 
 ## Boundary Rules
 

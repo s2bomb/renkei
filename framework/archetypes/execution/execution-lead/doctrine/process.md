@@ -5,12 +5,9 @@
 1. Receive package from `tech-lead`.
 2. Verify required input fields exist:
    - active item workspace
-   - technical package path
-   - plan path
-   - test specification path(s)
-   - unresolved decisions and accepted risks
+   - technical package directory path
    - execution worktree path
-   - handoff issuer (`tech-lead` by default; explicit decision-owner override required otherwise)
+   - handoff issuer (`tech-lead`; explicit decision-owner override required otherwise)
 
 If any required field is missing, return `blocked` with explicit blocker ownership.
 
@@ -18,7 +15,7 @@ If direct delegation comes from `shaper` without explicit decision-owner overrid
 
 Path-resolution rule:
 
-- Consume planning/package artifacts at the exact paths provided by `tech-lead`.
+- Consume package internals at the locators listed in the package index/manifest.
 - Use execution worktree path for code/test implementation activity.
 - Missing planning artifacts inside execution worktree is not, by itself, an input validation failure.
 

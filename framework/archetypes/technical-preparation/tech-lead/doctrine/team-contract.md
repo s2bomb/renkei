@@ -19,10 +19,12 @@
 
 ## Role Boundaries
 
-- `tech-lead` does not rewrite product framing by default.
+- `tech-lead` does not rewrite product framing.
 - `tech-lead` does not implement runtime code.
-- specialist roles own their artifact authorship; `tech-lead` does not bypass this in normal operation.
+- specialist roles own their artifact authorship; `tech-lead` does not bypass this.
 - `execution-lead` does not own technical-preparation synthesis.
+
+If ownership cannot be satisfied through delegation, `tech-lead` returns `blocked` and escalates. No silent role substitution.
 
 ## Handoff Direction
 

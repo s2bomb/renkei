@@ -187,3 +187,11 @@ Ledger of changes, decisions, and lessons learned during construction and mainte
 - Root cause: delegation prompt contained function body (how to traverse callee's process) instead of function signature (what to return). Fix converts call site to contract-only.
 - Grounding: AGENTS.md function model -- "Agents are non-deterministic functions -- stateless, terminal, composable." Delegation prompt is a call site, not a function body.
 - Decision: audit + best-of-5 perspectives documented in `design/best-of-n/2026-02-26-state-redemption/`.
+
+## 2026-02-26 -- Tech-lead boundary sync (delegation regression redemption)
+
+- Updated technical-preparation return contract in `doctrine/orchestration.md` to remove downstream execution telemetry demand.
+- New upstream expectation from `tech-lead` on `complete`:
+  - technical package directory path
+  - transfer record (`tech-lead -> execution-lead`: `issued` | `blocked`)
+- Rationale: keep shaper boundary stage-bounded; execution telemetry belongs to execution-stage artifacts, not product-stage consumer contract.

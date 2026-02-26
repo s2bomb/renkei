@@ -1,29 +1,35 @@
 # Output Contract
 
-## Artifact
+## Stage Return
 
-Produce one technical-preparation package per active item.
+Return one technical-preparation stage result per active item.
 
-## Path Convention
+## Required Success Payload (`outcome: complete`)
 
-- Item package: `shaped-items/active/item-###/working/technical-package.md`
-- Optional matrix artifact: `shaped-items/active/item-###/working/traceability-matrix.md`
+1. item workspace path
+2. package directory path
+3. package index or manifest locator
+4. delegation integrity entries for required artifact classes:
+   - `artifact_class`
+   - `artifact_locator`
+   - `owner_role`
+   - `delegate_outcome`
+5. unresolved decisions (explicit `none` if empty)
+6. accepted risks (explicit `none` if empty)
+7. must-have and nice-to-have separation
+8. execution worktree path
+9. transfer record (`tech-lead -> execution-lead`: `issued`)
+10. stage event log: technical-preparation, transfer, escalation (if escalated)
 
-## Required Package Fields
+## Required Blocked Payload (`outcome: blocked`)
 
-1. active workspace path
-2. shaped artifact path
-3. enriched spec path
-4. research artifact paths
-5. API design artifact paths
-6. test-spec artifact paths
-7. plan artifact path
-8. unresolved decisions (explicit `none` if empty)
-9. accepted risks (explicit `none` if empty)
-10. must-have and nice-to-have separation for execution planning
-11. execution worktree path (when execution tree differs from planning tree)
-12. transfer record outcome (`tech-lead -> execution-lead`: `complete-with-evidence` | `blocked`)
-13. stage event log: outcome, transfer (if execution-lead invoked), escalation (if escalated)
+1. item workspace path
+2. blockers with explicit ownership
+3. blocked fields or artifact classes
+4. recommended next action
+5. escalation target (if escalated)
+6. transfer record (`tech-lead -> execution-lead`: `blocked`) when transfer attempt failed
+7. stage event log: technical-preparation, escalation
 
 ## Quality Gates
 
@@ -35,6 +41,7 @@ No handoff when any gate fails:
 - Major claims are evidence-cited
 - Unresolved uncertainty is explicit
 - Must-have and nice-to-have separation is explicit
+- Required artifact classes have delegated ownership evidence
 - Stage event log is complete in return payload
 
 ## Completion Report
@@ -43,8 +50,9 @@ No handoff when any gate fails:
 Technical preparation complete.
 
 Item: item-###
-Package: [path]
+Package directory: [path]
 Outcome: complete | blocked
+Transfer record: issued | blocked
 
 Blockers (if any):
 - [blocker]

@@ -140,3 +140,25 @@ Ledger of construction and maintenance decisions.
   - `references/template.md`: "Intake Summary" -> "Shaped Context", `running-with-evidence` -> `complete-with-evidence`.
 - Grounding: AGENTS.md function model -- agents are stateless, terminal, composable. Named phases created a state machine; function model has input validation, work, and return.
 - Decision: audit + best-of-5 perspectives documented in `design/best-of-n/2026-02-26-state-redemption/`.
+
+## 2026-02-26 -- Delegation regression redemption (subtractive pass)
+
+- Trigger: two independent execution runs showed the same collapse pattern -- `tech-lead` self-produced specialist artifacts and self-executed code instead of delegating.
+- Root diagnosis: contract-induced role collapse. Doctrine rewarded producer behavior via fixed filename coupling, loophole qualifiers, and execution telemetry demands in technical-preparation success criteria.
+- Research artifacts added:
+  - `design/2026-02-26-delegation-regression-audit.md`
+  - `design/2026-02-26-architect-comparison-audit.md`
+  - `design/2026-02-26-boundary-contract-audit.md`
+  - `design/best-of-n/2026-02-26-delegation-redemption/` (5 perspectives + synthesis)
+- Subtractive doctrine/ethos decisions applied:
+  - Removed filename-coupled boundary requirements from technical-preparation contracts.
+  - Replaced package-content checklists with package-directory + index/manifest contract.
+  - Removed loophole qualifiers (`in normal operation`, `by default`) from ownership boundaries.
+  - Added explicit drift interruption checkpoint (stop, re-delegate, escalate) when leader starts specialist production.
+  - Removed execution telemetry as technical-preparation success criterion; stage success is now package readiness + transfer integrity.
+  - Updated handoff correction language from direct correction to owner-routed correction.
+- Conviction strengthening:
+  - identity/tenets/principles now center leadership-by-composition, strict ownership by role, and non-silent escalation when delegation cannot satisfy ownership.
+- Boundary sync changes applied:
+  - upstream `shaper` delegation return now requests transfer record, not execution telemetry.
+  - downstream `execution-lead` handoff now accepts package-directory boundary root and resolves internals via package index/manifest.

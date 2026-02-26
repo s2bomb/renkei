@@ -125,3 +125,9 @@ Ledger of construction and maintenance decisions.
   - `doctrine/pipeline.md`: "intake package" -> "input package".
 - Grounding: AGENTS.md function model -- agents are stateless, terminal, composable. Named phases created a state machine; function model has input validation, work, and return.
 - Decision: audit + best-of-5 perspectives documented in `design/best-of-n/2026-02-26-state-redemption/`.
+
+## 2026-02-26 -- Tech-lead handoff boundary sync (package-directory contract)
+
+- Updated `doctrine/handoff-contract.md`, `doctrine/process.md`, and `doctrine/pipeline.md` to accept package-directory boundary root from `tech-lead`.
+- Removed child-path fan-out as required cross-stage fields (plan/test paths are resolved from package index/manifest inside package directory).
+- Rationale: reduce boundary coupling and keep internal artifact naming owned by producing stage.

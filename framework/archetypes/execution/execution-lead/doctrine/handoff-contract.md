@@ -9,20 +9,15 @@ Member artifacts from technical-preparation specialists do not cross directly to
 ## Required Input Fields
 
 1. active item workspace path
-2. shaped artifact path
-3. technical package path
-4. plan path
-5. test specification path(s)
-6. unresolved decisions list
-7. accepted risks list
-8. execution worktree path (code-change target)
-9. handoff issuer role (`tech-lead` unless explicit decision-owner override)
+2. technical package directory path
+3. execution worktree path (code-change target)
+4. handoff issuer role (`tech-lead` unless explicit decision-owner override)
 
 ## Path Semantics
 
-- Planning/package artifacts are read from the paths supplied in the input fields.
+- Package internals are resolved from the package index/manifest inside the technical package directory.
 - Execution worktree path is used for code and test implementation activity.
-- Do not rebase planning artifact paths into execution worktree unless explicitly instructed.
+- Do not rebase package internal locators into execution worktree unless explicitly instructed.
 
 ## Return Contract
 

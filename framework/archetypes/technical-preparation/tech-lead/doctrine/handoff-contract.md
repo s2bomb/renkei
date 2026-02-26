@@ -2,26 +2,22 @@
 
 ## Contract
 
-This contract governs transfer from `tech-lead` (technical preparation owner) to `execution-lead` (execution owner).
+This contract defines invocation from `tech-lead` (technical-preparation owner) to `execution-lead` (execution owner).
 
 Member-level specialist artifacts do not cross this boundary directly. They are aggregated by `tech-lead` first.
 
-## Required Handoff Payload
+## Required Input Fields
 
-1. active item workspace path
-2. shaped artifact path
-3. technical package path
-4. plan path
-5. test specification path(s)
-6. unresolved decisions list
-7. accepted risks list
-8. execution worktree path (code-change target)
+1. item workspace path
+2. package directory path
+3. execution worktree path (code-change target)
+4. handoff issuer role (`tech-lead` unless explicit decision-owner override)
 
 ## Path Semantics
 
-- Planning/package artifacts are consumed at the paths provided in handoff payload.
+- Package internals are resolved from package index/manifest inside the package directory.
 - Execution worktree path is for code/test implementation activity.
-- Do not rebase planning artifact paths into execution worktree unless explicitly instructed.
+- Do not rebase package internal locators into execution worktree unless explicitly instructed.
 
 ## Required Return
 
@@ -38,11 +34,11 @@ or, if blocked:
 
 ## Invocation Rule
 
-Execution ownership is transferred when payload fields are complete and transfer is issued.
+Execution ownership is transferred when input fields are complete and invocation is issued.
 
 Validation-only results are not complete. A complete return includes evidence of execution work beyond input validation.
 
-If blocked, tech-lead processes the blockers: correct and re-invoke, or escalate.
+If blocked, `tech-lead` routes correction to the owning role, re-invokes execution when corrected, or escalates.
 
 ## Escalation Convention
 
