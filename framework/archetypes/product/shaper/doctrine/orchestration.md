@@ -24,14 +24,15 @@ For ambiguous, research-heavy, or multi-item inputs, delegate exploration and ru
 
 ### OpenCode Delegation Protocol (current runtime)
 
-In the current OpenCode runtime, delegation is explicit and mandatory:
-- Use `Task(subagent_type="general")`.
-- Delegate's first action is Skill invocation for the target role.
-- No pre-skill exploration.
+In the current OpenCode runtime, delegation is explicit and mandatory.
+
+When delegating to team members or downstream leaders who load a Skill, always use `Task(subagent_type="general")`. Do not use clone subagent types -- these have built-in behavior that conflicts with the Skill file. Only `general` gives the Skill full authority over the agent's identity.
+
+For research and exploration tasks that do not load a Skill, other subagent types (`codebase-analyzer`, `explore`, `web-search-researcher`, etc.) are fine.
 
 ### Problem exploration delegation
 
-Delegate problem exploration to `problem-analyst` with strict return contract.
+The delegation prompt provides arguments only. The problem-analyst's own skill governs what it does and what it produces.
 
 ```python
 Task(
@@ -39,31 +40,19 @@ Task(
   prompt="""
 STOP. READ THIS BEFORE DOING ANYTHING.
 
-Your FIRST action MUST be to call the Skill tool with skill: 'problem-analyst' and args: '[project path and source paths]'.
+Your FIRST action MUST be to call the Skill tool with skill: 'problem-analyst'.
 
-DO NOT start exploring on your own first. Step 1 is invoking the skill.
+I need your help understanding this problem space. Here's what we're working with.
 
-Return:
-1. Problem validation findings
-2. Scoped item list (1..N)
-3. Assumptions with validity/necessity tags
-4. Open risks and unresolved questions
-5. Recommended in-scope and out-of-scope boundaries per item
+Project workspace: [path]
+Sources: [source paths]
+Shaping questions: [questions]
+Constraints: [constraints]
+
+Write your findings to the workspace. Let me know what you discover.
 """
 )
 ```
-
-Required delegation inputs:
-- source inputs
-- shaping questions
-- constraints and decision context
-
-Required return contract:
-1. Problem validation findings
-2. Scoped item list (1..N)
-3. Assumptions with validity/necessity tags
-4. Open risks and unresolved questions
-5. Recommended in-scope and out-of-scope boundaries per item
 
 If the specialist role is unavailable, run role emulation and record that collapse explicitly.
 
@@ -97,13 +86,14 @@ Task(
   prompt="""
 STOP. READ THIS BEFORE DOING ANYTHING.
 
-Your FIRST action MUST be to call the Skill tool with skill: 'tech-lead' and args: '[active shaped artifact path(s)]'.
+Your FIRST action MUST be to call the Skill tool with skill: 'tech-lead'.
 
-DO NOT start planning or coding before Skill invocation.
+This item is active and ready for technical preparation. Everything you need is in the workspace.
 
-Active workspace path: [path]
-Shape path: [path]
-Sources: [source paths, analyst brief, research artifacts]
+Active workspace: [path]
+Shape: [path]
+Sources: [source paths]
+Execution worktree: [path]
 Item constraints: [no-gos from shaped artifact]
 """
 )
