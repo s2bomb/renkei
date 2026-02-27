@@ -30,6 +30,22 @@ doctrine:
 references:
   - template.md
 
+signature:
+  input:
+    shaped_item_path:
+      type: path
+      required: true
+    sources:
+      type: list[path]
+    constraints:
+      type: list[string]
+  output:
+    success:
+      package_path: path
+      transfer_record: string
+    error:
+      blockers: list[string]
+
 output:
   - target: claude-code
     path: ~/.claude/skills/tech-lead/SKILL.md

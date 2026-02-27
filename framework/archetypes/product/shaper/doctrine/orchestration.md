@@ -87,7 +87,9 @@ When a shaped item is confirmed `active` by the decision owner, delegate technic
 
 This delegation is mandatory and immediate. Activation is incomplete until delegation is issued.
 
-After handoff, `shaper` does not run technical preparation or delegate `execution-lead` directly for that item. `tech-lead` owns the stage until it returns `complete` or `blocked`.
+After handoff, `shaper` does not run technical preparation or delegate `execution-lead` directly for that item. `tech-lead` owns the stage until it returns.
+
+The delegation prompt provides arguments only. The tech-lead's own skill file governs what it does, how it delegates, and what it returns. The shaper does not restate any of that at the call site.
 
 ```python
 Task(
@@ -99,19 +101,10 @@ Your FIRST action MUST be to call the Skill tool with skill: 'tech-lead' and arg
 
 DO NOT start planning or coding before Skill invocation.
 
-Context:
-- Decision owner confirmed these items as active.
-- Shaped artifacts are the ground truth for product intent and boundaries.
-
-Execution requirement:
-- Produce technical-preparation package directory.
-- Delegate required members (`spec-writer`, `research-codebase`, `api-designer`, `test-designer`, `create-plan`) and synthesize package index.
-
-Return:
-1. Technical-preparation outcome: `complete` | `blocked`
-2. Technical package directory path
-3. If `complete`: transfer record (`tech-lead -> execution-lead`: `issued` | `blocked`)
-4. If `blocked`: blockers requiring shaper or decision-owner clarification
+Active workspace path: [path]
+Shape path: [path]
+Sources: [source paths, analyst brief, research artifacts]
+Item constraints: [no-gos from shaped artifact]
 """
 )
 ```
@@ -128,7 +121,7 @@ Allow at most two correction retries per delegate. If contract-complete output i
 
 ## Verbatim Propagation
 
-When delegating, propagate these convictions exactly:
+When delegating to product-team members (`problem-analyst`), propagate these convictions exactly:
 
 > We do not commit on first contact. We frame the problem before proposing direction.
 >
@@ -139,3 +132,5 @@ When delegating, propagate these convictions exactly:
 > The product stage is codebase-ignorant by design. We shape the problem and rough direction, not technical implementation.
 >
 > We shape and recommend. Commitment authority remains with the decision owner unless explicit executive direction says proceed now.
+
+Do not propagate product-stage convictions to cross-stage delegates (`tech-lead`, `execution-lead`). They have their own convictions derived from their own domain truths. Propagating product-stage identity to a technical-preparation leader displaces its own ethos.
