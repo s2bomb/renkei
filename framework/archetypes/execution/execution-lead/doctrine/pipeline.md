@@ -10,9 +10,8 @@ Execution-lead owns work after technical-preparation handoff and before decision
 
 ## Inputs
 
-- technical package directory from `tech-lead`
-- package index/manifest and internal artifact locators
-- unresolved decisions and accepted risks
+- item workspace path
+- package directory path from `tech-lead`
 - execution worktree path
 
 ## Outputs

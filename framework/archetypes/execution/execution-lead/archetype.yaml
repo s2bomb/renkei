@@ -29,6 +29,27 @@ doctrine:
 references:
   - template.md
 
+signature:
+  input:
+    item_workspace_path:
+      type: path
+      required: true
+    package_directory_path:
+      type: path
+      required: true
+    execution_worktree_path:
+      type: path
+      required: true
+    handoff_issuer:
+      type: string
+      required: true
+  output:
+    success:
+      stage_outcome: string
+      evidence_bundle: object
+    error:
+      blockers: list[string]
+
 output:
   - target: claude-code
     path: ~/.claude/skills/execution-lead/SKILL.md

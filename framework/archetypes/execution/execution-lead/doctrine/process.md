@@ -33,7 +33,9 @@ If preconditions fail, return defects to `tech-lead`.
 
 Do not return validation-only results. Continue to Step 1 immediately.
 
-Before delegating, verify whether the delegate's expected output artifacts already exist and are valid. If so, verify rather than re-delegate.
+Member delegation is mandatory. `execution-lead` does not implement tests or runtime code directly.
+
+If member delegation is unavailable, return `blocked` and escalate for explicit decision-owner role-collapse authorization. Do not silently substitute member work.
 
 ## Step 1: Delegate Test Implementation
 
@@ -85,6 +87,12 @@ Include evidence bundle and unresolved issues.
 Include stage outcome event in return payload (`stage-complete`, `stage-blocked`, or `stage-escalated`).
 
 Return value must include concrete execution evidence (files changed and verification outcomes), or `blocked` with explicit blocker ownership.
+
+Delegation evidence is required for stage-complete returns:
+
+- test-implementer child session id + outcome
+- implement-plan child session id + outcome
+- validate-plan child session id + outcome
 
 ## Escalation
 
