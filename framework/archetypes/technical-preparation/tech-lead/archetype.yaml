@@ -39,6 +39,9 @@ signature:
       type: list[path]
     constraints:
       type: list[string]
+    execution_worktree_path:
+      type: path
+      required: true
   output:
     success:
       package_path: path

@@ -4,8 +4,9 @@
 
 Receive active item context from `shaper`:
 - active workspace path
-- shaped intent artifact locator
-- source and analyst artifact locators
+- shaped artifact path
+- source artifact paths
+- execution worktree path
 - appetite, no-gos, and open assumptions
 
 Preconditions -- all must hold before any delegation:
@@ -15,6 +16,7 @@ Preconditions -- all must hold before any delegation:
 3. Appetite is explicit.
 4. No-gos are explicit.
 5. Major uncertainties are visible.
+6. Execution worktree path is present and usable for downstream execution delegation.
 
 If any precondition fails, return `blocked` to `shaper` with explicit defect notes and ownership.
 
@@ -76,7 +78,13 @@ As stage owner, `tech-lead` is accountable for cross-artifact coherence and pack
 
 Delegate package directory to `execution-lead`.
 
-Execution ownership transfer is valid when required handoff fields are complete and transfer is issued.
+Execution ownership transfer is valid only when required handoff fields are complete and the `execution-lead` delegation is actually issued.
+
+Transfer evidence is required:
+
+- delegated child session id
+- delegation timestamp
+- delegation outcome (`issued` | `blocked`)
 
 If `execution-lead` returns `blocked`, route correction to the owning role, re-invoke, or escalate.
 
@@ -92,7 +100,7 @@ Escalate to decision owner when:
 Include escalation event in return payload with blocker ownership.
 
 Return one of:
-- `complete` with item workspace path, package directory path, package index locator, and transfer record (`issued`)
+- `complete` with item workspace path, package directory path, package index locator, and transfer record (`issued`) with transfer evidence
 - `blocked` with blocker ownership and escalation target
 
 A return that contains only input context restatement or conversational summary is incomplete.

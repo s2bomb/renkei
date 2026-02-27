@@ -10,9 +10,10 @@ The tech-lead sits between product activation and execution ownership.
 
 ## Inputs
 
-- active shaped intent artifact locator
-- active workspace scaffold and ledgers
-- source and analyst evidence artifacts
+- active workspace path
+- shaped artifact path
+- source artifact paths
+- execution worktree path
 - appetite, no-gos, and open assumptions
 
 ## Outputs
