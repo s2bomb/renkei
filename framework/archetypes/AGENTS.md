@@ -203,19 +203,23 @@ Rules:
 ### Delegation prompts are call sites, not function bodies
 
 When one agent delegates to another, the delegation prompt specifies:
-1. **Input**: what the delegate receives (paths, context, constraints)
-2. **Return contract**: what the delegate must return (outcome enum + payload)
+1. **Skill invocation**: which skill the delegate loads
+2. **Input arguments**: what the delegate receives (paths, context, constraints)
 
 The delegation prompt does NOT specify:
+- The callee's return contract (the callee's own skill defines what it returns)
 - How the delegate should traverse its internal process
 - Which internal phases to complete
 - What to do at intermediate checkpoints
 - What NOT to return (prohibition-style guardrails)
+- Behavioral instructions ("do not implement code", "return only acknowledgment")
 
-The callee's own archetype governs its internal behavior. The caller specifies what goes in and what comes back. That is all.
+The callee's own archetype governs its internal behavior, its delegation to its own members, and its return type. The caller specifies what goes in. That is all.
 
-**Bad**: "Continue through technical-preparation process to stage outcome. Do not stop at intake-only chat."
-**Good**: "Produce technical-preparation package. Return: `ready-for-execution` | `blocked`."
+**Grounding -- call-site primacy**: The call-site prompt has cognitive primacy over the loaded skill file. The skill loads second. The agent has already internalized the call-site before the skill arrives. The less the call-site says, the more the skill governs. Return contracts, execution requirements, and behavioral instructions at the call-site displace the callee's own identity and suppress its internal delegation. This is observable across all delegation boundaries -- callers that add return contracts produce callees that comply with the call-site instead of their own skill.
+
+**Bad**: "Produce technical-preparation package. Return: `ready-for-execution` | `blocked`."
+**Good**: Skill invocation + input argument values only. The callee's skill defines its return type.
 
 ### Return values are terminal and honest
 

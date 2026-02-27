@@ -18,7 +18,10 @@ Return one technical-preparation stage result per active item.
 6. accepted risks (explicit `none` if empty)
 7. must-have and nice-to-have separation
 8. execution worktree path
-9. transfer record (`tech-lead -> execution-lead`: `issued`)
+9. transfer record (`tech-lead -> execution-lead`: `issued`) with transfer evidence:
+   - execution-lead child session id
+   - delegation timestamp
+   - delegation outcome
 10. stage event log: technical-preparation, transfer, escalation (if escalated)
 
 ## Required Blocked Payload (`outcome: blocked`)
@@ -42,6 +45,7 @@ No handoff when any gate fails:
 - Unresolved uncertainty is explicit
 - Must-have and nice-to-have separation is explicit
 - Required artifact classes have delegated ownership evidence
+- Transfer record includes execution-lead delegation evidence (session id + timestamp)
 - Stage event log is complete in return payload
 
 ## Completion Report

@@ -16,9 +16,31 @@ You are here: technical preparation stage owner.
 
 ## OpenCode Delegation Protocol (Current Runtime)
 
-- Use `Task(subagent_type="general")`.
-- Delegate's first action is Skill invocation for the target role.
-- No pre-skill exploration.
+When delegating to specialists who load a Skill, always use `Task(subagent_type="general")`. Do not use clone subagent types (`design-clone`, `spec-writer-clone`, `test-writer-clone`, etc.) -- these have built-in behavior that conflicts with the Skill file. Only `general` gives the Skill full authority over the agent's identity.
+
+For research and exploration tasks that do not load a Skill, other subagent types (`codebase-analyzer`, `explore`, `web-search-researcher`, etc.) are fine.
+
+### Specialist delegation template
+
+This template is used for all specialist delegations. The specialist's own Skill governs what it does and what it produces. The tech-lead provides the workspace path and lets the specialist do its work.
+
+```python
+Task(
+  subagent_type="general",
+  prompt="""
+STOP. READ THIS BEFORE DOING ANYTHING.
+
+Your FIRST action MUST be to call the Skill tool with skill: '[specialist-role]'.
+
+[Brief natural context about what's needed.]
+
+Item workspace: [path]
+Package workspace: [path]
+
+Write your artifacts to the package workspace when done.
+"""
+)
+```
 
 ## Specialist Delegation Set
 
@@ -31,29 +53,13 @@ You are here: technical preparation stage owner.
 ## Dependency Rules
 
 - `spec-writer` and `research-codebase` may run in parallel once input is validated.
-- `api-designer` depends on enriched spec + research.
-- `test-designer` depends on API design + spec + research.
-- `create-plan` depends on spec + research + design + test spec.
-
-## Required Return Contract (All Delegates)
-
-Every delegated return must include:
-1. `artifact_class`
-2. `artifact_locator`
-3. `owner_role`
-4. required section completeness
-5. explicit blockers or unresolved questions
-6. source citations for major claims
+- `api-designer` runs after `spec-writer` and `research-codebase` complete.
+- `test-designer` runs after `api-designer`, `spec-writer`, and `research-codebase` complete.
+- `create-plan` runs after all other specialists complete.
 
 ## Member Ownership Rule
 
-- `spec-writer` owns enriched spec artifact authorship.
-- `research-codebase` owns research artifact authorship.
-- `api-designer` owns API design artifact authorship.
-- `test-designer` owns test-spec artifact authorship.
-- `create-plan` owns implementation-plan artifact authorship.
-
-`tech-lead` synthesizes and gates. It does not bypass member ownership.
+Each specialist owns their own artifact authorship. `tech-lead` synthesizes and gates. It does not author specialist-owned work.
 
 If ownership cannot be satisfied through delegation, return `blocked` and escalate for explicit decision-owner role-collapse authorization.
 

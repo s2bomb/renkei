@@ -19,26 +19,35 @@ Member-level specialist artifacts do not cross this boundary directly. They are 
 - Execution worktree path is for code/test implementation activity.
 - Do not rebase package internal locators into execution worktree unless explicitly instructed.
 
-## Required Return
+## Delegation
 
-Execution owner returns one of:
+The delegation prompt provides arguments only. The execution-lead's own skill file governs what it does, how it delegates, and what it returns. The tech-lead does not restate any of that at the call site.
 
-1. `outcome`: `complete`
-2. evidence demonstrating execution work occurred (e.g., files changed, verification commands executed, outcomes observed)
+```python
+Task(
+  subagent_type="general",
+  prompt="""
+STOP. READ THIS BEFORE DOING ANYTHING.
 
-or, if blocked:
+Your FIRST action MUST be to call the Skill tool with skill: 'execution-lead'.
 
-1. `outcome`: `blocked`
-2. `blockers[]`: explicit blocker list with ownership
-3. `recommended_next_action`
+Technical preparation is complete. The package has everything you need for execution.
 
-## Invocation Rule
+Item workspace: [path]
+Package: [path]
+Execution worktree: [path]
+Handoff issuer: tech-lead
 
-Execution ownership is transferred when input fields are complete and invocation is issued.
+Let me know the outcome when you're done. If you hit blockers, get back to me and I'll help resolve them.
+"""
+)
+```
 
-Validation-only results are not complete. A complete return includes evidence of execution work beyond input validation.
+## Ownership Transfer
 
-If blocked, `tech-lead` routes correction to the owning role, re-invokes execution when corrected, or escalates.
+Execution ownership is transferred when invocation is issued with complete input fields and transfer evidence is recorded (execution-lead child session id + delegation timestamp).
+
+If `execution-lead` returns `blocked`, `tech-lead` routes correction to the owning role, re-invokes, or escalates.
 
 ## Escalation Convention
 

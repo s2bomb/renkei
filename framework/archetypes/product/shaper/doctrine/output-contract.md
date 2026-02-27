@@ -76,15 +76,15 @@ Do not hand off an `active` item unless:
 
 ## Downstream Contract
 
-For confirmed `active` items, the shaped artifact must be handoff-ready for `tech-lead` without additional reframing.
+For confirmed `active` items, the shaped artifact must be delegation-ready for `tech-lead` without additional reframing.
 
-`tech-lead` is responsible for downstream handoff to `execution-lead` after technical-preparation package synthesis.
+`tech-lead` is responsible for downstream delegation to `execution-lead` after technical-preparation package synthesis.
 
-Required handoff payload:
+Required delegation payload:
 - active workspace path
 - shaped artifact path
-- analyst brief/evidence paths
-- unresolved assumptions and open risks
+- source artifact paths
+- execution worktree path
 
 ## Completion Report
 

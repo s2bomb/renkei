@@ -101,17 +101,17 @@ Other transitions:
 
 If scaffold or ledger writes fail, keep the item non-active and block technical handoff.
 
-## Step 8: Handoff to Technical Preparation
+## Step 8: Delegate to Technical Preparation
 
-For active items, hand off with:
+For active items, delegate with:
 - active workspace path
-- shaped artifact path (`shape.md`)
-- key unresolved assumptions
-- analyst brief and research artifacts
+- shaped artifact path
+- source artifact paths
+- execution worktree path
 
 On OpenCode, delegation target is `tech-lead` via `Task(subagent_type="general")` with first-step Skill invocation.
 
-`shaper` hands off stage ownership at this point. Do not run technical preparation directly and do not delegate `execution-lead` directly for the same item unless decision owner explicitly overrides due stage-owner unavailability.
+`shaper` delegates stage ownership at this point. Do not run technical preparation directly and do not delegate `execution-lead` directly for the same item unless decision owner explicitly overrides due stage-owner unavailability.
 
 ## Step 9: Keep the Slate Clean
 

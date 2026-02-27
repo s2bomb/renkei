@@ -24,14 +24,15 @@ For ambiguous, research-heavy, or multi-item inputs, delegate exploration and ru
 
 ### OpenCode Delegation Protocol (current runtime)
 
-In the current OpenCode runtime, delegation is explicit and mandatory:
-- Use `Task(subagent_type="general")`.
-- Delegate's first action is Skill invocation for the target role.
-- No pre-skill exploration.
+In the current OpenCode runtime, delegation is explicit and mandatory.
+
+When delegating to team members or downstream leaders who load a Skill, always use `Task(subagent_type="general")`. Do not use clone subagent types -- these have built-in behavior that conflicts with the Skill file. Only `general` gives the Skill full authority over the agent's identity.
+
+For research and exploration tasks that do not load a Skill, other subagent types (`codebase-analyzer`, `explore`, `web-search-researcher`, etc.) are fine.
 
 ### Problem exploration delegation
 
-Delegate problem exploration to `problem-analyst` with strict return contract.
+The delegation prompt provides arguments only. The problem-analyst's own skill governs what it does and what it produces.
 
 ```python
 Task(
@@ -39,31 +40,19 @@ Task(
   prompt="""
 STOP. READ THIS BEFORE DOING ANYTHING.
 
-Your FIRST action MUST be to call the Skill tool with skill: 'problem-analyst' and args: '[project path and source paths]'.
+Your FIRST action MUST be to call the Skill tool with skill: 'problem-analyst'.
 
-DO NOT start exploring on your own first. Step 1 is invoking the skill.
+I need your help understanding this problem space. Here's what we're working with.
 
-Return:
-1. Problem validation findings
-2. Scoped item list (1..N)
-3. Assumptions with validity/necessity tags
-4. Open risks and unresolved questions
-5. Recommended in-scope and out-of-scope boundaries per item
+Project workspace: [path]
+Sources: [source paths]
+Shaping questions: [questions]
+Constraints: [constraints]
+
+Write your findings to the workspace. Let me know what you discover.
 """
 )
 ```
-
-Required delegation inputs:
-- source inputs
-- shaping questions
-- constraints and decision context
-
-Required return contract:
-1. Problem validation findings
-2. Scoped item list (1..N)
-3. Assumptions with validity/necessity tags
-4. Open risks and unresolved questions
-5. Recommended in-scope and out-of-scope boundaries per item
 
 If the specialist role is unavailable, run role emulation and record that collapse explicitly.
 
@@ -87,7 +76,9 @@ When a shaped item is confirmed `active` by the decision owner, delegate technic
 
 This delegation is mandatory and immediate. Activation is incomplete until delegation is issued.
 
-After handoff, `shaper` does not run technical preparation or delegate `execution-lead` directly for that item. `tech-lead` owns the stage until it returns `complete` or `blocked`.
+After handoff, `shaper` does not run technical preparation or delegate `execution-lead` directly for that item. `tech-lead` owns the stage until it returns.
+
+The delegation prompt provides arguments only. The tech-lead's own skill file governs what it does, how it delegates, and what it returns. The shaper does not restate any of that at the call site.
 
 ```python
 Task(
@@ -95,23 +86,15 @@ Task(
   prompt="""
 STOP. READ THIS BEFORE DOING ANYTHING.
 
-Your FIRST action MUST be to call the Skill tool with skill: 'tech-lead' and args: '[active shaped artifact path(s)]'.
+Your FIRST action MUST be to call the Skill tool with skill: 'tech-lead'.
 
-DO NOT start planning or coding before Skill invocation.
+This item is active and ready for technical preparation. Everything you need is in the workspace.
 
-Context:
-- Decision owner confirmed these items as active.
-- Shaped artifacts are the ground truth for product intent and boundaries.
-
-Execution requirement:
-- Produce technical-preparation package directory.
-- Delegate required members (`spec-writer`, `research-codebase`, `api-designer`, `test-designer`, `create-plan`) and synthesize package index.
-
-Return:
-1. Technical-preparation outcome: `complete` | `blocked`
-2. Technical package directory path
-3. If `complete`: transfer record (`tech-lead -> execution-lead`: `issued` | `blocked`)
-4. If `blocked`: blockers requiring shaper or decision-owner clarification
+Active workspace: [path]
+Shape: [path]
+Sources: [source paths]
+Execution worktree: [path]
+Item constraints: [no-gos from shaped artifact]
 """
 )
 ```
@@ -128,7 +111,7 @@ Allow at most two correction retries per delegate. If contract-complete output i
 
 ## Verbatim Propagation
 
-When delegating, propagate these convictions exactly:
+When delegating to product-team members (`problem-analyst`), propagate these convictions exactly:
 
 > We do not commit on first contact. We frame the problem before proposing direction.
 >
@@ -139,3 +122,5 @@ When delegating, propagate these convictions exactly:
 > The product stage is codebase-ignorant by design. We shape the problem and rough direction, not technical implementation.
 >
 > We shape and recommend. Commitment authority remains with the decision owner unless explicit executive direction says proceed now.
+
+Do not propagate product-stage convictions to cross-stage delegates (`tech-lead`, `execution-lead`). They have their own convictions derived from their own domain truths. Propagating product-stage identity to a technical-preparation leader displaces its own ethos.

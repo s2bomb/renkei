@@ -29,6 +29,14 @@ doctrine:
 references:
   - template.md
 
+team:
+  role: leader
+  stage: product
+  members:
+    - problem-analyst
+  downstream:
+    - tech-lead
+
 output:
   - target: claude-code
     path: ~/.claude/skills/shaper/SKILL.md
