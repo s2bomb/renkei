@@ -3,9 +3,9 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
 
 # Install vendor deps if needed
-if [ ! -d "$REPO_ROOT/vendor/opencode/node_modules" ]; then
-  bun install --cwd "$REPO_ROOT/vendor/opencode"
+if [ ! -d "$REPO_ROOT/platform/opencode/node_modules" ]; then
+  bun install --cwd "$REPO_ROOT/platform/opencode"
 fi
 
 # Launch OpenCode TUI from repo root -- picks up AGENTS.md and .claude/skills/ automatically
-exec bun run --cwd "$REPO_ROOT/vendor/opencode/packages/opencode" --conditions=browser src/index.ts "$@"
+exec bun run --cwd "$REPO_ROOT/platform/opencode/packages/opencode" --conditions=browser src/index.ts "$@"
