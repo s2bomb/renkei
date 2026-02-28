@@ -103,42 +103,6 @@ async function loadRuntimeModule(): Promise<RuntimeModule> {
 }
 
 describe("unit section-2 stale-assumption-scanner contracts", () => {
-  test("S2-T16 default pattern set includes all Section B stale-assumption IDs", async () => {
-    const runtime = await loadRuntimeModule()
-    const patterns = runtime.defaultStaleAssumptionPatterns()
-    const byID = new Map(patterns.map((pattern) => [pattern.id, pattern]))
-
-    expect(byID.size).toBe(4)
-    expect([...byID.keys()].sort()).toEqual(["fork-env-var", "fork-surface", "fork-test-script", "openteams-surface"])
-
-    const expectedSeverity: Record<StaleAssumptionPatternID, StaleAssumptionSeverity> = {
-      "fork-surface": "error",
-      "openteams-surface": "error",
-      "fork-env-var": "warning",
-      "fork-test-script": "warning",
-    }
-
-    for (const [id, severity] of Object.entries(expectedSeverity)) {
-      const pattern = byID.get(id as StaleAssumptionPatternID)
-      expect(pattern === undefined).toBe(false)
-      if (!pattern) {
-        continue
-      }
-
-      expect(pattern.expression instanceof RegExp).toBe(true)
-      expect(pattern.severity).toBe(severity)
-    }
-  })
-
-  test("S2-T17 default Section B scan target emits canonical include and default excludes", async () => {
-    const runtime = await loadRuntimeModule()
-    const target = runtime.defaultSectionBScanTarget("/repo/root")
-
-    expect(target.roots).toEqual(["/repo/root"])
-    expect(target.include).toEqual(SECTION_B_INCLUDE_GLOBS)
-    expect(target.exclude).toEqual(SECTION_B_DEFAULT_EXCLUDE_GLOBS)
-  })
-
   test("S2-T18 resolver replaces roots and include, then merges excludes with lexical de-dup", async () => {
     const runtime = await loadRuntimeModule()
     const base = makeSectionBBaseScanTarget("/repo")

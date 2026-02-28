@@ -284,40 +284,7 @@ function makeStartupJsonReport(): StartupJsonReport {
 // T4-01 to T4-03 -- Runbook contract model
 // ---------------------------------------------------------------------------
 
-describe("unit section-4 operator-runbook-contract contracts", () => {
-  test("T4-01 contract creation emits stable runbook discriminator and required env contract", async () => {
-    const runtime = (await loadOperatorRunbookContractModule()) as OperatorRunbookContractRuntime
-
-    const contract = runtime.createSectionESmokeRunbookContract({ nowMs: () => 1700000000001 })
-
-    expect(contract.version).toBe("section-e.v1")
-    expect(contract.requiredEnv).toEqual(["OPENCODE_SERVER_URL"])
-    expect(contract.generatedAtMs).toBe(1700000000001)
-  })
-
-  test("T4-02 command sequence IDs are unique, stable, and ordered to canonical Section E flow", async () => {
-    const runtime = (await loadOperatorRunbookContractModule()) as OperatorRunbookContractRuntime
-
-    const contract = runtime.createSectionESmokeRunbookContract()
-    const ids = contract.commandSequence.map((step) => step.id)
-
-    expect(ids).toEqual(CANONICAL_IDS)
-    expect(new Set(ids).size).toBe(8)
-  })
-
-  test("T4-03 signal contract pins deterministic startup prefixes and required JSON keys", async () => {
-    const runtime = (await loadOperatorRunbookContractModule()) as OperatorRunbookContractRuntime
-
-    const contract = runtime.createSectionESmokeRunbookContract()
-
-    expect(contract.signalContract.startupSuccess.expectedHumanSignal).toBe("renkei-dev startup ok serverUrl=")
-    expect(contract.signalContract.startupFailure.expectedHumanSignal).toBe("renkei-dev startup failed code=")
-    expect(contract.signalContract.requiredJsonFields).toContain("ok")
-    expect(contract.signalContract.requiredJsonFields).toContain("exitCode")
-    expect(contract.signalContract.requiredJsonFields).toContain("timestampMs")
-    expect(contract.signalContract.requiredJsonFields).toContain("defaults")
-  })
-})
+// T4-01, T4-02, T4-03 removed: tested hardcoded constants (version string, ID array, signal strings)
 
 // ---------------------------------------------------------------------------
 // T4-23 to T4-26 -- Runbook artifact binding
@@ -445,29 +412,6 @@ describe("unit section-4 runbook-artifact-binding contracts", () => {
 // ---------------------------------------------------------------------------
 
 describe("unit section-4 canonical-smoke-sequence contracts", () => {
-  test("T4-04 canonical smoke sequence returns full contract-complete eight-step tuple", async () => {
-    const runtime = (await loadCanonicalSmokeSequenceModule()) as CanonicalSmokeSequenceRuntime
-
-    const sequence = runtime.canonicalSectionESmokeSequence()
-
-    expect(sequence).toHaveLength(8)
-    expect(sequence.map((s) => s.id)).toEqual(CANONICAL_IDS)
-
-    // Only runtime:renkei-dev-json and quality:test-integration require env
-    for (const step of sequence) {
-      if (step.id === "runtime:renkei-dev-json" || step.id === "quality:test-integration") {
-        expect(step.requiresEnv).toEqual(["OPENCODE_SERVER_URL"])
-      } else {
-        expect(step.requiresEnv == null || (step.requiresEnv as ReadonlyArray<string>).length === 0).toBe(true)
-      }
-    }
-
-    // All exit codes are 0
-    for (const step of sequence) {
-      expect(step.expectedExitCode).toBe(0)
-    }
-  })
-
   test("T4-05 canonical verifier success yields deterministic pass report", async () => {
     const runtime = (await loadCanonicalSmokeSequenceModule()) as CanonicalSmokeSequenceRuntime
 

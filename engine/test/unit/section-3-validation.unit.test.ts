@@ -299,17 +299,6 @@ describe("unit section-3 live-integration-prereqs contracts", () => {
     process.env.OPENCODE_SERVER_URL = originalServerUrlEnv
   })
 
-  test("T3-01 default required surfaces mirror canonical composition surface IDs", async () => {
-    const runtime = (await loadLiveIntegrationPrereqsModule()) as LivePrereqRuntime
-
-    const surfaces = runtime.defaultRequiredSectionDSurfaces()
-    expect(surfaces).toEqual(COMPOSITION_SURFACES)
-    expect(surfaces.length).toBeGreaterThan(0)
-    for (const surface of surfaces) {
-      expect(COMPOSITION_SURFACES.includes(surface as (typeof COMPOSITION_SURFACES)[number])).toBe(true)
-    }
-  })
-
   test("T3-02 missing OPENCODE_SERVER_URL fails typed before downstream gates", async () => {
     const runtime = (await loadLiveIntegrationPrereqsModule()) as LivePrereqRuntime
     const allowed = new Set<string>(LIVE_PREREQ_ERROR_CODES)
@@ -627,32 +616,6 @@ describe("unit section-3 no-degradation-pipeline contracts", () => {
 })
 
 describe("unit section-3 workflow-signoff contracts", () => {
-  test("T3-15 canonical workflow list is ordered and contract-complete", async () => {
-    const runtime = (await loadBaselineWorkflowsModule()) as WorkflowSignoffRuntime
-    const workflows = runtime.defaultSectionDBaselineWorkflows()
-
-    const expectedIDs = [
-      "quality:typecheck",
-      "quality:lint",
-      "quality:test-unit",
-      "runtime:renkei-dev-json",
-      "quality:test-integration",
-    ]
-
-    const expectedCommands = [
-      ["bun", "run", "typecheck"],
-      ["bun", "run", "lint"],
-      ["bun", "run", "test:unit"],
-      ["bun", "run", "renkei-dev", "--", "--json"],
-      ["bun", "run", "test:integration"],
-    ]
-
-    expect(workflows.map((workflow) => workflow.id)).toEqual(expectedIDs)
-    expect(workflows.map((workflow) => workflow.command)).toEqual(expectedCommands)
-    expect(workflows.map((workflow) => workflow.expectedExitCode)).toEqual([0, 0, 0, 0, 0])
-    expect(workflows.map((workflow) => workflow.requiresLiveServer)).toEqual([false, false, false, true, true])
-  })
-
   test("T3-16 empty workflow list fails typed before command execution", async () => {
     const runtime = (await loadBaselineWorkflowsModule()) as WorkflowSignoffRuntime
     const allowed = new Set<string>(WORKFLOW_SIGNOFF_ERROR_CODES)

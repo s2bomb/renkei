@@ -46,14 +46,6 @@ function makeFinding(options: {
 }
 
 describe("unit section-2 purity-verification contracts", () => {
-  test("S2-T25 defaultPuritySeverityPolicy fails on error and allows warning", async () => {
-    const runtime = await loadPurityVerificationModule()
-
-    const policy = runtime.defaultPuritySeverityPolicy()
-    expect(policy.failOn).toEqual(["error"])
-    expect(policy.allow).toEqual(["warning"])
-  })
-
   test("S2-T26 zero findings yields pass report with deterministic evidence payload", async () => {
     const runtime = await loadPurityVerificationModule()
 

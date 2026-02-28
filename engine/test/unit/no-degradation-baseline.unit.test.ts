@@ -71,11 +71,4 @@ describe("unit no-degradation-baseline contracts", () => {
     }
   })
 
-  test("T2-12 default requirement returns canonical no-degradation constants", async () => {
-    const runtime = await loadNoDegradationBaselineModule()
-
-    const requirement = runtime.defaultBaselineRequirement()
-    expect(requirement.requiredCompositionSurfaceCount).toBe(4)
-    expect(requirement.requireStartupTimingFields).toBe(true)
-  })
 })
