@@ -4,11 +4,7 @@ import type { Result } from "../shared/result"
 import type { WorktreeResolution, WorktreeResolveInput } from "../shared/types"
 import type { WorktreeError } from "../shared/errors"
 import { ok, err } from "../shared/result"
-import {
-  worktreeNotFoundError,
-  missingDirectoryError,
-  bareRepoNotFoundError,
-} from "../shared/errors"
+import { worktreeNotFoundError, missingDirectoryError, bareRepoNotFoundError } from "../shared/errors"
 
 /**
  * Resolve the engine source worktree path from CLI input and filesystem state.
@@ -20,9 +16,7 @@ import {
  * 4. If no override: resolve <bareRepoParent>/dev/, validate exists + has engine/ + platform/.
  * 5. All paths via path.resolve() for absoluteness.
  */
-export async function resolveWorktree(
-  opts: WorktreeResolveInput,
-): Promise<Result<WorktreeResolution, WorktreeError>> {
+export async function resolveWorktree(opts: WorktreeResolveInput): Promise<Result<WorktreeResolution, WorktreeError>> {
   // Step 1: Find the source root by walking up from scriptDir
   const sourceRoot = await findSourceRoot(opts.scriptDir)
 
