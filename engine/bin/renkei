@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Renkei composed entry point
+# Resolves the engine source and launches OpenCode through the composition layer.
+exec bun run "$(dirname "$0")/../src/index.ts" "$@"
