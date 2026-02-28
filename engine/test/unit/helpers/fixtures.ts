@@ -25,7 +25,6 @@ export function engineConfig(overrides?: Partial<EngineConfig>): EngineConfig {
 export function launchOptions(overrides?: Partial<LaunchOptions>): LaunchOptions {
   return {
     worktreeOverride: undefined,
-    devMode: false,
     projectDir: undefined,
     passthroughArgs: [],
     ...overrides,

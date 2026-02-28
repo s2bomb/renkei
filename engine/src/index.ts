@@ -16,6 +16,9 @@ async function main(): Promise<void> {
   // launch() only returns on error -- success replaces the process
   if (isErr(result)) {
     const error = result.error
+    if (error.tag === "LaunchFailed" && error.exitCode === 0) {
+      process.exit(0)
+    }
     console.error(`renkei: ${error.message}`)
     if (error.tag === "LaunchFailed" && error.exitCode !== null) {
       process.exit(error.exitCode)

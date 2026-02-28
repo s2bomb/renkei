@@ -22,13 +22,12 @@ describe("parseLaunchOptions", () => {
     expect(opts.passthroughArgs).not.toContain("/some/path")
   })
 
-  test("T-L06: --dev is parsed as a boolean flag", () => {
+  test("T-L06: unrecognized flags pass through without being consumed", () => {
     const result = parseLaunchOptions(["--dev", "--verbose"])
     expect(isOk(result)).toBe(true)
     const opts = (result as Ok<LaunchOptions>).value
-    expect(opts.devMode).toBe(true)
-    expect(opts.passthroughArgs).toEqual(["--verbose"])
-    expect(opts.passthroughArgs).not.toContain("--dev")
+    expect(opts.projectDir).toBeUndefined()
+    expect(opts.passthroughArgs).toEqual(["--dev", "--verbose"])
   })
 
   test("T-L07: first positional argument is captured as projectDir", () => {
@@ -46,7 +45,6 @@ describe("parseLaunchOptions", () => {
     expect(isOk(result)).toBe(true)
     const opts = (result as Ok<LaunchOptions>).value
     expect(opts.worktreeOverride).toBeUndefined()
-    expect(opts.devMode).toBe(false)
     expect(opts.projectDir).toBeUndefined()
     expect(opts.passthroughArgs).toEqual(input)
   })
@@ -72,27 +70,24 @@ describe("parseLaunchOptions", () => {
     expect(isOk(result)).toBe(true)
     const opts = (result as Ok<LaunchOptions>).value
     expect(opts.worktreeOverride).toBeUndefined()
-    expect(opts.devMode).toBe(false)
     expect(opts.projectDir).toBeUndefined()
     expect(opts.passthroughArgs).toEqual([])
   })
 
-  test("T-L12: combined flags -- --worktree, --dev, positional, and passthrough", () => {
-    const result = parseLaunchOptions(["--worktree", "/wt", "--dev", "~/project", "--model", "claude"])
+  test("T-L12: combined flags -- --worktree, positional, and passthrough", () => {
+    const result = parseLaunchOptions(["--worktree", "/wt", "~/project", "--model", "claude"])
     expect(isOk(result)).toBe(true)
     const opts = (result as Ok<LaunchOptions>).value
     expect(opts.worktreeOverride).toBe("/wt")
-    expect(opts.devMode).toBe(true)
     expect(opts.projectDir).toBe("~/project")
     expect(opts.passthroughArgs).toEqual(["--model", "claude"])
   })
 })
 
 describe("buildLaunchCommand", () => {
-  test("T-L13: dev mode produces bun run command with correct args and env", () => {
+  test("T-L13: produces bun run command with correct args and env", () => {
     const res = fixtures.resolution()
     const opts = fixtures.launchOptions({
-      devMode: true,
       projectDir: "~/project",
       passthroughArgs: ["--model", "claude"],
     })
@@ -117,28 +112,6 @@ describe("buildLaunchCommand", () => {
     expect(projectIdx).toBeGreaterThan(-1)
     expect(modelIdx).toBeGreaterThan(projectIdx)
     expect(claudeIdx).toBeGreaterThan(modelIdx)
-    // env must contain the LaunchEnvironment values
-    expect(cmd.env.OPENCODE_CONFIG_CONTENT).toBe(env.OPENCODE_CONFIG_CONTENT)
-    expect(cmd.env.OPENCODE_CONFIG_DIR).toBe(env.OPENCODE_CONFIG_DIR)
-    expect(cmd.env.RENKEI_ENGINE_SOURCE).toBe(env.RENKEI_ENGINE_SOURCE)
-  })
-
-  test("T-L14: binary mode produces opencode binary command with env", () => {
-    const res = fixtures.resolution()
-    const opts = fixtures.launchOptions({
-      devMode: false,
-      passthroughArgs: ["--verbose"],
-    })
-    const env = fixtures.launchEnvironment()
-
-    const cmd = buildLaunchCommand(res, opts, env)
-
-    // command should be path to the opencode binary
-    expect(cmd.command).toContain(res.platformPath)
-    expect(cmd.command).toContain("opencode")
-    expect(cmd.command).not.toBe("bun")
-    // args should contain passthrough args
-    expect(cmd.args).toContain("--verbose")
     // env must contain the LaunchEnvironment values
     expect(cmd.env.OPENCODE_CONFIG_CONTENT).toBe(env.OPENCODE_CONFIG_CONTENT)
     expect(cmd.env.OPENCODE_CONFIG_DIR).toBe(env.OPENCODE_CONFIG_DIR)
