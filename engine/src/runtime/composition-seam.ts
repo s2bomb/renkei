@@ -6,7 +6,7 @@ import type {
   CapabilityReport,
   ComposedToolDef,
   CompositionError,
-  HarnessPluginDef,
+  EnginePluginDef,
   LoadedSkill,
   OpencodeSDKClient,
   Result,
@@ -143,12 +143,12 @@ export async function registerComposedTool(
     }
   }
   store.tools.set(tool.id, tool)
-  recordSpan("harness.composition.tool-register", { tool_id: tool.id, ok: true })
+  recordSpan("engine.composition.tool-register", { tool_id: tool.id, ok: true })
   return { ok: true, value: undefined }
 }
 
 export async function registerHarnessPlugin(
-  plugin: HarnessPluginDef,
+  plugin: EnginePluginDef,
   report: CapabilityReport,
 ): Promise<Result<void, CompositionError>> {
   const required = requireCompositionSurface(report, "plugin-hooks")
@@ -179,7 +179,7 @@ export async function registerHarnessPlugin(
 
   const store = getStore(report.serverUrl)
   store.plugins.set(plugin.name, plugin)
-  recordSpan("harness.composition.plugin-register", {
+  recordSpan("engine.composition.plugin-register", {
     plugin_name: plugin.name,
     tool_count: plugin.tools ? Object.keys(plugin.tools).length : 0,
     hook_count: plugin.hooks ? Object.keys(plugin.hooks).length : 0,
@@ -218,7 +218,7 @@ export async function loadDeployedSkills(options?: {
     }
   }
 
-  recordSpan("harness.composition.skill-load", {
+  recordSpan("engine.composition.skill-load", {
     root_count: roots.length,
     skills_found: loaded.length,
     skills_failed: 0,
@@ -233,7 +233,7 @@ export async function createHarnessSDKClient(config: {
 }): Promise<Result<OpencodeSDKClient, CompositionError>> {
   const connectivity = await assertReachable(config.serverUrl, 1200)
   if (!connectivity.ok) {
-    recordSpan("harness.composition.sdk-connect", {
+    recordSpan("engine.composition.sdk-connect", {
       server_url: config.serverUrl,
       ok: false,
       error: connectivity.error.code,
@@ -276,7 +276,7 @@ export async function createHarnessSDKClient(config: {
     })
   }
 
-  recordSpan("harness.composition.sdk-connect", { server_url: config.serverUrl, ok: true })
+  recordSpan("engine.composition.sdk-connect", { server_url: config.serverUrl, ok: true })
   return { ok: true, value: client }
 }
 

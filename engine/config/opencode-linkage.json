@@ -1,6 +1,6 @@
 {
   "mode": "subtree",
-  "opencodeRoot": "vendor/opencode",
+  "opencodeRoot": "platform/opencode",
   "provenance": {
     "remote": "https://github.com/sst/opencode.git",
     "ref": "v1.2.14",

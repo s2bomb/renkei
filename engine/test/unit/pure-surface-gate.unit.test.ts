@@ -12,7 +12,7 @@ const CANONICAL_SURFACES = ["tool-registry", "plugin-hooks", "skill-load", "sdk-
 function makeApprovedRegistry() {
   return {
     version: "2026-02-19",
-    sourcePath: "harness/config/approved-opencode-surfaces.json",
+    sourcePath: "engine/config/approved-opencode-surfaces.json",
     generatedAtMs: 111,
     entries: CANONICAL_SURFACES.map((id) => ({
       id,

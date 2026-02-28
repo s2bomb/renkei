@@ -1,12 +1,12 @@
 export const SECTION_B_INCLUDE_GLOBS = [
-  "harness/test/**/*.ts",
-  "harness/AGENTS.md",
+  "engine/test/**/*.ts",
+  "engine/AGENTS.md",
   "thoughts/projects/2026-02-19-m2-rebaseline-pure-opencode-integration/**/*.md",
 ] as const
 
 export const SECTION_B_DEFAULT_EXCLUDE_GLOBS = [
-  "vendor/**",
-  "harness/vendor/**",
+  "platform/**",
+  "engine/platform/**",
   "**/node_modules/**",
   "thoughts/projects/2026-02-19-m2-first-runnable-renkei-harness/**",
 ] as const

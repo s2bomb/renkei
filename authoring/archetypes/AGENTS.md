@@ -1,11 +1,11 @@
 # Archetypes
 
-How agent archetypes are constructed, maintained, and organized. This is the top-level guide for the `framework/archetypes/` directory.
+How agent archetypes are constructed, maintained, and organized. This is the top-level guide for the `authoring/archetypes/` directory.
 
-> For the derivation method (truth → ethos → doctrine), see `docs/framework/AUTHORING.md`.
-> For the end-to-end creation workflow (chaos → order), see `docs/framework/ARCHETYPE_WORKFLOW.md`.
-> For the decomposition process (converting existing skills into archetypes), see `framework/lib/decompose/AGENTS.md`.
-> For assembly tooling, see `framework/lib/assemble.py` and `framework/AGENTS.md`.
+> For the derivation method (truth → ethos → doctrine), see `docs/authoring/AUTHORING.md`.
+> For the end-to-end creation workflow (chaos → order), see `docs/authoring/ARCHETYPE_WORKFLOW.md`.
+> For the decomposition process (converting existing skills into archetypes), see `authoring/lib/decompose/AGENTS.md`.
+> For assembly tooling, see `authoring/lib/assemble.py` and `authoring/AGENTS.md`.
 
 ---
 
@@ -25,7 +25,7 @@ references/   # Optional supporting material deployed alongside SKILL.md
 archetype.yaml  # Manifest declaring assembly order and metadata
 ```
 
-This layer is well-documented in `framework/AGENTS.md` and `docs/framework/AUTHORING.md`.
+This layer is well-documented in `authoring/AGENTS.md` and `docs/authoring/AUTHORING.md`.
 
 ### Design Layer
 
@@ -232,7 +232,7 @@ Positive return contracts (whitelist what to return) are stronger than prohibiti
 
 ### Events are return data, not side effects
 
-Agents do not append to external ledgers during execution. Events accumulated during work are returned as structured data in the return payload. The caller (or harness) persists them. This keeps the function pure and avoids orphaned intermediate events on failure.
+Agents do not append to external ledgers during execution. Events accumulated during work are returned as structured data in the return payload. The caller (or engine) persists them. This keeps the function pure and avoids orphaned intermediate events on failure.
 
 ---
 
@@ -310,11 +310,11 @@ When building a brand new archetype:
 9. **Propagate interface updates.** Update neighboring archetypes if role boundaries changed.
 10. **Assemble and verify.** Run `--dry-run` for new and affected archetypes.
 
-Use `docs/framework/ARCHETYPE_WORKFLOW.md` as the canonical phase-by-phase runbook.
+Use `docs/authoring/ARCHETYPE_WORKFLOW.md` as the canonical phase-by-phase runbook.
 
 ## Construction: From Decomposition
 
-When converting an existing skill file into an archetype, follow the decompose process in `framework/lib/decompose/AGENTS.md`. The decompose workbench artifacts should be stored in `design/` (or `design/workbench/`) so the reasoning trail lives with the archetype.
+When converting an existing skill file into an archetype, follow the decompose process in `authoring/lib/decompose/AGENTS.md`. The decompose workbench artifacts should be stored in `design/` (or `design/workbench/`) so the reasoning trail lives with the archetype.
 
 Additionally, write `design/why.md` -- the decompose process does not produce this, but every archetype needs it.
 
@@ -323,7 +323,7 @@ Additionally, write `design/why.md` -- the decompose process does not produce th
 ## Organization
 
 ```
-framework/archetypes/
+authoring/archetypes/
   AGENTS.md               # This file
   development/            # Development team
     _shared/              # Shared articles across development archetypes

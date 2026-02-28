@@ -4,7 +4,7 @@ Controlled vocabulary for Renkei documentation. One preferred term per concept, 
 
 When a document needs a term not listed here, add it here before using it. Do not define terms locally in individual documents.
 
-Terms are constant across all domains. A term means the same thing in framework docs, code comments, GUI labels, and conversation.
+Terms are constant across all domains. A term means the same thing in authoring docs, code comments, GUI labels, and conversation.
 
 ---
 
@@ -198,15 +198,25 @@ Not to be confused with: the derivation chain as an authoring method (which desc
 
 ## System
 
-**Harness**
+**Engine**
 
-The agentic runtime that executes archetypes. Claude Code, OpenCode, or any system that consumes skill files, system prompts, or agent configs. Renkei is not a harness -- it produces the definitions that harnesses consume.
+The Renkei composition layer that bridges authoring and platform. The engine (`engine/`) loads archetypes, enforces orchestration policy, and composes domain behavior onto the platform runtime. It owns archetype loading, capability gating, and composition adapters -- but not the platform's session engine, transport, or interfaces.
 
-Not to be confused with: Renkei (which manages definitions, not execution).
+Not to be confused with: platform (the host runtime the engine composes onto); authoring (which defines archetypes, not execution policy).
+
+**Platform**
+
+The host runtime that provides session execution, transport, tool registry, interfaces, and all infrastructure an agent needs to act in the world. OpenCode is the current platform. The platform is a dependency the engine composes onto -- Renkei does not own or maintain the platform.
+
+Not to be confused with: engine (Renkei's composition layer on top of the platform); harness (deprecated term -- see Deprecated Terms).
+
+**Harness** *(deprecated -- see Deprecated Terms)*
+
+Previously referred to the agentic runtime that executes archetypes. The concept has been split: "engine" for Renkei's composition layer (`engine/`), "platform" for the host runtime (OpenCode). See Deprecated Terms table.
 
 **Skill File**
 
-A host-specific output artifact produced by assembling an archetype for a particular harness. For Claude Code: a SKILL.md file. For other harnesses: their native config format. The skill file is a rendered view of the archetype, not the archetype itself.
+A host-specific output artifact produced by assembling an archetype for a particular platform. For Claude Code: a SKILL.md file. For other platforms: their native config format. The skill file is a rendered view of the archetype, not the archetype itself.
 
 Not to be confused with: archetype (the source definition from which skill files are assembled).
 
@@ -216,7 +226,7 @@ The `archetype.yaml` file that declares an archetype's assembly order, shared ar
 
 **Assembly**
 
-The process of composing an archetype's articles into a usable output artifact, guided by the manifest. Two phases: compose (produce intermediate assembled.md from articles in manifest order) then host-adapt (format for target harness). Assembly is include/compose, not compilation or template expansion -- articles are joined, not transformed.
+The process of composing an archetype's articles into a usable output artifact, guided by the manifest. Two phases: compose (produce intermediate assembled.md from articles in manifest order) then host-adapt (format for target platform). Assembly is include/compose, not compilation or template expansion -- articles are joined, not transformed.
 
 Not to be confused with: compilation (transforms source into a different representation); rendering (transforms structure into presentation).
 
@@ -285,3 +295,5 @@ These terms have been superseded. Use the preferred term.
 | workflow (as a noun for process) | process | "Workflow" was ambiguous -- used for both individual process steps and entire operational setups |
 | pipeline (as a noun for ensemble) | ensemble | "Pipeline" describes one topology, not the general concept of archetypes working together |
 | rule (as an ethos article) | (removed) | Rules are *nomos* (external law), not *ethos* (internal character). A constitutionally charged agent derives constraints from conviction, not from NEVER/ALWAYS directives. If rules are needed, the ethos isn't deep enough. |
+| harness | engine + platform | "Harness" conflated two distinct concepts: Renkei's composition layer (now "engine", `engine/`) and the host runtime (now "platform", e.g. OpenCode). Splitting clarifies ownership boundaries. |
+| framework (as directory name) | authoring | The `framework/` directory was renamed to `authoring/` to better describe its purpose: archetype authoring, not a general framework. |

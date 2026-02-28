@@ -62,7 +62,7 @@ describe("unit section-1-path-resolution contracts", () => {
     const fixture = await createSection1RepoFixture()
 
     try {
-      const result = runtime.resolveRepoPath(fixture.repoRoot, "vendor/../opencode")
+      const result = runtime.resolveRepoPath(fixture.repoRoot, "platform/../opencode")
       expect(result.ok).toBe(false)
       if (result.ok) {
         return
@@ -79,15 +79,15 @@ describe("unit section-1-path-resolution contracts", () => {
     const fixture = await createSection1RepoFixture()
 
     try {
-      const result = runtime.resolveRepoPath(fixture.repoRoot, "vendor/opencode/package.json")
+      const result = runtime.resolveRepoPath(fixture.repoRoot, "platform/opencode/package.json")
       expect(result.ok).toBe(true)
       if (!result.ok) {
         return
       }
 
-      expect(result.value.absolute).toBe(join(fixture.repoRoot, "vendor", "opencode", "package.json"))
+      expect(result.value.absolute).toBe(join(fixture.repoRoot, "platform", "opencode", "package.json"))
       expect(result.value.absolute.startsWith(fixture.repoRoot)).toBe(true)
-      expect(result.value.relative).toBe("vendor/opencode/package.json")
+      expect(result.value.relative).toBe("platform/opencode/package.json")
     } finally {
       await fixture.cleanup()
     }

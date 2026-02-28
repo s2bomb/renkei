@@ -1,11 +1,11 @@
 import type { Result } from "./types"
 
-export type WorkingDirectoryLabel = "repo-root" | "harness"
+export type WorkingDirectoryLabel = "repo-root" | "engine"
 
 export type WorkingDirectoryResolutionInput = {
   readonly absoluteCwd: string
   readonly repoRootAbsolutePath: string
-  readonly harnessAbsolutePath: string
+  readonly engineAbsolutePath: string
 }
 
 export type WorkingDirectoryResolutionError =
@@ -49,7 +49,7 @@ export function resolveSectionERunbookWorkingDirectoryLabel(
   input: WorkingDirectoryResolutionInput,
 ): Result<WorkingDirectoryLabel, WorkingDirectoryResolutionError> {
   // Validate all three inputs are absolute (begin with /)
-  for (const [path] of [[input.absoluteCwd], [input.repoRootAbsolutePath], [input.harnessAbsolutePath]] as const) {
+  for (const [path] of [[input.absoluteCwd], [input.repoRootAbsolutePath], [input.engineAbsolutePath]] as const) {
     if (!path.startsWith("/")) {
       return {
         ok: false,
@@ -59,7 +59,7 @@ export function resolveSectionERunbookWorkingDirectoryLabel(
   }
 
   // Check traversal segments on each input before normalizing (check raw input per spec)
-  for (const [rawPath] of [[input.absoluteCwd], [input.repoRootAbsolutePath], [input.harnessAbsolutePath]] as const) {
+  for (const [rawPath] of [[input.absoluteCwd], [input.repoRootAbsolutePath], [input.engineAbsolutePath]] as const) {
     const normalized = normalizePath(rawPath)
     if (hasTraversalSegment(normalized)) {
       return {
@@ -72,14 +72,14 @@ export function resolveSectionERunbookWorkingDirectoryLabel(
   // Normalize all paths for comparison
   const normalizedCwd = normalizePath(input.absoluteCwd)
   const normalizedRepoRoot = normalizePath(input.repoRootAbsolutePath)
-  const normalizedHarness = normalizePath(input.harnessAbsolutePath)
+  const normalizedEngine = normalizePath(input.engineAbsolutePath)
 
   if (normalizedCwd === normalizedRepoRoot) {
     return { ok: true, value: "repo-root" }
   }
 
-  if (normalizedCwd === normalizedHarness) {
-    return { ok: true, value: "harness" }
+  if (normalizedCwd === normalizedEngine) {
+    return { ok: true, value: "engine" }
   }
 
   return {
@@ -87,7 +87,7 @@ export function resolveSectionERunbookWorkingDirectoryLabel(
     error: {
       code: "RUNBOOK_CWD_LABEL_UNRESOLVED",
       normalizedCwd,
-      allowed: ["repo-root", "harness"],
+      allowed: ["repo-root", "engine"],
     },
   }
 }

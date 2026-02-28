@@ -15,7 +15,7 @@ export type { WorkingDirectoryLabel }
 export type EnvironmentPreflightInput = {
   readonly requiredEnv: ReadonlyArray<RunbookEnvironmentVar>
   readonly requiredPaths: ReadonlyArray<
-    "vendor/opencode" | "harness" | "harness/config/approved-opencode-surfaces.json" | string
+    "platform/opencode" | "engine" | "engine/config/approved-opencode-surfaces.json" | string
   >
   readonly expectedWorkingDirectories: ReadonlyArray<WorkingDirectoryLabel>
 }
@@ -155,18 +155,18 @@ export async function verifySectionERunbookEnvironmentPreflight(
       error: {
         code: "RUNBOOK_PREFLIGHT_CWD_INVALID",
         cwd: currentCwd,
-        allowed: ["repo-root", "harness"],
+        allowed: ["repo-root", "engine"],
       },
     }
   }
 
   const repoRoot = repoRootResult.value
-  const harnessPath = resolve(repoRoot, "harness")
+  const enginePath = resolve(repoRoot, "engine")
 
   const labelResult = resolved.resolveWorkingDirectoryLabel({
     absoluteCwd: currentCwd,
     repoRootAbsolutePath: repoRoot,
-    harnessAbsolutePath: harnessPath,
+    engineAbsolutePath: enginePath,
   })
 
   if (!labelResult.ok) {
@@ -175,7 +175,7 @@ export async function verifySectionERunbookEnvironmentPreflight(
       error: {
         code: "RUNBOOK_PREFLIGHT_CWD_INVALID",
         cwd: currentCwd,
-        allowed: ["repo-root", "harness"],
+        allowed: ["repo-root", "engine"],
       },
     }
   }

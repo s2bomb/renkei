@@ -12,7 +12,7 @@ ETHOS (conviction — who the agent is)
 DOCTRINE (action — what the agent does)
 ```
 
-Each link is a derivation, not an assertion. Ethos is derived from established truths. Doctrine is the natural action of an agent that holds the ethos. See [AUTHORING.md](docs/framework/AUTHORING.md) for the full grounding.
+Each link is a derivation, not an assertion. Ethos is derived from established truths. Doctrine is the natural action of an agent that holds the ethos. See [AUTHORING.md](docs/authoring/AUTHORING.md) for the full grounding.
 
 ## Decision Filter
 

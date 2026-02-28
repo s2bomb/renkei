@@ -92,7 +92,7 @@ export type PluginHookHandlers = {
   readonly [key: string]: ((input: unknown, output?: unknown) => void | Promise<void>) | undefined
 }
 
-export type HarnessPluginDef = {
+export type EnginePluginDef = {
   readonly name?: string
   readonly tools?: Record<string, ComposedToolDef>
   readonly hooks?: PluginHookHandlers

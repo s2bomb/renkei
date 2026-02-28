@@ -1,8 +1,8 @@
-# Framework
+# Authoring
 
-Archetype authoring system. Defines agent archetypes through a derivation chain: domain truths → conviction (ethos) → action (doctrine). Produces skill files that any harness can execute.
+Archetype authoring system. Defines agent archetypes through a derivation chain: domain truths → conviction (ethos) → action (doctrine). Produces skill files that any engine can execute.
 
-> See `docs/framework/AUTHORING.md` for the full derivation method. See `docs/framework/VOCABULARY.md` for the controlled vocabulary. See `docs/framework/WHY.md` for the decision filter.
+> See `docs/authoring/AUTHORING.md` for the full derivation method. See `docs/authoring/VOCABULARY.md` for the controlled vocabulary. See `docs/authoring/WHY.md` for the decision filter.
 
 ---
 
@@ -41,7 +41,7 @@ Orchestrators pass ethos to sub-agents **byte-identical**. No paraphrasing, no n
 ## Archetype Structure
 
 ```
-framework/archetypes/<team>/<name>/
+authoring/archetypes/<team>/<name>/
   archetype.yaml        # Manifest: assembly order, shared refs, output targets, metadata
   truth/                # At least 1 article required
     [flexible articles]
@@ -90,7 +90,7 @@ output:
 Articles shared across multiple archetypes in the same team. Organized under pillar subdirectories.
 
 ```
-framework/archetypes/<team>/
+authoring/archetypes/<team>/
   _shared/
     ethos/
       silence-is-failure.md
@@ -125,7 +125,7 @@ Not mandatory. Observed patterns that may become standard as more archetypes are
 
 ---
 
-## Assembly Tooling (`framework/lib/assemble.py`)
+## Assembly Tooling (`authoring/lib/assemble.py`)
 
 Reads `archetype.yaml`, composes articles in pillar order (truth → ethos → doctrine), and produces a host-adapted SKILL.md for Claude Code. Every deploy is git-wrapped for rollback safety.
 
@@ -133,19 +133,19 @@ Reads `archetype.yaml`, composes articles in pillar order (truth → ethos → d
 
 ```bash
 # Preview assembled output (no file writes)
-python framework/lib/assemble.py framework/archetypes/development/test-designer --dry-run
+python authoring/lib/assemble.py authoring/archetypes/development/test-designer --dry-run
 
 # Assemble to a specific output directory
-python framework/lib/assemble.py framework/archetypes/development/test-designer -o output/
+python authoring/lib/assemble.py authoring/archetypes/development/test-designer -o output/
 
 # Assemble all archetypes in a team
-python framework/lib/assemble.py --all framework/archetypes/development/
+python authoring/lib/assemble.py --all authoring/archetypes/development/
 
 # Deploy: assemble, diff, approve, write to target, git commit
-python framework/lib/assemble.py --push framework/archetypes/development/test-designer
+python authoring/lib/assemble.py --push authoring/archetypes/development/test-designer
 
 # Deploy all, skip interactive approval
-python framework/lib/assemble.py --push --force --all framework/archetypes/development/
+python authoring/lib/assemble.py --push --force --all authoring/archetypes/development/
 ```
 
 ### What `--push` Does
@@ -184,4 +184,4 @@ When creating a new archetype:
 4. **Test the derivation.** Can someone trace each doctrine article back to a known good in one mental step? If not, compress.
 5. **Assemble and validate.** Run `--dry-run` to preview. Run `--push` to deploy with diff review.
 
-See `docs/framework/AUTHORING.md` for the full grounding of why this method works.
+See `docs/authoring/AUTHORING.md` for the full grounding of why this method works.

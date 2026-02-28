@@ -15,7 +15,7 @@ export type RunbookCommandID =
 export type RunbookCommandStep = {
   readonly id: RunbookCommandID
   readonly command: ReadonlyArray<string>
-  readonly cwd: "repo-root" | "harness"
+  readonly cwd: "repo-root" | "engine"
   readonly requiresEnv?: ReadonlyArray<RunbookEnvironmentVar>
   readonly expectedExitCode: 0
   readonly evidenceKey:
@@ -96,7 +96,7 @@ export const STEP_EVIDENCE_KEYS: Readonly<Record<RunbookCommandID, RunbookComman
 const CANONICAL_COMMAND_SEQUENCE: ReadonlyArray<RunbookCommandStep> = [
   {
     id: "bootstrap:vendor-install",
-    command: ["bun", "install", "--cwd", "vendor/opencode"],
+    command: ["bun", "install", "--cwd", "platform/opencode"],
     cwd: "repo-root",
     expectedExitCode: 0,
     evidenceKey: "vendorInstall",
@@ -118,28 +118,28 @@ const CANONICAL_COMMAND_SEQUENCE: ReadonlyArray<RunbookCommandStep> = [
   {
     id: "quality:typecheck",
     command: ["bun", "run", "typecheck"],
-    cwd: "harness",
+    cwd: "engine",
     expectedExitCode: 0,
     evidenceKey: "typecheck",
   },
   {
     id: "quality:lint",
     command: ["bun", "run", "lint"],
-    cwd: "harness",
+    cwd: "engine",
     expectedExitCode: 0,
     evidenceKey: "lint",
   },
   {
     id: "quality:test-unit",
     command: ["bun", "run", "test:unit"],
-    cwd: "harness",
+    cwd: "engine",
     expectedExitCode: 0,
     evidenceKey: "testUnit",
   },
   {
     id: "runtime:renkei-dev-json",
     command: ["bun", "run", "renkei-dev", "--", "--json"],
-    cwd: "harness",
+    cwd: "engine",
     requiresEnv: ["OPENCODE_SERVER_URL"],
     expectedExitCode: 0,
     evidenceKey: "renkeiDevJson",
@@ -147,7 +147,7 @@ const CANONICAL_COMMAND_SEQUENCE: ReadonlyArray<RunbookCommandStep> = [
   {
     id: "quality:test-integration",
     command: ["bun", "run", "test:integration"],
-    cwd: "harness",
+    cwd: "engine",
     requiresEnv: ["OPENCODE_SERVER_URL"],
     expectedExitCode: 0,
     evidenceKey: "testIntegration",

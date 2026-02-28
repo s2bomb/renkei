@@ -1,4 +1,4 @@
-# Harness
+# Engine
 
 Domain composition layer over OpenCode. Adds Renkei archetype loading, capability gating, and orchestration policy to OpenCode's runtime, interfaces, and tooling substrate.
 
@@ -16,18 +16,18 @@ OpenCode is a working agentic runtime with proven interfaces (TUI, GUI, server, 
 ### What follows from this
 
 - **Own domain policy, not platform machinery.** Renkei defines archetype loading, orchestration rules, and composition adapters. OpenCode defines runtime plumbing, UI rendering, and transport. Do not blur this line.
-- **Fail loud at every boundary.** Every function that touches a composition surface checks the gate before performing side effects. Returns typed `Result` errors, never throws for expected failures. Unexpected failures are normalized to `Result` at the harness boundary.
+- **Fail loud at every boundary.** Every function that touches a composition surface checks the gate before performing side effects. Returns typed `Result` errors, never throws for expected failures. Unexpected failures are normalized to `Result` at the engine boundary.
 - **Treat OpenCode like a versioned dependency.** API changes in OpenCode are handled the same way as any dependency upgrade: check contracts, update adapters, verify gates. The integration probe exists for this reason.
 
 ---
 
 ## What We Own vs What OpenCode Owns
 
-| OpenCode (host runtime -- we do not maintain) | Renkei Harness (our layer -- we maintain) |
+| OpenCode (host runtime -- we do not maintain) | Renkei Engine (our layer -- we maintain) |
 |---|---|
 | Session engine, prompt loop, tool execution | Archetype loading, orchestration policy |
 | TUI, GUI, CLI, server, SDK surfaces | Capability probes, composition adapters |
-| Plugin/tool registry mechanics | Harness-specific tools, plugins, and skill loading |
+| Plugin/tool registry mechanics | Engine-specific tools, plugins, and skill loading |
 | Transport, events, storage | Observability normalization |
 | General platform fixes and ecosystem updates | Composition seam maintenance |
 
@@ -35,23 +35,23 @@ OpenCode is a working agentic runtime with proven interfaces (TUI, GUI, server, 
 
 ## Composition Model
 
-The harness composes with OpenCode through four proven extension seams:
+The engine composes with OpenCode through four proven extension seams:
 
-| Seam | OpenCode surface | Harness use |
+| Seam | OpenCode surface | Engine use |
 |---|---|---|
 | Tool registry | `tool/registry.ts` | Register harness-specific tools via `registerComposedTool` |
 | Plugin hooks | `plugin/index.ts` | Register lifecycle hooks via `registerHarnessPlugin` |
 | Skill loading | `skill/skill.ts` + config | Load assembled archetype skill files via `loadDeployedSkills` |
 | SDK/Server | `server/server.ts` + `sdk/js/` | Session operations via `createHarnessSDKClient` |
 
-**No OpenCode files are modified.** All harness behavior is composed through these seams.
+**No OpenCode files are modified.** All engine behavior is composed through these seams.
 
 ---
 
 ## Where Things Live
 
 ```
-harness/
+engine/
   AGENTS.md               # This document
   CLAUDE.md               # Pointer to AGENTS.md
   package.json            # Scripts, dependencies
@@ -59,7 +59,7 @@ harness/
   .editorconfig           # Symlink -> OpenCode
   .prettierignore         # Symlink -> OpenCode
   src/
-    runtime/              # Harness runtime modules
+    runtime/              # Engine runtime modules
       types.ts            # Canonical types, Result<T,E>, error shapes
       integration-probe.ts # Capability detection against host runtime
       composition-seam.ts # Tool/plugin/skill/SDK composition adapters
@@ -103,11 +103,11 @@ OPENCODE_SERVER_URL=http://... bun run test:integration   # Composition contract
 ## Dependencies
 
 - **OpenCode** -- host runtime (treated as versioned platform dependency)
-- **`framework/`** -- consumes assembled skill files and archetype metadata (dependency direction: harness depends on framework output, never the reverse)
+- **`authoring/`** -- consumes assembled skill files and archetype metadata (dependency direction: engine depends on authoring output, never the reverse)
 
-Harness inherits OpenCode's runtime dependency tree. Do not add harness-specific dependencies without justification.
+Engine inherits OpenCode's runtime dependency tree. Do not add engine-specific dependencies without justification.
 
-Code quality config (Prettier, editorconfig) is symlinked from OpenCode so harness style tracks upstream automatically.
+Code quality config (Prettier, editorconfig) is symlinked from OpenCode so engine style tracks upstream automatically.
 
 ---
 
@@ -126,7 +126,7 @@ Active project: `thoughts/projects/2026-02-19-m2-first-runnable-renkei-harness/`
 
 ## Extending This Code
 
-When adding harness behavior:
+When adding engine behavior:
 
 1. **Use a composition seam.** Write an adapter that uses an existing OpenCode seam. Register it through the composition-seam module.
 2. **Add a contract test.** Every new capability gets a test that proves it works AND a test that proves it fails loudly when unavailable.

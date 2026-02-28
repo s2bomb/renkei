@@ -16,8 +16,8 @@ describe("unit section-1-linkage contracts", () => {
 
       expect(result.value.mode).toBe("subtree")
       expect(result.value.repoRoot).toBe(fixture.repoRoot)
-      expect(result.value.harnessRoot).toBe(fixture.harnessRoot)
-      expect(result.value.vendorRoot).toBe(fixture.vendorRoot)
+      expect(result.value.engineRoot).toBe(fixture.engineRoot)
+      expect(result.value.platformRoot).toBe(fixture.platformRoot)
       expect(result.value.opencodeRoot).toBe(fixture.opencodeRoot)
       expect(result.value.opencodeRoot.startsWith(fixture.repoRoot)).toBe(true)
     } finally {
@@ -37,7 +37,7 @@ describe("unit section-1-linkage contracts", () => {
       }
 
       expect(result.error.code).toBe("LINKAGE_CONFIG_MISSING")
-      expect(String(result.error.expectedPath).endsWith("harness/config/opencode-linkage.json")).toBe(true)
+      expect(String(result.error.expectedPath).endsWith("engine/config/opencode-linkage.json")).toBe(true)
     } finally {
       await fixture.cleanup()
     }
@@ -67,7 +67,7 @@ describe("unit section-1-linkage contracts", () => {
     const fixture = await createSection1RepoFixture({
       linkageConfigValue: {
         mode: "submodule",
-        opencodeRoot: "vendor/opencode",
+        opencodeRoot: "platform/opencode",
         provenance: {
           remote: "https://github.com/sst/opencode.git",
           branch: "main",

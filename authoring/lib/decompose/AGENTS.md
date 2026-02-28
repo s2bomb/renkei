@@ -8,7 +8,7 @@ The closest structural analogy to this process is **Codd's database normalizatio
 
 A flat skill file is a denormalized table: truths, convictions, methods, and operational steps are interleaved. The derivation chain (truth -> ethos -> doctrine) is the functional dependency. The three pillars are the normal forms. Assembly is the join.
 
-The process itself is grounded in Fowler's refactoring principle: understand before restructuring, preserve behavior, verify after each step. And in the Renkei derivation method (`docs/framework/AUTHORING.md`): truth -> therefore -> ethos -> therefore -> doctrine.
+The process itself is grounded in Fowler's refactoring principle: understand before restructuring, preserve behavior, verify after each step. And in the Renkei derivation method (`docs/authoring/AUTHORING.md`): truth -> therefore -> ethos -> therefore -> doctrine.
 
 ---
 
@@ -19,9 +19,9 @@ Before starting a decomposition, the operator must have:
 1. **The source file.** The currently deployed skill file. For skills with an existing `archetype.yaml`, the deploy path is in `output[].path`. For fresh decompositions, the source is the SKILL.md in the harness's skill directory (e.g., `~/.claude/skills/<name>/SKILL.md`).
 
 2. **Framework context.** Read before starting Phase 2:
-   - `docs/framework/AUTHORING.md` -- the derivation method, what counts as a known good, the derivation boundary
-   - `docs/framework/VOCABULARY.md` -- controlled vocabulary, especially "Known Good" and "Tenet" definitions
-   - `docs/framework/WHY.md` -- the decision filter (6 grounds for rejection)
+   - `docs/authoring/AUTHORING.md` -- the derivation method, what counts as a known good, the derivation boundary
+   - `docs/authoring/VOCABULARY.md` -- controlled vocabulary, especially "Known Good" and "Tenet" definitions
+   - `docs/authoring/WHY.md` -- the decision filter (6 grounds for rejection)
 
 3. **Reference archetypes.** Read 1-2 existing archetypes as calibration:
    - `archetypes/development/test-designer/` -- strong truth article, clean derivation chains

@@ -4,7 +4,7 @@ import { loadPurityVerificationModule } from "../helpers/module-loader"
 
 const CANONICAL_SURFACES = ["tool-registry", "plugin-hooks", "skill-load", "sdk-client"] as const
 
-function makeApprovedRegistry(sourcePath = "harness/config/approved-opencode-surfaces.json") {
+function makeApprovedRegistry(sourcePath = "engine/config/approved-opencode-surfaces.json") {
   return {
     version: "2026-02-19",
     sourcePath,
@@ -59,7 +59,7 @@ describe("unit section-2 purity-verification contracts", () => {
 
     const result = runtime.verifyPureOpenCodeIntegration(
       {
-        registryResult: { ok: true, value: makeApprovedRegistry("harness/config/approved-opencode-surfaces.json") },
+        registryResult: { ok: true, value: makeApprovedRegistry("engine/config/approved-opencode-surfaces.json") },
         surfaceGateResult: { ok: true, value: makeSurfaceGateEvaluation(4) },
         staleScanResult: { ok: true, value: { scannedFiles: 7, findings: [] } },
         requiredSurfaces: [...COMPOSITION_SURFACES],
@@ -79,7 +79,7 @@ describe("unit section-2 purity-verification contracts", () => {
     expect(result.value.staleFindingCount).toBe(0)
     expect(result.value.staleFindingCountsBySeverity.error).toBe(0)
     expect(result.value.staleFindingCountsBySeverity.warning).toBe(0)
-    expect(result.value.evidence.registrySourcePath).toBe("harness/config/approved-opencode-surfaces.json")
+    expect(result.value.evidence.registrySourcePath).toBe("engine/config/approved-opencode-surfaces.json")
     expect(result.value.evidence.reportSurfaceCount).toBe(4)
     expect(result.value.evidence.scannedFiles).toBe(7)
   })
@@ -88,7 +88,7 @@ describe("unit section-2 purity-verification contracts", () => {
     const runtime = await loadPurityVerificationModule()
     const findings = [
       makeFinding({
-        file: "harness/test/unit/pure-surface-gate.unit.test.ts",
+        file: "engine/test/unit/pure-surface-gate.unit.test.ts",
         line: 18,
         column: 9,
         matchedText: "openteams",
@@ -132,7 +132,7 @@ describe("unit section-2 purity-verification contracts", () => {
         ok: false,
         error: {
           code: "APPROVED_SURFACE_REGISTRY_INVALID",
-          path: "harness/config/approved-opencode-surfaces.json",
+          path: "engine/config/approved-opencode-surfaces.json",
           detail: "invalid payload",
         },
       },
@@ -149,7 +149,7 @@ describe("unit section-2 purity-verification contracts", () => {
     expect(allowed.has(result.error.code)).toBe(true)
     expect(result.error.code).toBe("PURITY_REGISTRY_FAILED")
     expect(result.error.error.code).toBe("APPROVED_SURFACE_REGISTRY_INVALID")
-    expect(result.error.error.path).toBe("harness/config/approved-opencode-surfaces.json")
+    expect(result.error.error.path).toBe("engine/config/approved-opencode-surfaces.json")
   })
 
   test("S2-T29 surface gate violation maps to PURITY_SURFACE_GATE_FAILED", async () => {
@@ -190,7 +190,7 @@ describe("unit section-2 purity-verification contracts", () => {
         ok: false,
         error: {
           code: "SCAN_IO_FAILURE",
-          path: "harness/test/unit/pure-surface-gate.unit.test.ts",
+          path: "engine/test/unit/pure-surface-gate.unit.test.ts",
           cause: "EACCES",
         },
       },
@@ -204,14 +204,14 @@ describe("unit section-2 purity-verification contracts", () => {
 
     expect(result.error.code).toBe("PURITY_STALE_ASSUMPTION_FAILED")
     expect(result.error.error.code).toBe("SCAN_IO_FAILURE")
-    expect(result.error.error.path).toBe("harness/test/unit/pure-surface-gate.unit.test.ts")
+    expect(result.error.error.path).toBe("engine/test/unit/pure-surface-gate.unit.test.ts")
   })
 
   test("S2-T31 error-severity stale findings fail with PURITY_STALE_ASSUMPTION_FOUND", async () => {
     const runtime = await loadPurityVerificationModule()
     const findings = [
       makeFinding({
-        file: "harness/test/unit/pure-surface-gate.unit.test.ts",
+        file: "engine/test/unit/pure-surface-gate.unit.test.ts",
         line: 20,
         column: 5,
         matchedText: "fork",

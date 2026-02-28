@@ -19,7 +19,7 @@ function makeValidRequest(overrides?: Partial<VendoredUpdateRequest>): VendoredU
   return {
     remote: "origin",
     branch: "main",
-    vendorPrefix: "vendor/opencode",
+    vendorPrefix: "platform/opencode",
     squash: true,
     ...overrides,
   }
@@ -27,8 +27,8 @@ function makeValidRequest(overrides?: Partial<VendoredUpdateRequest>): VendoredU
 
 function makeValidPlan(overrides?: Partial<VendoredUpdatePlan>): VendoredUpdatePlan {
   return {
-    command: ["git", "subtree", "pull", "--prefix", "vendor/opencode", "origin", "main", "--squash"],
-    expectedPrefix: "vendor/opencode",
+    command: ["git", "subtree", "pull", "--prefix", "platform/opencode", "origin", "main", "--squash"],
+    expectedPrefix: "platform/opencode",
     upstreamRef: "origin/main",
     ...overrides,
   }
@@ -44,13 +44,13 @@ describe("unit section-1-vendored-update contracts", () => {
       return
     }
 
-    expect(result.value.expectedPrefix).toBe("vendor/opencode")
+    expect(result.value.expectedPrefix).toBe("platform/opencode")
     expect(result.value.upstreamRef).toBe("origin/main")
     expect(result.value.command[0]).toBe("git")
     expect(result.value.command.includes("subtree")).toBe(true)
     expect(result.value.command.includes("pull")).toBe(true)
     expect(result.value.command.includes("--prefix")).toBe(true)
-    expect(result.value.command.includes("vendor/opencode")).toBe(true)
+    expect(result.value.command.includes("platform/opencode")).toBe(true)
     expect(result.value.command.includes("origin")).toBe(true)
     expect(result.value.command.includes("main")).toBe(true)
   })
@@ -167,9 +167,9 @@ describe("unit section-1-vendored-update contracts", () => {
         value: {
           mode: "subtree",
           repoRoot: "/tmp/repo",
-          vendorRoot: "/tmp/repo/vendor",
-          opencodeRoot: "/tmp/repo/vendor/opencode",
-          harnessRoot: "/tmp/repo/harness",
+          platformRoot: "/tmp/repo/platform",
+          opencodeRoot: "/tmp/repo/platform/opencode",
+          engineRoot: "/tmp/repo/engine",
           provenance: {
             remote: "origin",
             branch: "main",

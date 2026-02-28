@@ -12,7 +12,7 @@ export type { EnvironmentPreflightSuccess }
 export type RunbookStepExecution = {
   readonly id: RunbookCommandID
   readonly command: ReadonlyArray<string>
-  readonly cwd: "repo-root" | "harness"
+  readonly cwd: "repo-root" | "engine"
   readonly startedAtMs: number
   readonly finishedAtMs: number
   readonly durationMs: number

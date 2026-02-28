@@ -13,8 +13,8 @@ type Section1RepoFixtureOptions = {
 export type Section1RepoFixture = {
   readonly repoRoot: string
   readonly nestedCwd: string
-  readonly harnessRoot: string
-  readonly vendorRoot: string
+  readonly engineRoot: string
+  readonly platformRoot: string
   readonly opencodeRoot: string
   readonly linkageConfigPath: string
   readonly cleanup: () => Promise<void>
@@ -23,7 +23,7 @@ export type Section1RepoFixture = {
 function makeDefaultLinkageConfig() {
   return {
     mode: "subtree",
-    opencodeRoot: "vendor/opencode",
+    opencodeRoot: "platform/opencode",
     provenance: {
       remote: "https://github.com/sst/opencode.git",
       branch: "main",
@@ -35,15 +35,15 @@ function makeDefaultLinkageConfig() {
 
 export async function createSection1RepoFixture(options?: Section1RepoFixtureOptions): Promise<Section1RepoFixture> {
   const repoRoot = await mkdtemp(join(tmpdir(), "renkei-section-1-"))
-  const harnessRoot = join(repoRoot, "harness")
-  const vendorRoot = join(repoRoot, "vendor")
-  const opencodeRoot = join(vendorRoot, "opencode")
-  const linkageConfigPath = join(harnessRoot, "config", "opencode-linkage.json")
-  const nestedCwd = join(repoRoot, "harness", "test", "fixtures", "nested")
+  const engineRoot = join(repoRoot, "engine")
+  const platformRoot = join(repoRoot, "platform")
+  const opencodeRoot = join(platformRoot, "opencode")
+  const linkageConfigPath = join(engineRoot, "config", "opencode-linkage.json")
+  const nestedCwd = join(repoRoot, "engine", "test", "fixtures", "nested")
 
   await mkdir(nestedCwd, { recursive: true })
-  await mkdir(join(harnessRoot, "config"), { recursive: true })
-  await mkdir(join(harnessRoot, "src"), { recursive: true })
+  await mkdir(join(engineRoot, "config"), { recursive: true })
+  await mkdir(join(engineRoot, "src"), { recursive: true })
 
   if (options?.withRepoMarker ?? true) {
     await mkdir(join(repoRoot, ".git"), { recursive: true })
@@ -63,8 +63,8 @@ export async function createSection1RepoFixture(options?: Section1RepoFixtureOpt
   return {
     repoRoot,
     nestedCwd,
-    harnessRoot,
-    vendorRoot,
+    engineRoot,
+    platformRoot,
     opencodeRoot,
     linkageConfigPath,
     cleanup: () => rm(repoRoot, { recursive: true, force: true }),

@@ -1,8 +1,8 @@
 # Renkei
 
-Full-suite system for defining, embodying, and operating agentic teams. Three layers: **framework** (who agents are), **harness** (how they act), **tools** (how they connect to the world).
+Full-suite system for defining, embodying, and operating agentic teams. Three layers: **authoring** (who agents are), **engine** (how they act), **platform** (how they connect to the world).
 
-> See `docs/personal-notes/vision.md` for the full vision. See `docs/framework/VOCABULARY.md` for the controlled vocabulary.
+> See `docs/personal-notes/vision.md` for the full vision. See `docs/authoring/VOCABULARY.md` for the controlled vocabulary.
 
 ---
 
@@ -37,31 +37,31 @@ These four are ordered by priority. A developer should sacrifice simplicity (3) 
 ┌─────────────────────────────────────────────────────┐
 │                 Renkei (the system)                  │
 ├─────────────────────────────────────────────────────┤
-│  Layer 1: Framework           (framework/)          │
+│  Layer 1: Authoring           (authoring/)          │
 │    Truth → Ethos → Doctrine authoring               │
-│    Assembly, deployment to harness-native formats    │
+│    Assembly, deployment to engine-native formats     │
 │    Derivation method (the "compiler")               │
 ├─────────────────────────────────────────────────────┤
-│  Layer 2: Harness             (harness/)            │
+│  Layer 2: Engine              (engine/)             │
 │    Agent execution runtime (composition over OpenCode)│
 │    Teams as core primitive                          │
 │    Communication: in-person + email protocols       │
 │    CLI + TUI + Web + SDK + Server                   │
 ├─────────────────────────────────────────────────────┤
-│  Layer 3: Tools & Integrations (future)             │
+│  Layer 3: Platform            (platform/)           │
 │    Human-compatible interfaces (email, Slack, etc.) │
 │    Server deployment and orchestration              │
 │    Observation capture and session replay            │
 └─────────────────────────────────────────────────────┘
 ```
 
-**Layer 1** defines WHO agents are. The archetype framework produces agent definitions grounded in domain truths and driven by conviction. This is the authoring layer.
+**Layer 1** defines WHO agents are. The authoring layer produces agent definitions grounded in domain truths and driven by conviction.
 
-**Layer 2** embodies agents and lets them act. The harness (composition layer over vanilla OpenCode) executes archetypes as live agents, composes them into teams, manages communication, and gives humans operational control. This is the runtime layer.
+**Layer 2** embodies agents and lets them act. The engine (composition layer over vanilla OpenCode) executes archetypes as live agents, composes them into teams, manages communication, and gives humans operational control. This is the runtime layer.
 
-**Layer 3** connects agents to the world humans already use. Email, Slack, Discord, databases, file systems -- not invented tools, but the tools that already exist. This is the integration layer.
+**Layer 3** connects agents to the world humans already use. Email, Slack, Discord, databases, file systems -- not invented tools, but the tools that already exist. This is the platform layer.
 
-The layers have a strict dependency direction. The framework does not depend on the harness. The harness depends on the framework's output format. Tools depend on the harness.
+The layers have a strict dependency direction. Authoring does not depend on the engine. The engine depends on authoring's output format. Platform depends on the engine.
 
 ---
 
@@ -75,8 +75,8 @@ Every directory in the codebase belongs to exactly one category. Each category c
 
 | Category | Rule | Location |
 |---|---|---|
-| **Framework** | Archetype authoring system. Definitions, assembly tooling, framework-specific docs. See `framework/AGENTS.md`. | `framework/` |
-| **Harness** | Agent execution runtime. Composition layer over vanilla OpenCode. See `harness/AGENTS.md`. | `harness/` |
+| **Authoring** | Archetype authoring system. Definitions, assembly tooling, authoring-specific docs. See `authoring/AGENTS.md`. | `authoring/` |
+| **Engine** | Agent execution runtime. Composition layer over vanilla OpenCode. See `engine/AGENTS.md`. | `engine/` |
 | **Docs** | Stable, synthesized references. Edit only when decisions change. Not a working area. | `docs/` |
 | **Thoughts** | Working area. Ideas, issues, research, specs, skill drafts. Historical record -- do not modify research papers. | `thoughts/` |
 | **Root** | Repo metadata only. `AGENTS.md`, `CLAUDE.md`, `README.md`, `.gitignore`. Nothing else at root level. | `/` |
@@ -84,15 +84,15 @@ Every directory in the codebase belongs to exactly one category. Each category c
 ### Dependencies Flow One Direction
 
 ```
-docs ← framework ← harness ← (future: tools)
+docs ← authoring ← engine ← platform
            ^
     thoughts (read by humans and agents, never imported by code)
 ```
 
 - **Docs** are the stable product of synthesis from research and decisions. They are the system's intellectual foundation.
-- **Framework** produces archetype definitions and assembled skill files. It references docs (vocabulary, authoring method) but never imports harness code.
-- **Harness** consumes framework output (skill files, archetype metadata). It never defines archetype content. It never modifies the framework.
-- **Thoughts** are working material. They feed into docs, framework, and harness when decisions are made. They are never imported by code.
+- **Authoring** produces archetype definitions and assembled skill files. It references docs (vocabulary, authoring method) but never imports engine code.
+- **Engine** consumes authoring output (skill files, archetype metadata). It never defines archetype content. It never modifies the authoring layer.
+- **Thoughts** are working material. They feed into docs, authoring, and engine when decisions are made. They are never imported by code.
 
 ### Decision Tree
 
@@ -103,22 +103,22 @@ Is it code?
 |
 +-- Yes
 |   +-- Does it define or assemble archetypes? (Python)
-|   |   +-- Yes → framework/lib/
-|   |           Rule: own file, independently runnable, no harness imports
+|   |   +-- Yes → authoring/lib/
+|   |           Rule: own file, independently runnable, no engine imports
 |   |
 |   +-- Does it execute agents, manage teams, or run the runtime? (TypeScript)
-|   |   +-- Yes → harness/
-|   |           Rule: composes over vanilla OpenCode, no framework internals
+|   |   +-- Yes → engine/
+|   |           Rule: composes over vanilla OpenCode, no authoring internals
 |   |
 |   +-- Neither → Reconsider: does this code belong in renkei at all?
 |
 +-- No (it's markdown)
     +-- Is this a stable, synthesized reference?
-    |   +-- Yes → docs/framework/ or docs/personal-notes/
+    |   +-- Yes → docs/authoring/ or docs/personal-notes/
     |             Rule: edit only when decisions change
     |
     +-- Is this an archetype definition (truth, ethos, doctrine articles)?
-    |   +-- Yes → framework/archetypes/<team>/<name>/<pillar>/
+    |   +-- Yes → authoring/archetypes/<team>/<name>/<pillar>/
     |             Rule: each article is one file, manifest declares assembly order
     |
     +-- Is this working material (ideas, issues, research, specs, drafts)?
@@ -133,7 +133,7 @@ Every path terminates in a location AND a rule. If the content doesn't fit any p
 ## Repository Structure
 
 ```
-framework/                        # Layer 1: Archetype authoring system
+authoring/                        # Layer 1: Archetype authoring system
   archetypes/
     development/                  # Development team
       _shared/                    # Shared articles across team archetypes
@@ -150,11 +150,11 @@ framework/                        # Layer 1: Archetype authoring system
   lib/
     assemble.py                   # Assembly script: compose, diff, deploy, git-wrap
 
-harness/                          # Layer 2: Agent execution runtime
-  (Composition layer over vanilla OpenCode -- see harness/AGENTS.md)
+engine/                           # Layer 2: Agent execution runtime
+  (Composition layer over vanilla OpenCode -- see engine/AGENTS.md)
 
 docs/
-  framework/                      # Stable, synthesized framework documentation
+  authoring/                      # Stable, synthesized authoring documentation
     AUTHORING.md                  # How agent archetypes are built (the derivation method)
     VOCABULARY.md                 # Controlled vocabulary -- THE authoritative term reference
     WHY.md                        # Why Renkei exists + decision filter
@@ -182,21 +182,21 @@ thoughts/
 
 ## The Contract Between Layers
 
-The framework and harness connect through a defined output format. Neither imports the other's internals.
+The authoring layer and engine connect through a defined output format. Neither imports the other's internals.
 
-**Framework produces:**
-- Assembled skill files (SKILL.md) -- the full archetype rendered for a specific harness
+**Authoring produces:**
+- Assembled skill files (SKILL.md) -- the full archetype rendered for a specific engine
 - Archetype metadata (manifests) -- team membership, roles, assembly order
 - Shared vocabulary (VOCABULARY.md) -- term definitions both layers use
 
-**Harness consumes:**
+**Engine consumes:**
 - Skill files as agent system prompts
 - Metadata for team composition, role assignment, progressive disclosure
 - Vocabulary for consistent UI labeling and communication
 
-Change the framework's assembly process -- the harness does not care as long as the output format holds. Change the harness's UI -- the framework does not care as long as it still loads skill files.
+Change authoring's assembly process -- the engine does not care as long as the output format holds. Change the engine's UI -- authoring does not care as long as it still loads skill files.
 
-This is the compiler/runtime relationship. The framework is the compiler (source → executable). The harness is the runtime (executes the output). The skill file is the object code.
+This is the compiler/runtime relationship. Authoring is the compiler (source → executable). The engine is the runtime (executes the output). The skill file is the object code.
 
 ---
 
@@ -245,7 +245,7 @@ Split when concepts diverge. Never split to hit a line count.
 
 | Pattern | Rule |
 |---|---|
-| Top-level directory | The layer it owns: `framework`, `harness`, `docs`, `thoughts` |
+| Top-level directory | The layer it owns: `authoring`, `engine`, `docs`, `thoughts` |
 | Archetype directory | The agent it defines: `test-designer`, `api-designer` |
 | Pillar directory | Exactly one of: `truth`, `ethos`, `doctrine` |
 | Article file | The article it contains: `identity.md`, `tenets.md`, `process.md` |
@@ -278,7 +278,7 @@ This is a procedural codebase across both layers. No class hierarchies, no inher
 - Control flow is explicit. An `if` chain is almost always clearer than dynamic dispatch.
 - State is a value you pass around, not a property you hide inside an object and mutate through methods.
 
-### Python Conventions (Framework)
+### Python Conventions (Authoring)
 
 - **Type hints on all function signatures.** Parameters and return types. No `Any` unless genuinely needed. Use `Path`, not `str`, for filesystem paths.
 - **`pathlib.Path` for all filesystem operations.** Not `os.path`. Not string concatenation.
@@ -288,9 +288,9 @@ This is a procedural codebase across both layers. No class hierarchies, no inher
 - **f-strings for formatting.** Not `.format()`, not `%`.
 - **No global mutable state.** Module-level constants are fine. Module-level variables that change are not.
 
-### TypeScript Conventions (Harness)
+### TypeScript Conventions (Engine)
 
-To be established when the harness is integrated. Will follow the same principles (honest signatures, procedural style, explicit control flow) adapted for TypeScript/Bun idioms.
+To be established when the engine is integrated. Will follow the same principles (honest signatures, procedural style, explicit control flow) adapted for TypeScript/Bun idioms.
 
 ### Dependencies
 
@@ -308,7 +308,7 @@ Do not add dependencies without justification. Every dependency is a bet that it
 
 ## Controlled Vocabulary
 
-`docs/framework/VOCABULARY.md` is the single source of truth for all terminology. Rules:
+`docs/authoring/VOCABULARY.md` is the single source of truth for all terminology. Rules:
 
 - **One preferred term per concept, one definition per term.**
 - Terms are constant across all domains -- a term means the same thing in docs, code comments, GUI labels, and conversation.
@@ -344,7 +344,7 @@ Key terms you must use correctly:
 
 ### Document Conventions
 
-- **Framework docs** (`docs/framework/`): Synthesized, stable references. Edit only when decisions change.
+- **Authoring docs** (`docs/authoring/`): Synthesized, stable references. Edit only when decisions change.
 - **Decisions** (`docs/personal-notes/decisions.md`): Every decision records its grounding and a reference to the research that produced it.
 - **Research papers** (`thoughts/research/`): Numbered sequentially. Historical record -- do not modify.
 - **Specs** (`thoughts/specs/`): Dated (`YYYY-MM-DD-name.md`). Define concrete changes.
@@ -365,13 +365,13 @@ Key terms you must use correctly:
 
 ### The Compiler Proves Types. Humans Prove Derivations.
 
-**Framework verification:**
+**Authoring verification:**
 - Assembly: `--dry-run` shows assembled output. `--push` shows diffs. Every deploy is git-committed for rollback.
 - Derivation: every tenet traces to a known good, every doctrine article traces to an ethos article. The audit trail is the therefore-chain.
 - Vocabulary: terms defined in one place. Deprecated terms listed. Agents check before using.
 
-**Harness verification:**
-- To be established when harness is integrated. Will include TypeScript type checking, test runner, and integration tests for team primitives.
+**Engine verification:**
+- To be established when engine is integrated. Will include TypeScript type checking, test runner, and integration tests for team primitives.
 
 ### When Code Arrives
 
@@ -385,13 +385,13 @@ Do not add testing infrastructure preemptively. Add it when the first test is wr
 
 ## Current State
 
-**The constraint is: daily-drivable harness.** Everything else is blocked by not having a harness that can be used instead of plain OpenCode for daily work.
+**The constraint is: daily-drivable engine.** Everything else is blocked by not having an engine that can be used instead of plain OpenCode for daily work.
 
 | Layer | Status |
 |---|---|
-| Framework | Working. Assembly script, 3 archetypes built and deployed. |
-| Harness | Composition layer over vanilla OpenCode. Runtime modules built and tested. Not yet daily-drivable. |
-| Tools | Not started. |
+| Authoring | Working. Assembly script, 3 archetypes built and deployed. |
+| Engine | Composition layer over vanilla OpenCode. Runtime modules built and tested. Not yet daily-drivable. |
+| Platform | Not started. |
 
 See `thoughts/roadmap.md` for the full milestone tracker.
 
@@ -406,7 +406,7 @@ See `thoughts/roadmap.md` for the full milestone tracker.
 - Do not modify research papers (they are historical record).
 - Do not skip grounding. Every decision traces to something established.
 - Do not add dependencies without justification.
-- Do not put framework code in harness/ or vice versa. The dependency direction is one-way.
+- Do not put authoring code in engine/ or vice versa. The dependency direction is one-way.
 
 ---
 

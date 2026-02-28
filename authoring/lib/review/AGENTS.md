@@ -24,11 +24,11 @@ These are separate concerns.
 
 ## State Locality (Single Source of Truth)
 
-Review **tooling** lives in `framework/lib/review/`.
+Review **tooling** lives in `authoring/lib/review/`.
 
 Review **state** lives with each archetype under:
 
-`framework/archetypes/<team>/<name>/review/`
+`authoring/archetypes/<team>/<name>/review/`
 
 Reason: evaluation context belongs to the archetype it judges. Tooling may change; archetype history and criteria must remain co-located with the archetype.
 

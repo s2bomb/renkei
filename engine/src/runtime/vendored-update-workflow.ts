@@ -193,7 +193,7 @@ function defaultWriteLinkageProvenance(
       return { ok: false, error: normalizeLinkageFailure(linkage.error) }
     }
 
-    const configPath = resolve(linkage.value.repoRoot, "harness", "config", "opencode-linkage.json")
+    const configPath = resolve(linkage.value.repoRoot, "engine", "config", "opencode-linkage.json")
     if (!existsSync(configPath) || !statSync(configPath).isFile()) {
       return {
         ok: false,

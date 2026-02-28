@@ -33,7 +33,7 @@ type RunbookCommandID =
 type RunbookCommandStep = {
   readonly id: RunbookCommandID
   readonly command: ReadonlyArray<string>
-  readonly cwd: "repo-root" | "harness"
+  readonly cwd: "repo-root" | "engine"
   readonly requiresEnv?: ReadonlyArray<"OPENCODE_SERVER_URL">
   readonly expectedExitCode: 0
   readonly evidenceKey: string
@@ -63,7 +63,7 @@ type OkResult<T> = { readonly ok: true; readonly value: T }
 type ErrResult<E> = { readonly ok: false; readonly error: E }
 type AnyResult = OkResult<Record<string, unknown>> | ErrResult<Record<string, unknown>>
 
-type WorkingDirectoryLabel = "repo-root" | "harness"
+type WorkingDirectoryLabel = "repo-root" | "engine"
 
 type EnvironmentPreflightSuccess = {
   readonly checkedAtMs: number
@@ -76,7 +76,7 @@ type EnvironmentPreflightSuccess = {
 type RunbookStepExecution = {
   readonly id: RunbookCommandID
   readonly command: ReadonlyArray<string>
-  readonly cwd: "repo-root" | "harness"
+  readonly cwd: "repo-root" | "engine"
   readonly startedAtMs: number
   readonly finishedAtMs: number
   readonly durationMs: number
@@ -121,7 +121,7 @@ type WorkingDirectoryLabelRuntime = {
   resolveSectionERunbookWorkingDirectoryLabel: (input: {
     absoluteCwd: string
     repoRootAbsolutePath: string
-    harnessAbsolutePath: string
+    engineAbsolutePath: string
   }) => OkResult<WorkingDirectoryLabel> | ErrResult<Record<string, unknown>>
 }
 
@@ -142,7 +142,7 @@ type RunbookEnvironmentPreflightRuntime = {
       resolveWorkingDirectoryLabel: (input: {
         absoluteCwd: string
         repoRootAbsolutePath: string
-        harnessAbsolutePath: string
+        engineAbsolutePath: string
       }) => OkResult<WorkingDirectoryLabel> | ErrResult<Record<string, unknown>>
     }>,
   ) => Promise<AnyResult>
@@ -189,7 +189,7 @@ function makeCanonicalSteps(): ReadonlyArray<RunbookCommandStep> {
   return [
     {
       id: "bootstrap:vendor-install",
-      command: ["bun", "install", "--cwd", "vendor/opencode"],
+      command: ["bun", "install", "--cwd", "platform/opencode"],
       cwd: "repo-root",
       expectedExitCode: 0,
       evidenceKey: "vendorInstall",
@@ -211,28 +211,28 @@ function makeCanonicalSteps(): ReadonlyArray<RunbookCommandStep> {
     {
       id: "quality:typecheck",
       command: ["bun", "run", "typecheck"],
-      cwd: "harness",
+      cwd: "engine",
       expectedExitCode: 0,
       evidenceKey: "typecheck",
     },
     {
       id: "quality:lint",
       command: ["bun", "run", "lint"],
-      cwd: "harness",
+      cwd: "engine",
       expectedExitCode: 0,
       evidenceKey: "lint",
     },
     {
       id: "quality:test-unit",
       command: ["bun", "run", "test:unit"],
-      cwd: "harness",
+      cwd: "engine",
       expectedExitCode: 0,
       evidenceKey: "testUnit",
     },
     {
       id: "runtime:renkei-dev-json",
       command: ["bun", "run", "renkei-dev", "--", "--json"],
-      cwd: "harness",
+      cwd: "engine",
       requiresEnv: ["OPENCODE_SERVER_URL"],
       expectedExitCode: 0,
       evidenceKey: "renkeiDevJson",
@@ -240,7 +240,7 @@ function makeCanonicalSteps(): ReadonlyArray<RunbookCommandStep> {
     {
       id: "quality:test-integration",
       command: ["bun", "run", "test:integration"],
-      cwd: "harness",
+      cwd: "engine",
       requiresEnv: ["OPENCODE_SERVER_URL"],
       expectedExitCode: 0,
       evidenceKey: "testIntegration",
@@ -270,9 +270,9 @@ function makePreflightSuccess(): EnvironmentPreflightSuccess {
   return {
     checkedAtMs: 1700000000000,
     env: { OPENCODE_SERVER_URL: "http://127.0.0.1:4099" },
-    resolvedPaths: ["vendor/opencode", "harness", "harness/config/approved-opencode-surfaces.json"],
-    workingDirectory: "/home/user/project/harness",
-    workingDirectoryLabel: "harness",
+    resolvedPaths: ["platform/opencode", "engine", "engine/config/approved-opencode-surfaces.json"],
+    workingDirectory: "/home/user/project/engine",
+    workingDirectoryLabel: "engine",
   }
 }
 
@@ -563,14 +563,14 @@ describe("unit section-4 working-directory-label contracts", () => {
     const allowed = new Set<string>(CWD_RESOLUTION_ERROR_CODES)
 
     const validAbs = "/home/user/project"
-    const validHarness = "/home/user/project/harness"
+    const validEngine = "/home/user/project/engine"
 
     const cases = [
       {
         input: {
           absoluteCwd: "relative/path",
           repoRootAbsolutePath: validAbs,
-          harnessAbsolutePath: validHarness,
+          engineAbsolutePath: validEngine,
         },
         offendingPath: "relative/path",
       },
@@ -578,7 +578,7 @@ describe("unit section-4 working-directory-label contracts", () => {
         input: {
           absoluteCwd: validAbs,
           repoRootAbsolutePath: "relative/repo",
-          harnessAbsolutePath: validHarness,
+          engineAbsolutePath: validEngine,
         },
         offendingPath: "relative/repo",
       },
@@ -586,9 +586,9 @@ describe("unit section-4 working-directory-label contracts", () => {
         input: {
           absoluteCwd: validAbs,
           repoRootAbsolutePath: validAbs,
-          harnessAbsolutePath: "relative/harness",
+          engineAbsolutePath: "relative/engine",
         },
-        offendingPath: "relative/harness",
+        offendingPath: "relative/engine",
       },
     ]
 
@@ -611,12 +611,12 @@ describe("unit section-4 working-directory-label contracts", () => {
       {
         absoluteCwd: "/home/user/../user/project",
         repoRootAbsolutePath: "/home/user/project",
-        harnessAbsolutePath: "/home/user/project/harness",
+        engineAbsolutePath: "/home/user/project/engine",
       },
       {
         absoluteCwd: "/home/user/./project",
         repoRootAbsolutePath: "/home/user/project",
-        harnessAbsolutePath: "/home/user/project/harness",
+        engineAbsolutePath: "/home/user/project/engine",
       },
     ]
 
@@ -635,32 +635,32 @@ describe("unit section-4 working-directory-label contracts", () => {
     const allowed = new Set<string>(CWD_RESOLUTION_ERROR_CODES)
 
     const repoRoot = "/home/user/project"
-    const harness = "/home/user/project/harness"
+    const engine = "/home/user/project/engine"
 
     const repoResult = runtime.resolveSectionERunbookWorkingDirectoryLabel({
       absoluteCwd: repoRoot,
       repoRootAbsolutePath: repoRoot,
-      harnessAbsolutePath: harness,
+      engineAbsolutePath: engine,
     })
     expect(repoResult.ok).toBe(true)
     if (repoResult.ok) {
       expect(repoResult.value).toBe("repo-root")
     }
 
-    const harnessResult = runtime.resolveSectionERunbookWorkingDirectoryLabel({
-      absoluteCwd: harness,
+    const engineResult = runtime.resolveSectionERunbookWorkingDirectoryLabel({
+      absoluteCwd: engine,
       repoRootAbsolutePath: repoRoot,
-      harnessAbsolutePath: harness,
+      engineAbsolutePath: engine,
     })
-    expect(harnessResult.ok).toBe(true)
-    if (harnessResult.ok) {
-      expect(harnessResult.value).toBe("harness")
+    expect(engineResult.ok).toBe(true)
+    if (engineResult.ok) {
+      expect(engineResult.value).toBe("engine")
     }
 
     const unmatchedResult = runtime.resolveSectionERunbookWorkingDirectoryLabel({
       absoluteCwd: "/home/user/other",
       repoRootAbsolutePath: repoRoot,
-      harnessAbsolutePath: harness,
+      engineAbsolutePath: engine,
     })
     expect(unmatchedResult.ok).toBe(false)
     if (!unmatchedResult.ok) {
@@ -686,8 +686,8 @@ describe("unit section-4 runbook-environment-preflight contracts", () => {
     const result = await runtime.verifySectionERunbookEnvironmentPreflight(
       {
         requiredEnv: ["OPENCODE_SERVER_URL"],
-        requiredPaths: ["vendor/opencode"],
-        expectedWorkingDirectories: ["harness"],
+        requiredPaths: ["platform/opencode"],
+        expectedWorkingDirectories: ["engine"],
       },
       {
         getEnv: () => undefined,
@@ -720,7 +720,7 @@ describe("unit section-4 runbook-environment-preflight contracts", () => {
       {
         requiredEnv: ["OPENCODE_SERVER_URL"],
         requiredPaths: [],
-        expectedWorkingDirectories: ["harness"],
+        expectedWorkingDirectories: ["engine"],
       },
       {
         getEnv: () => "not-a-valid-url",
@@ -745,13 +745,13 @@ describe("unit section-4 runbook-environment-preflight contracts", () => {
     const result = await runtime.verifySectionERunbookEnvironmentPreflight(
       {
         requiredEnv: ["OPENCODE_SERVER_URL"],
-        requiredPaths: ["vendor/opencode", "harness", "harness/config/approved-opencode-surfaces.json"],
-        expectedWorkingDirectories: ["harness"],
+        requiredPaths: ["platform/opencode", "engine", "engine/config/approved-opencode-surfaces.json"],
+        expectedWorkingDirectories: ["engine"],
       },
       {
         getEnv: () => "http://127.0.0.1:4099",
         parseUrl: (value) => ({ ok: true, value }),
-        pathExists: async (path) => path !== "harness",
+        pathExists: async (path) => path !== "engine",
       },
     )
 
@@ -759,7 +759,7 @@ describe("unit section-4 runbook-environment-preflight contracts", () => {
     if (!result.ok) {
       expect(allowed.has(String(result.error.code))).toBe(true)
       expect(result.error.code).toBe("RUNBOOK_PREFLIGHT_PATH_MISSING")
-      expect(result.error.path).toBe("harness")
+      expect(result.error.path).toBe("engine")
     }
   })
 
@@ -770,8 +770,8 @@ describe("unit section-4 runbook-environment-preflight contracts", () => {
     const result = await runtime.verifySectionERunbookEnvironmentPreflight(
       {
         requiredEnv: ["OPENCODE_SERVER_URL"],
-        requiredPaths: ["vendor/opencode"],
-        expectedWorkingDirectories: ["harness"],
+        requiredPaths: ["platform/opencode"],
+        expectedWorkingDirectories: ["engine"],
       },
       {
         getEnv: () => "http://127.0.0.1:4099",
@@ -783,7 +783,7 @@ describe("unit section-4 runbook-environment-preflight contracts", () => {
           error: {
             code: "RUNBOOK_CWD_LABEL_UNRESOLVED",
             normalizedCwd: "/some/unrelated/directory",
-            allowed: ["repo-root", "harness"],
+            allowed: ["repo-root", "engine"],
           },
         }),
       },
@@ -804,17 +804,17 @@ describe("unit section-4 runbook-environment-preflight contracts", () => {
     const result = await runtime.verifySectionERunbookEnvironmentPreflight(
       {
         requiredEnv: ["OPENCODE_SERVER_URL"],
-        requiredPaths: ["vendor/opencode", "harness"],
-        expectedWorkingDirectories: ["harness"],
+        requiredPaths: ["platform/opencode", "engine"],
+        expectedWorkingDirectories: ["engine"],
       },
       {
         nowMs: () => 1700000000014,
         getEnv: () => "http://127.0.0.1:4099",
         parseUrl: (value) => ({ ok: true, value: value.trim() }),
         pathExists: async () => true,
-        cwd: () => "/home/user/project/harness",
+        cwd: () => "/home/user/project/engine",
         resolveRepoRootAbsolutePath: () => ({ ok: true, value: "/home/user/project" }),
-        resolveWorkingDirectoryLabel: () => ({ ok: true, value: "harness" }),
+        resolveWorkingDirectoryLabel: () => ({ ok: true, value: "engine" }),
       },
     )
 
@@ -829,10 +829,10 @@ describe("unit section-4 runbook-environment-preflight contracts", () => {
       }
       expect(val.checkedAtMs).toBe(1700000000014)
       expect(val.env.OPENCODE_SERVER_URL).toBe("http://127.0.0.1:4099")
-      expect(val.resolvedPaths.includes("vendor/opencode")).toBe(true)
-      expect(val.resolvedPaths.includes("harness")).toBe(true)
+      expect(val.resolvedPaths.includes("platform/opencode")).toBe(true)
+      expect(val.resolvedPaths.includes("engine")).toBe(true)
       expect(typeof val.workingDirectory).toBe("string")
-      expect(val.workingDirectoryLabel).toBe("harness")
+      expect(val.workingDirectoryLabel).toBe("engine")
     }
   })
 
@@ -843,8 +843,8 @@ describe("unit section-4 runbook-environment-preflight contracts", () => {
     const result = await runtime.verifySectionERunbookEnvironmentPreflight(
       {
         requiredEnv: ["OPENCODE_SERVER_URL"],
-        requiredPaths: ["vendor/opencode", "harness"],
-        expectedWorkingDirectories: ["repo-root", "harness"],
+        requiredPaths: ["platform/opencode", "engine"],
+        expectedWorkingDirectories: ["repo-root", "engine"],
       },
       {
         nowMs: () => 1700000000014,
@@ -856,7 +856,7 @@ describe("unit section-4 runbook-environment-preflight contracts", () => {
 
     expect(result.ok).toBe(true)
     if (result.ok) {
-      expect(["repo-root", "harness"]).toContain(result.value.workingDirectoryLabel)
+      expect(["repo-root", "engine"]).toContain(result.value.workingDirectoryLabel)
       expect(result.value.workingDirectory).toBe(currentCwd)
     }
   })
@@ -868,14 +868,14 @@ describe("unit section-4 runbook-environment-preflight contracts", () => {
     const result = await runtime.verifySectionERunbookEnvironmentPreflight(
       {
         requiredEnv: ["OPENCODE_SERVER_URL"],
-        requiredPaths: ["vendor/opencode"],
-        expectedWorkingDirectories: ["harness"],
+        requiredPaths: ["platform/opencode"],
+        expectedWorkingDirectories: ["engine"],
       },
       {
         getEnv: () => "http://127.0.0.1:4099",
         parseUrl: (value) => ({ ok: true, value }),
         pathExists: async () => true,
-        cwd: () => "/workspace/renkei/harness",
+        cwd: () => "/workspace/renkei/engine",
         resolveRepoRootAbsolutePath: () => ({ ok: false, error: { code: "PATH_TARGET_MISSING" } }),
       },
     )
@@ -884,7 +884,7 @@ describe("unit section-4 runbook-environment-preflight contracts", () => {
     if (!result.ok) {
       expect(allowed.has(String(result.error.code))).toBe(true)
       expect(result.error.code).toBe("RUNBOOK_PREFLIGHT_CWD_INVALID")
-      expect(result.error.cwd).toBe("/workspace/renkei/harness")
+      expect(result.error.cwd).toBe("/workspace/renkei/engine")
     }
   })
 
@@ -896,8 +896,8 @@ describe("unit section-4 runbook-environment-preflight contracts", () => {
     const result1 = await runtime.verifySectionERunbookEnvironmentPreflight(
       {
         requiredEnv: ["OPENCODE_SERVER_URL"],
-        requiredPaths: ["vendor/opencode"],
-        expectedWorkingDirectories: ["harness"],
+        requiredPaths: ["platform/opencode"],
+        expectedWorkingDirectories: ["engine"],
       },
       {
         getEnv: () => {
@@ -928,8 +928,8 @@ describe("unit section-4 runbook-environment-preflight contracts", () => {
     const result2 = await runtime.verifySectionERunbookEnvironmentPreflight(
       {
         requiredEnv: ["OPENCODE_SERVER_URL"],
-        requiredPaths: ["vendor/opencode"],
-        expectedWorkingDirectories: ["harness"],
+        requiredPaths: ["platform/opencode"],
+        expectedWorkingDirectories: ["engine"],
       },
       {
         getEnv: () => {
@@ -961,8 +961,8 @@ describe("unit section-4 runbook-environment-preflight contracts", () => {
     const result3 = await runtime.verifySectionERunbookEnvironmentPreflight(
       {
         requiredEnv: ["OPENCODE_SERVER_URL"],
-        requiredPaths: ["vendor/opencode"],
-        expectedWorkingDirectories: ["harness"],
+        requiredPaths: ["platform/opencode"],
+        expectedWorkingDirectories: ["engine"],
       },
       {
         getEnv: () => {
@@ -986,7 +986,7 @@ describe("unit section-4 runbook-environment-preflight contracts", () => {
           error: {
             code: "RUNBOOK_CWD_LABEL_UNRESOLVED",
             normalizedCwd: "/some/path",
-            allowed: ["repo-root", "harness"],
+            allowed: ["repo-root", "engine"],
           },
         }),
       },

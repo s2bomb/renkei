@@ -1,5 +1,5 @@
 {
-  "name": "@renkei/harness",
+  "name": "@renkei/engine",
   "private": true,
   "type": "module",
   "scripts": {

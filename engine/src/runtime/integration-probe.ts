@@ -37,7 +37,7 @@ export async function probeIntegrationCapabilities(
   const timeoutMs = options?.timeoutMs ?? DEFAULT_TIMEOUT_MS
   const reachable = await verifyReachable(serverUrl, timeoutMs)
   if (!reachable.ok) {
-    recordSpan("harness.integration.probe", {
+    recordSpan("engine.integration.probe", {
       server_url: serverUrl,
       error_code: reachable.error.code,
       probe_duration_ms: Date.now() - startedAt,
@@ -51,7 +51,7 @@ export async function probeIntegrationCapabilities(
     probedAt: Date.now(),
   }
 
-  recordSpan("harness.integration.probe", {
+  recordSpan("engine.integration.probe", {
     server_url: serverUrl,
     composition_count: report.composition.length,
     probe_duration_ms: Date.now() - startedAt,

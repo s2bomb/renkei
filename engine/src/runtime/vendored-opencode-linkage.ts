@@ -8,9 +8,9 @@ export type VendoredLinkageMode = "subtree"
 export type VendoredOpenCodeLinkage = {
   readonly mode: VendoredLinkageMode
   readonly repoRoot: string
-  readonly vendorRoot: string
+  readonly platformRoot: string
   readonly opencodeRoot: string
-  readonly harnessRoot: string
+  readonly engineRoot: string
   readonly provenance: {
     readonly remote: string
     readonly branch: string
@@ -115,7 +115,7 @@ export function loadVendoredOpenCodeLinkage(cwd: string): Result<VendoredOpenCod
   }
 
   const repoRoot = repoRootResult.value.absolute
-  const configPath = resolve(repoRoot, "harness", "config", "opencode-linkage.json")
+  const configPath = resolve(repoRoot, "engine", "config", "opencode-linkage.json")
 
   if (!existsSync(configPath)) {
     return {
@@ -159,9 +159,9 @@ export function loadVendoredOpenCodeLinkage(cwd: string): Result<VendoredOpenCod
     value: {
       mode: "subtree",
       repoRoot,
-      vendorRoot: dirname(opencodePathResult.value.absolute),
+      platformRoot: dirname(opencodePathResult.value.absolute),
       opencodeRoot: opencodePathResult.value.absolute,
-      harnessRoot: resolve(repoRoot, "harness"),
+      engineRoot: resolve(repoRoot, "engine"),
       provenance: configResult.value.provenance,
     },
   }

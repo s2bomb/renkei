@@ -16,7 +16,7 @@ function makeRegistryJSON(entries: ReadonlyArray<{ readonly id: string }>) {
   })
 }
 
-function makeCanonicalRegistry(sourcePath = "harness/config/approved-opencode-surfaces.json") {
+function makeCanonicalRegistry(sourcePath = "engine/config/approved-opencode-surfaces.json") {
   return {
     version: "2026-02-19",
     sourcePath,
@@ -33,7 +33,7 @@ function makeCanonicalRegistry(sourcePath = "harness/config/approved-opencode-su
 describe("unit section-2 approved-surface-registry contracts", () => {
   test("S2-T01 loads canonical JSON and preserves deterministic entry order", async () => {
     const runtime = await loadApprovedSurfaceRegistryModule()
-    const sourcePath = "harness/config/approved-opencode-surfaces.json"
+    const sourcePath = "engine/config/approved-opencode-surfaces.json"
     const json = makeRegistryJSON([
       { id: "plugin-hooks" },
       { id: "tool-registry" },
@@ -64,7 +64,7 @@ describe("unit section-2 approved-surface-registry contracts", () => {
 
   test("S2-T02 missing source path fails with APPROVED_SURFACE_REGISTRY_NOT_FOUND", async () => {
     const runtime = await loadApprovedSurfaceRegistryModule()
-    const sourcePath = "harness/config/missing-registry.json"
+    const sourcePath = "engine/config/missing-registry.json"
     const allowed = new Set<string>(APPROVED_SURFACE_REGISTRY_ERROR_CODES)
 
     const result = await runtime.loadApprovedSurfaceRegistry(sourcePath, {
@@ -92,7 +92,7 @@ describe("unit section-2 approved-surface-registry contracts", () => {
     const runtime = await loadApprovedSurfaceRegistryModule()
 
     for (const payload of ["{", JSON.stringify({ version: "2026-02-19", entries: [{ id: "tool-registry" }] })]) {
-      const result = await runtime.loadApprovedSurfaceRegistry("harness/config/approved-opencode-surfaces.json", {
+      const result = await runtime.loadApprovedSurfaceRegistry("engine/config/approved-opencode-surfaces.json", {
         nowMs: () => 4242,
         readTextFile: async () => ({ ok: true, value: payload }),
       })
@@ -117,7 +117,7 @@ describe("unit section-2 approved-surface-registry contracts", () => {
       { id: "sdk-client" },
     ])
 
-    const result = await runtime.loadApprovedSurfaceRegistry("harness/config/approved-opencode-surfaces.json", {
+    const result = await runtime.loadApprovedSurfaceRegistry("engine/config/approved-opencode-surfaces.json", {
       nowMs: () => 4242,
       readTextFile: async () => ({ ok: true, value: json }),
     })
@@ -133,7 +133,7 @@ describe("unit section-2 approved-surface-registry contracts", () => {
 
   test("S2-T05 empty entries fail with APPROVED_SURFACE_EMPTY", async () => {
     const runtime = await loadApprovedSurfaceRegistryModule()
-    const sourcePath = "harness/config/approved-opencode-surfaces.json"
+    const sourcePath = "engine/config/approved-opencode-surfaces.json"
     const json = JSON.stringify({ version: "2026-02-19", entries: [] })
 
     const result = await runtime.loadApprovedSurfaceRegistry(sourcePath, {

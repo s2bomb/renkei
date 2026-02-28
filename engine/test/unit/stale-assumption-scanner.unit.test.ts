@@ -145,8 +145,8 @@ describe("unit section-2 stale-assumption-scanner contracts", () => {
 
     const result = runtime.resolveSectionBScanTarget(base, {
       roots: ["/override-root"],
-      include: ["harness/src/**/*.ts", "harness/test/**/*.ts"],
-      excludeAdditions: ["docs/archive/**", "vendor/**", "harness/vendor/**", "docs/archive/**", "**/node_modules/**"],
+      include: ["engine/src/**/*.ts", "engine/test/**/*.ts"],
+      excludeAdditions: ["docs/archive/**", "platform/**", "engine/platform/**", "docs/archive/**", "**/node_modules/**"],
     })
 
     expect(result.ok).toBe(true)
@@ -155,13 +155,13 @@ describe("unit section-2 stale-assumption-scanner contracts", () => {
     }
 
     expect(result.value.roots).toEqual(["/override-root"])
-    expect(result.value.include).toEqual(["harness/src/**/*.ts", "harness/test/**/*.ts"])
+    expect(result.value.include).toEqual(["engine/src/**/*.ts", "engine/test/**/*.ts"])
     expect(result.value.exclude).toEqual(
       lexicalUnique([
         ...SECTION_B_DEFAULT_EXCLUDE_GLOBS,
         "docs/archive/**",
-        "vendor/**",
-        "harness/vendor/**",
+        "platform/**",
+        "engine/platform/**",
         "docs/archive/**",
         "**/node_modules/**",
       ]),
@@ -173,7 +173,7 @@ describe("unit section-2 stale-assumption-scanner contracts", () => {
     const base = makeSectionBBaseScanTarget("/repo")
 
     const result = runtime.resolveSectionBScanTarget(base, {
-      excludeAdditions: ["tmp/**", "vendor/**"],
+      excludeAdditions: ["tmp/**", "platform/**"],
       excludeReplacements: ["tmp/**", "custom/**", "tmp/**"],
     })
 
@@ -238,7 +238,7 @@ describe("unit section-2 stale-assumption-scanner contracts", () => {
       makeSectionBBaseScanTarget("/repo"),
       runtime.defaultStaleAssumptionPatterns(),
       {
-        globFiles: async () => ({ ok: true, value: ["/repo/harness/AGENTS.md"] }),
+        globFiles: async () => ({ ok: true, value: ["/repo/engine/AGENTS.md"] }),
         readTextFile: async (path) => ({
           ok: false,
           error: {
@@ -257,7 +257,7 @@ describe("unit section-2 stale-assumption-scanner contracts", () => {
 
     expect(result.error.code).toBe("SCAN_IO_FAILURE")
     if (result.error.code === "SCAN_IO_FAILURE") {
-      expect(result.error.path).toBe("/repo/harness/AGENTS.md")
+      expect(result.error.path).toBe("/repo/engine/AGENTS.md")
       expect(result.error.cause).toBe("EACCES")
     }
   })
@@ -266,9 +266,9 @@ describe("unit section-2 stale-assumption-scanner contracts", () => {
     const runtime = await loadRuntimeModule()
     const readOrder: string[] = []
     const fileContents = new Map<string, string>([
-      ["/repo/harness/AGENTS.md", "openteams"],
-      ["/repo/harness/test/unit/a.unit.test.ts", "fork"],
-      ["/repo/harness/test/unit/z.unit.test.ts", "fork\nopenteams"],
+      ["/repo/engine/AGENTS.md", "openteams"],
+      ["/repo/engine/test/unit/a.unit.test.ts", "fork"],
+      ["/repo/engine/test/unit/z.unit.test.ts", "fork\nopenteams"],
     ])
 
     const result = await runtime.scanForStaleAssumptions(
@@ -281,9 +281,9 @@ describe("unit section-2 stale-assumption-scanner contracts", () => {
         globFiles: async () => ({
           ok: true,
           value: [
-            "/repo/harness/test/unit/z.unit.test.ts",
-            "/repo/harness/AGENTS.md",
-            "/repo/harness/test/unit/a.unit.test.ts",
+            "/repo/engine/test/unit/z.unit.test.ts",
+            "/repo/engine/AGENTS.md",
+            "/repo/engine/test/unit/a.unit.test.ts",
           ],
         }),
         readTextFile: async (path) => {
@@ -311,9 +311,9 @@ describe("unit section-2 stale-assumption-scanner contracts", () => {
     }
 
     expect(readOrder).toEqual([
-      "/repo/harness/AGENTS.md",
-      "/repo/harness/test/unit/a.unit.test.ts",
-      "/repo/harness/test/unit/z.unit.test.ts",
+      "/repo/engine/AGENTS.md",
+      "/repo/engine/test/unit/a.unit.test.ts",
+      "/repo/engine/test/unit/z.unit.test.ts",
     ])
     expect(result.value.scannedFiles).toBe(3)
 
