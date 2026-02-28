@@ -1,4 +1,5 @@
 import type { WorktreeResolution, EngineConfig, LaunchOptions, LaunchEnvironment } from "../../../src/shared/types"
+import type { ChildSessionCapabilities } from "../../../src/adapters/session-capabilities"
 
 export function resolution(overrides?: Partial<WorktreeResolution>): WorktreeResolution {
   return {
@@ -37,6 +38,26 @@ export function launchEnvironment(overrides?: Partial<LaunchEnvironment>): Launc
     OPENCODE_CONFIG_DIR: "/home/user/renkei/dev/engine/.opencode",
     RENKEI_ENGINE_SOURCE: "/home/user/renkei/dev",
     RENKEI_WORKTREE_OVERRIDE: undefined,
+    ...overrides,
+  }
+}
+
+/**
+ * Factory for upstream child session defaults (the "before engine override" state).
+ * Prompt hidden, exit keybind active, all modes permissive.
+ */
+export function childSessionDefaults(overrides?: Partial<ChildSessionCapabilities>): ChildSessionCapabilities {
+  return {
+    promptVisible: false,
+    sidebarVisible: false,
+    permissionsEnabled: false,
+    questionsEnabled: false,
+    exitKeybindActive: true,
+    submissionMethod: "sync",
+    shellModeAllowed: true,
+    commandsAllowed: true,
+    agentCyclingAllowed: true,
+    variantCyclingAllowed: true,
     ...overrides,
   }
 }
