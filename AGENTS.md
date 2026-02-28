@@ -76,7 +76,8 @@ Every directory in the codebase belongs to exactly one category. Each category c
 | Category | Rule | Location |
 |---|---|---|
 | **Authoring** | Archetype authoring system. Definitions, assembly tooling, authoring-specific docs. See `authoring/AGENTS.md`. | `authoring/` |
-| **Engine** | Agent execution runtime. Composition layer over vanilla OpenCode. See `engine/AGENTS.md`. | `engine/` |
+| **Engine** | Agent execution runtime. Composition layer over OpenCode through seam adapters. See `engine/AGENTS.md`. | `engine/` |
+| **Platform** | Vendored host runtime (OpenCode). Maintained via git subtree rebaseline, not authored directly. Level 3 patches land here. | `platform/` |
 | **Docs** | Stable, synthesized references. Edit only when decisions change. Not a working area. | `docs/` |
 | **Thoughts** | Working area. Ideas, issues, research, specs, skill drafts. Historical record -- do not modify research papers. | `thoughts/` |
 | **Root** | Repo metadata only. `AGENTS.md`, `CLAUDE.md`, `README.md`, `.gitignore`. Nothing else at root level. | `/` |
@@ -91,7 +92,8 @@ docs ← authoring ← engine ← platform
 
 - **Docs** are the stable product of synthesis from research and decisions. They are the system's intellectual foundation.
 - **Authoring** produces archetype definitions and assembled skill files. It references docs (vocabulary, authoring method) but never imports engine code.
-- **Engine** consumes authoring output (skill files, archetype metadata). It never defines archetype content. It never modifies the authoring layer.
+- **Engine** consumes authoring output (skill files, archetype metadata). It composes over the platform through seam adapters. It never defines archetype content. It never modifies the authoring layer.
+- **Platform** is the vendored OpenCode host runtime. The engine composes over it through seam adapters (anti-corruption layer). Level 3 patches (new seams) land here. Rebaseline updates here. We do not author features in the platform -- we create extension points via patches when existing seams are insufficient. See `engine/AGENTS.md` for the seam hierarchy.
 - **Thoughts** are working material. They feed into docs, authoring, and engine when decisions are made. They are never imported by code.
 
 ### Decision Tree
@@ -108,7 +110,11 @@ Is it code?
 |   |
 |   +-- Does it execute agents, manage teams, or run the runtime? (TypeScript)
 |   |   +-- Yes → engine/
-|   |           Rule: composes over vanilla OpenCode, no authoring internals
+|   |           Rule: composes over OpenCode through seam adapters, no authoring internals
+|   |
+|   +-- Is it a Level 3 seam patch for the vendored platform?
+|   |   +-- Yes → platform/opencode/
+|   |           Rule: minimal, documented, merge-safe, enables freedom (see engine/AGENTS.md)
 |   |
 |   +-- Neither → Reconsider: does this code belong in renkei at all?
 |
@@ -151,7 +157,12 @@ authoring/                        # Layer 1: Archetype authoring system
     assemble.py                   # Assembly script: compose, diff, deploy, git-wrap
 
 engine/                           # Layer 2: Agent execution runtime
-  (Composition layer over vanilla OpenCode -- see engine/AGENTS.md)
+  (Composition layer over OpenCode through seam adapters -- see engine/AGENTS.md)
+
+platform/                         # Vendored host runtime
+  opencode/                       # OpenCode git subtree -- do not author features here
+                                  # Level 3 patches (new seams) land here
+                                  # Rebaseline updates here
 
 docs/
   authoring/                      # Stable, synthesized authoring documentation
