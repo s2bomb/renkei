@@ -9,7 +9,6 @@ export interface WorktreeResolution {
 
 export interface LaunchOptions {
   readonly worktreeOverride: string | undefined
-  readonly devMode: boolean
   readonly projectDir: string | undefined
   readonly passthroughArgs: readonly string[]
 }

@@ -12,13 +12,12 @@ import { buildLaunchEnv } from "../adapters/config-injection"
 /**
  * Parse renkei-specific flags from argv, passing unrecognized args through to OpenCode.
  *
- * Consumed flags: --worktree <path>, --dev
+ * Consumed flags: --worktree <path>
  * First non-flag positional: projectDir
  * Everything else: passthroughArgs (order preserved)
  */
 export function parseLaunchOptions(argv: readonly string[]): Result<LaunchOptions, ParseError> {
   let worktreeOverride: string | undefined
-  let devMode = false
   let projectDir: string | undefined
   const passthroughArgs: string[] = []
 
@@ -33,12 +32,6 @@ export function parseLaunchOptions(argv: readonly string[]): Result<LaunchOption
       }
       worktreeOverride = next
       i += 2
-      continue
-    }
-
-    if (arg === "--dev") {
-      devMode = true
-      i += 1
       continue
     }
 
@@ -68,14 +61,14 @@ export function parseLaunchOptions(argv: readonly string[]): Result<LaunchOption
     i += 1
   }
 
-  return ok({ worktreeOverride, devMode, projectDir, passthroughArgs })
+  return ok({ worktreeOverride, projectDir, passthroughArgs })
 }
 
 /**
  * Build the launch command for exec'ing into OpenCode.
  *
- * Dev mode: bun run --cwd <platformPath>/opencode/packages/opencode --conditions=browser src/index.ts [project] [...passthrough]
- * Binary mode: <platformPath>/opencode/packages/opencode/bin/opencode [project] [...passthrough]
+ * Always launches through source runtime:
+ * bun run --cwd <platformPath>/opencode/packages/opencode --conditions=browser src/index.ts [project] [...passthrough]
  */
 export function buildLaunchCommand(
   resolution: WorktreeResolution,
@@ -95,28 +88,10 @@ export function buildLaunchCommand(
     envRecord.RENKEI_WORKTREE_OVERRIDE = launchEnv.RENKEI_WORKTREE_OVERRIDE
   }
 
-  if (opts.devMode) {
-    const opencodePkgPath = path.resolve(resolution.platformPath, "opencode", "packages", "opencode")
-    return {
-      command: "bun",
-      args: [
-        "run",
-        "--cwd",
-        opencodePkgPath,
-        "--conditions=browser",
-        "src/index.ts",
-        ...projectArgs,
-        ...passthroughArgs,
-      ],
-      env: envRecord,
-      cwd: process.cwd(),
-    }
-  }
-
-  const binaryPath = path.resolve(resolution.platformPath, "opencode", "packages", "opencode", "bin", "opencode")
+  const opencodePkgPath = path.resolve(resolution.platformPath, "opencode", "packages", "opencode")
   return {
-    command: binaryPath,
-    args: [...projectArgs, ...passthroughArgs],
+    command: "bun",
+    args: ["run", "--cwd", opencodePkgPath, "--conditions=browser", "src/index.ts", ...projectArgs, ...passthroughArgs],
     env: envRecord,
     cwd: process.cwd(),
   }
