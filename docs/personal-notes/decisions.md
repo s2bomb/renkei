@@ -215,6 +215,24 @@ Renkei exists to **define and audit agent archetypes from the most fundamental l
 
 ---
 
+## Seam Hierarchy: Conditioned Platform Extension
+
+**Decision**: The engine extends the platform through a four-level seam hierarchy. Level 3 (patch to create a new seam) is an accepted, conditioned mechanism -- not a fork. The previous "zero fork, propose upstream" position is superseded.
+
+**Date**: 2026-02-28
+
+**Grounding**:
+- Items 001-004 proved that not all required behaviours are achievable through existing seams. Item-001 identified Bucket C (3 behaviours requiring new hooks). Item-003 confirmed the gap is real and bounded by proving 3 Bucket B capabilities composable without vendor changes. Item-004 resolved C-1 (UI message part registration) through a custom frontend wrapper package.
+- The plugin system alone is insufficient (grounded in item-001 gap analysis and CEO direction).
+- The Brave/Chromium model demonstrates that maintaining minimal, conditioned patches on an upstream platform is a proven, sustainable pattern at browser scale.
+- The four conditions for Level 3 patches (minimal, documented, merge-conflict-positioned, enables freedom) constrain patches to extension point creation, not feature insertion -- preserving the composition relationship.
+
+**What this supersedes**: "Harness Architecture: Composition Over Vanilla OpenCode" (2026-02-19). The composition principle survives; the "zero modifications" and "propose upstream, not patches" clauses do not.
+
+**Reference**: `thoughts/projects/2026-02-26-opencode-extension-seams/sources/ceo-seam-hierarchy-doctrine-2026-02-28.md`
+
+---
+
 ## Stage Ownership Semantics
 
 **Decision**: Stage-leader invocation implies immediate stage execution. There is no conversational waiting state.

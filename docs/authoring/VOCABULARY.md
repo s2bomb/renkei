@@ -200,7 +200,7 @@ Not to be confused with: the derivation chain as an authoring method (which desc
 
 **Engine**
 
-The Renkei composition layer that bridges authoring and platform. The engine (`engine/`) loads archetypes, enforces orchestration policy, and composes domain behavior onto the platform runtime. It owns archetype loading, capability gating, and composition adapters -- but not the platform's session engine, transport, or interfaces.
+The Renkei composition layer that bridges authoring and platform. The engine (`engine/`) loads archetypes, enforces orchestration policy, and composes domain behavior onto the platform runtime. It owns archetype loading, capability gating, and seam adapters -- but not the platform's session engine, transport, or interfaces.
 
 Not to be confused with: platform (the host runtime the engine composes onto); authoring (which defines archetypes, not execution policy).
 
@@ -213,6 +213,54 @@ Not to be confused with: engine (Renkei's composition layer on top of the platfo
 **Harness** *(deprecated -- see Deprecated Terms)*
 
 Previously referred to the agentic runtime that executes archetypes. The concept has been split: "engine" for Renkei's composition layer (`engine/`), "platform" for the host runtime (OpenCode). See Deprecated Terms table.
+
+**Seam** (engine context)
+
+A documented extension point in the platform (OpenCode) that engine code can compose through. A seam is a stable, addressable surface -- a function export, a hook registration point, a config entry, or an API endpoint -- through which the engine delivers capability without modifying the platform's source files. Seams may be discovered (already exist in OpenCode) or created (via Level 3 patches).
+
+Scope: Engine domain. A seam is an extension point, not the code that uses it. The engine composes *through* seams; it does not *own* them. Discovered seams are owned by OpenCode. Created seams are Renkei additions to the vendored platform, maintained during rebaseline.
+
+Not to be confused with: seam adapter (the engine-side wrapper for a seam); patch (the mechanism for creating a new seam).
+
+**Seam Adapter**
+
+A Renkei-maintained module that wraps one platform seam in an engine-owned interface. The adapter is the anti-corruption boundary: feature code imports the adapter, never the platform seam directly. If the platform changes a seam, only the adapter needs updating.
+
+Scope: Engine library layer. One adapter per seam. The adapter translates between the platform's interface and the engine's domain types.
+
+Not to be confused with: seam (the platform extension point the adapter wraps); composition adapter (deprecated M2 term -- use "seam adapter").
+
+**Patch** (engine context)
+
+A minimal, documented code change in the vendored platform that creates a new seam (extension point). A patch is NOT a feature -- it is the hook that enables features. Patches must satisfy four conditions: (1) minimal, (2) documented, (3) positioned to minimise merge conflicts during rebaseline, (4) enables freedom (the patch is itself a generalised hook, not a one-off insertion).
+
+Scope: Level 3 of the seam hierarchy. Patches modify vendored platform source to create new seams. They are maintained during rebaseline (re-applied after upstream sync).
+
+Not to be confused with: seam (the extension point a patch creates); vendor modification (a broader concept -- patches are a constrained, conditioned subset of vendor modifications).
+
+**Seam Hierarchy**
+
+The four-level decision framework that governs how the engine extends the platform. Priority order: Level 1 (existing seam, right fit) > Level 2 (existing seams, composed) > Level 3 (new seam via patch) > Level 4 (runtime manipulation). Every engine feature must be classified at one level. Lower-numbered levels are always preferred.
+
+Scope: Engine governance. The seam hierarchy is the primary decision filter for all engine development.
+
+Not to be confused with: the seam inventory (the catalogue of known seams); the anti-corruption layer (the adapter boundary, not the decision framework).
+
+**Anti-Corruption Layer**
+
+The boundary of seam adapter modules that isolates engine feature code from direct platform (OpenCode) dependencies. Feature code imports adapters; adapters import platform seams. If the platform changes, only adapters are affected. The term originates from Domain-Driven Design (Evans, 2003, Chapter 14) and describes the same architectural pattern: a translation layer that prevents upstream model changes from corrupting the downstream domain model.
+
+Scope: Engine architecture. The anti-corruption layer is the set of seam adapters, collectively. It is the living inventory of every platform seam the engine uses.
+
+Not to be confused with: seam adapter (a single module within the anti-corruption layer); seam hierarchy (the decision framework, not the boundary).
+
+**Rebaseline**
+
+Updating the vendored platform (OpenCode) to a new upstream version. Involves: pulling the upstream changes, verifying seam adapters still function, and re-applying any Level 3 patches. The rebaseline process is the ongoing maintenance cost of the vendor relationship.
+
+Scope: Engine operations. Rebaseline is the vendor update workflow.
+
+Not to be confused with: patch (a seam-creating change that must survive rebaseline); upstream contribution (proposing changes to OpenCode's public repository, which is a separate activity).
 
 **Skill File**
 
@@ -297,3 +345,4 @@ These terms have been superseded. Use the preferred term.
 | rule (as an ethos article) | (removed) | Rules are *nomos* (external law), not *ethos* (internal character). A constitutionally charged agent derives constraints from conviction, not from NEVER/ALWAYS directives. If rules are needed, the ethos isn't deep enough. |
 | harness | engine + platform | "Harness" conflated two distinct concepts: Renkei's composition layer (now "engine", `engine/`) and the host runtime (now "platform", e.g. OpenCode). Splitting clarifies ownership boundaries. |
 | framework (as directory name) | authoring | The `framework/` directory was renamed to `authoring/` to better describe its purpose: archetype authoring, not a general framework. |
+| composition adapter | seam adapter | "Composition adapter" was the M2 term for modules wrapping platform surfaces. Superseded by "seam adapter" which reflects the seam hierarchy model. |
