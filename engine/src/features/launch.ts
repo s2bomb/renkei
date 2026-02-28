@@ -1,6 +1,6 @@
 import type { Result } from "../shared/result"
-import type { LaunchOptions } from "../shared/types"
-import type { ParseError } from "../shared/errors"
+import type { LaunchOptions, LaunchCommand, LaunchEnvironment, WorktreeResolution, EngineConfig } from "../shared/types"
+import type { ParseError, ConfigBuildError, LaunchSequenceError } from "../shared/errors"
 import { ok, err } from "../shared/result"
 import { parseError } from "../shared/errors"
 
@@ -64,4 +64,46 @@ export function parseLaunchOptions(argv: readonly string[]): Result<LaunchOption
   }
 
   return ok({ worktreeOverride, devMode, projectDir, passthroughArgs })
+}
+
+/**
+ * Build the launch command for exec'ing into OpenCode.
+ *
+ * Dev mode: bun run --cwd <platformPath>/opencode/packages/opencode --conditions=browser src/index.ts [project] [...passthrough]
+ * Binary mode: <platformPath>/opencode/packages/opencode/bin/opencode [project] [...passthrough]
+ */
+export function buildLaunchCommand(
+  _resolution: WorktreeResolution,
+  _opts: LaunchOptions,
+  _launchEnv: LaunchEnvironment,
+): LaunchCommand {
+  throw new Error("not implemented")
+}
+
+/**
+ * Resolve engine config (skill paths, plugin path, config dir, agent definitions)
+ * from a validated worktree resolution.
+ */
+export async function resolveEngineConfig(
+  _resolution: WorktreeResolution,
+): Promise<Result<EngineConfig, ConfigBuildError>> {
+  throw new Error("not implemented")
+}
+
+/** Function signature for the exec step, injectable for testing. */
+export type ExecFn = (cmd: LaunchCommand) => Promise<{ exitCode: number | null }>
+
+/**
+ * Launch OpenCode through the engine composition layer.
+ *
+ * On success, this function does NOT return -- the process is replaced by OpenCode via exec.
+ * The return type Result<never, ...> encodes this: the Ok branch is unreachable.
+ * On failure, returns Err with the first error encountered in the pipeline.
+ */
+export async function launch(
+  _opts: LaunchOptions,
+  _scriptDir: string,
+  _exec?: ExecFn,
+): Promise<Result<never, LaunchSequenceError>> {
+  throw new Error("not implemented")
 }

@@ -1,4 +1,4 @@
-import type { WorktreeResolution, EngineConfig, LaunchOptions } from "../../../src/shared/types"
+import type { WorktreeResolution, EngineConfig, LaunchOptions, LaunchEnvironment } from "../../../src/shared/types"
 
 export function resolution(overrides?: Partial<WorktreeResolution>): WorktreeResolution {
   return {
@@ -28,6 +28,16 @@ export function launchOptions(overrides?: Partial<LaunchOptions>): LaunchOptions
     devMode: false,
     projectDir: undefined,
     passthroughArgs: [],
+    ...overrides,
+  }
+}
+
+export function launchEnvironment(overrides?: Partial<LaunchEnvironment>): LaunchEnvironment {
+  return {
+    OPENCODE_CONFIG_CONTENT: '{"skills":{"paths":[]}}',
+    OPENCODE_CONFIG_DIR: "/home/user/renkei/dev/engine/.opencode",
+    RENKEI_ENGINE_SOURCE: "/home/user/renkei/dev",
+    RENKEI_WORKTREE_OVERRIDE: undefined,
     ...overrides,
   }
 }
