@@ -3,10 +3,13 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "bun test || true",
-    "test:unit": "bun test --filter unit || true",
-    "test:integration": "bun test --filter integration || true",
+    "test": "bun test --pass-with-no-tests",
+    "test:unit": "bun test --pass-with-no-tests test/unit",
+    "test:integration": "bun test --pass-with-no-tests test/integration",
     "typecheck": "bun x tsc --noEmit",
-    "lint": "bun x prettier --check \"src/**/*.ts\" --config config/prettier.json --ignore-path .prettierignore"
+    "lint": "bun x prettier --check \"src/**/*.ts\" \"test/**/*.ts\" --no-error-on-unmatched-pattern --config config/prettier.json --ignore-path .prettierignore"
+  },
+  "devDependencies": {
+    "bun-types": "^1.3.10"
   }
 }
