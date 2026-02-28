@@ -7,6 +7,7 @@ import {
   For,
   Match,
   on,
+  onCleanup,
   Show,
   Switch,
   useContext,
@@ -81,6 +82,34 @@ import { UI } from "@/cli/ui.ts"
 
 addDefaultParsers(parsers.parsers)
 
+// Session capabilities seam -- Level 3 extension point for Renkei engine.
+// See engine/AGENTS.md for seam documentation.
+declare global {
+  // eslint-disable-next-line no-var
+  var __renkei_sessionCapabilities:
+    | ((sessionInfo: { parentID: string | undefined }, defaults: SessionCapabilities) => SessionCapabilities)
+    | undefined
+}
+
+type SessionCapabilities = {
+  promptVisible: boolean
+  sidebarVisible: boolean
+  permissionsEnabled: boolean
+  questionsEnabled: boolean
+  exitKeybindActive: boolean
+  submissionMethod: "sync" | "async"
+  shellModeAllowed: boolean
+  commandsAllowed: boolean
+  agentCyclingAllowed: boolean
+  variantCyclingAllowed: boolean
+}
+
+// Capabilities signal for app-level consumers (agent/variant cycling guards).
+// This inverted dependency (app.tsx reads from session) is necessary because
+// the Session component owns the capabilities memo but app.tsx registers the
+// cycling commands. See engine/AGENTS.md Level 3 Patches.
+export const [currentCapabilities, setCurrentCapabilities] = createSignal<SessionCapabilities | undefined>(undefined)
+
 class CustomSpeedScroll implements ScrollAcceleration {
   constructor(private speed: number) {}
 
@@ -124,22 +153,6 @@ export function Session() {
       .toSorted((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))
   })
   const messages = createMemo(() => sync.data.message[route.sessionID] ?? [])
-  const permissions = createMemo(() => {
-    if (session()?.parentID) return []
-    return children().flatMap((x) => sync.data.permission[x.id] ?? [])
-  })
-  const questions = createMemo(() => {
-    if (session()?.parentID) return []
-    return children().flatMap((x) => sync.data.question[x.id] ?? [])
-  })
-
-  const pending = createMemo(() => {
-    return messages().findLast((x) => x.role === "assistant" && !x.time.completed)?.id
-  })
-
-  const lastAssistant = createMemo(() => {
-    return messages().findLast((x) => x.role === "assistant")
-  })
 
   const dimensions = useTerminalDimensions()
   const [sidebar, setSidebar] = kv.signal<"auto" | "hide">("sidebar", "auto")
@@ -156,11 +169,43 @@ export function Session() {
   const [showGenericToolOutput, setShowGenericToolOutput] = kv.signal("generic_tool_output_visibility", false)
 
   const wide = createMemo(() => dimensions().width > 120)
-  const sidebarVisible = createMemo(() => {
-    if (session()?.parentID) return false
-    if (sidebarOpen()) return true
-    if (sidebar() === "auto" && wide()) return true
-    return false
+  const capabilities = createMemo((): SessionCapabilities => {
+    const isChild = !!session()?.parentID
+    const defaults: SessionCapabilities = {
+      promptVisible: !isChild,
+      sidebarVisible: isChild ? false : sidebarOpen() || (sidebar() === "auto" && wide()),
+      permissionsEnabled: !isChild,
+      questionsEnabled: !isChild,
+      exitKeybindActive: isChild,
+      submissionMethod: "sync",
+      shellModeAllowed: true,
+      commandsAllowed: true,
+      agentCyclingAllowed: true,
+      variantCyclingAllowed: true,
+    }
+    if (process.env.RENKEI_SESSION_CAPABILITIES && typeof globalThis.__renkei_sessionCapabilities === "function") {
+      return globalThis.__renkei_sessionCapabilities({ parentID: session()?.parentID }, defaults)
+    }
+    return defaults
+  })
+  createEffect(() => setCurrentCapabilities(capabilities()))
+  onCleanup(() => setCurrentCapabilities(undefined))
+  const sidebarVisible = createMemo((): boolean => {
+    return capabilities().sidebarVisible
+  })
+  const permissions = createMemo(() => {
+    if (!capabilities().permissionsEnabled) return []
+    return children().flatMap((x) => sync.data.permission[x.id] ?? [])
+  })
+  const questions = createMemo(() => {
+    if (!capabilities().questionsEnabled) return []
+    return children().flatMap((x) => sync.data.question[x.id] ?? [])
+  })
+  const pending = createMemo(() => {
+    return messages().findLast((x) => x.role === "assistant" && !x.time.completed)?.id
+  })
+  const lastAssistant = createMemo(() => {
+    return messages().findLast((x) => x.role === "assistant")
   })
   const showTimestamps = createMemo(() => timestamps() === "show")
   const contentWidth = createMemo(() => dimensions().width - (sidebarVisible() ? 42 : 0) - 4)
@@ -248,7 +293,7 @@ export function Session() {
   })
 
   useKeyboard((evt) => {
-    if (!session()?.parentID) return
+    if (!capabilities().exitKeybindActive) return
     if (keybind.match("app_exit", evt)) {
       exit()
     }
@@ -1118,7 +1163,11 @@ export function Session() {
                 <QuestionPrompt request={questions()[0]} />
               </Show>
               <Prompt
-                visible={!session()?.parentID && permissions().length === 0 && questions().length === 0}
+                visible={capabilities().promptVisible && permissions().length === 0 && questions().length === 0}
+                submissionMethod={capabilities().submissionMethod}
+                shellModeAllowed={capabilities().shellModeAllowed}
+                commandsAllowed={capabilities().commandsAllowed}
+                isChildSession={!!session()?.parentID}
                 ref={(r) => {
                   prompt = r
                   promptRef.set(r)

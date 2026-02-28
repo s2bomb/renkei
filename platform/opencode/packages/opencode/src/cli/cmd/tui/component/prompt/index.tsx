@@ -43,6 +43,11 @@ export type PromptProps = {
   ref?: (ref: PromptRef) => void
   hint?: JSX.Element
   showPlaceholder?: boolean
+  // Session capability policies (from capabilities seam)
+  submissionMethod?: "sync" | "async"
+  shellModeAllowed?: boolean
+  commandsAllowed?: boolean
+  isChildSession?: boolean
 }
 
 export type PromptRef = {
@@ -572,6 +577,10 @@ export function Prompt(props: PromptProps) {
     const variant = local.model.variant.current()
 
     if (store.mode === "shell") {
+      if (props.shellModeAllowed === false) {
+        setStore("mode", "normal")
+        return
+      }
       sdk.client.session.shell({
         sessionID,
         agent: local.agent.current().name,
@@ -590,6 +599,7 @@ export function Prompt(props: PromptProps) {
         return sync.data.command.some((x) => x.name === command)
       })
     ) {
+      if (props.commandsAllowed === false) return
       // Parse command from first line, preserve multi-line content in arguments
       const firstLineEnd = inputText.indexOf("\n")
       const firstLine = firstLineEnd === -1 ? inputText : inputText.slice(0, firstLineEnd)
@@ -613,10 +623,9 @@ export function Prompt(props: PromptProps) {
           })),
       })
     } else {
-      sdk.client.session
-        .prompt({
+      if (props.submissionMethod === "async") {
+        sdk.client.session.promptAsync({
           sessionID,
-          ...selectedModel,
           messageID,
           agent: local.agent.current().name,
           model: selectedModel,
@@ -633,7 +642,29 @@ export function Prompt(props: PromptProps) {
             })),
           ],
         })
-        .catch(() => {})
+      } else {
+        sdk.client.session
+          .prompt({
+            sessionID,
+            ...selectedModel,
+            messageID,
+            agent: local.agent.current().name,
+            model: selectedModel,
+            variant,
+            parts: [
+              {
+                id: Identifier.ascending("part"),
+                type: "text",
+                text: inputText,
+              },
+              ...nonTextParts.map((x) => ({
+                id: Identifier.ascending("part"),
+                ...x,
+              })),
+            ],
+          })
+          .catch(() => {})
+      }
     }
     history.append({
       ...store.prompt,
@@ -750,6 +781,7 @@ export function Prompt(props: PromptProps) {
   })
 
   const placeholderText = createMemo(() => {
+    if (props.isChildSession) return "Reply to subagent..."
     if (props.sessionID) return undefined
     if (store.mode === "shell") {
       const example = SHELL_PLACEHOLDERS[store.placeholder % SHELL_PLACEHOLDERS.length]
@@ -872,6 +904,7 @@ export function Prompt(props: PromptProps) {
                   }
                 }
                 if (e.name === "!" && input.visualCursor.offset === 0) {
+                  if (props.shellModeAllowed === false) return
                   setStore("placeholder", Math.floor(Math.random() * SHELL_PLACEHOLDERS.length))
                   setStore("mode", "shell")
                   e.preventDefault()
@@ -1133,9 +1166,11 @@ export function Prompt(props: PromptProps) {
                       {keybind.print("variant_cycle")} <span style={{ fg: theme.textMuted }}>variants</span>
                     </text>
                   </Show>
-                  <text fg={theme.text}>
-                    {keybind.print("agent_cycle")} <span style={{ fg: theme.textMuted }}>agents</span>
-                  </text>
+                  <Show when={!props.isChildSession}>
+                    <text fg={theme.text}>
+                      {keybind.print("agent_cycle")} <span style={{ fg: theme.textMuted }}>agents</span>
+                    </text>
+                  </Show>
                   <text fg={theme.text}>
                     {keybind.print("command_list")} <span style={{ fg: theme.textMuted }}>commands</span>
                   </text>
