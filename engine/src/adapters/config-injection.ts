@@ -29,5 +29,6 @@ export function buildLaunchEnv(input: ConfigInjectionInput): Result<LaunchEnviro
     OPENCODE_CONFIG_DIR: input.engineConfig.configDirPath,
     RENKEI_ENGINE_SOURCE: input.resolution.sourcePath,
     RENKEI_WORKTREE_OVERRIDE: input.worktreeOverride,
+    RENKEI_SESSION_CAPABILITIES: "override",
   })
 }

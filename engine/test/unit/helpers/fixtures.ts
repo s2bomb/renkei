@@ -38,6 +38,7 @@ export function launchEnvironment(overrides?: Partial<LaunchEnvironment>): Launc
     OPENCODE_CONFIG_DIR: "/home/user/renkei/dev/engine/.opencode",
     RENKEI_ENGINE_SOURCE: "/home/user/renkei/dev",
     RENKEI_WORKTREE_OVERRIDE: undefined,
+    RENKEI_SESSION_CAPABILITIES: "override",
     ...overrides,
   }
 }
