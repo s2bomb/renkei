@@ -235,6 +235,45 @@ All four quality gate commands must exit 0. On a clean-slate codebase (no featur
 
 ---
 
+## Level 3 Patches
+
+Active patches on the vendored platform. Each entry records what the patch adds, why it is needed, which engine features depend on it, and how it survives rebaseline.
+
+### Patch 1: Session Capabilities Seam
+
+**Added by**: item-012
+**Date**: 2026-03-01
+
+**What it adds**: A session capabilities computation in `session/index.tsx` that consolidates five scattered `session()?.parentID` guards into a single reactive `capabilities` memo with an override mechanism. The override is a function slot on `globalThis.__renkei_sessionCapabilities`, activated by the `RENKEI_SESSION_CAPABILITIES` environment variable. Also extends `PromptProps` in `prompt/index.tsx` with session policy props and adds a `currentCapabilities` signal export for `app.tsx` agent/variant cycling guards.
+
+**Why it is needed**: No existing OpenCode seam (Level 1 or 2) can control child session TUI capabilities. The plugin hooks are server-side. TuiEvent, command registry, and config cannot control component rendering. Level 3 seam decision flowchart walked in spec.md Section 2.
+
+**Files patched**:
+
+| File | Changes | Rebaseline Notes |
+|---|---|---|
+| `session/index.tsx` | `SessionCapabilities` type, `capabilities` memo, 5 guard replacements, `currentCapabilities` signal export | Memo is in the stable computation region (~lines 119-165). Guard replacements are single-expression swaps. Signal export is module-level. |
+| `prompt/index.tsx` | 4 new optional props on `PromptProps`, 6 conditional branches in component | Props are additive (optional with permissive defaults). Branches are at existing decision points. |
+| `app.tsx` | 1 import, 3 guard checks in cycling commands | Guards are one-line additions inside existing `onSelect` handlers. |
+
+**Dependent features**:
+- `engine/src/features/subagent-input.ts` -- enables user input in child sessions
+
+**Four conditions verification**:
+
+| Condition | Satisfied | Evidence |
+|---|---|---|
+| Minimal | Yes | Hook only. Zero feature logic. All policy decisions computed in engine. |
+| Documented | Yes | This section. |
+| Positioned | Yes | Memo in stable region. Guard swaps are single expressions. Props are additive. |
+| Enables freedom | Yes | Capabilities object controls all 5 existing + 5 new child session behaviours. Any future child-session-specific feature composes through the same surface. |
+
+**Known limitations (v1)**:
+- No runtime type validation across the globalThis boundary. Engine and platform types are structurally isomorphic. Divergence requires manual synchronisation. See api-design.md DR-1.
+- `currentCapabilities` is module-level state. Single active session assumption. See api-design.md DR-3.
+
+---
+
 ## Dependencies
 
 **Platform (OpenCode)**: The vendored platform dependency. The engine composes through OpenCode's seams; it does not own or maintain the platform's internals. Relationship maintained through rebaseline: pull upstream changes, verify seam adapters, re-apply Level 3 patches.
@@ -249,21 +288,18 @@ All four quality gate commands must exit 0. On a clean-slate codebase (no featur
 
 ## Current State
 
-Honest record of what exists as of item-009.
+Honest record of what exists as of item-012.
 
 | What | Status |
 |---|---|
 | Governing doctrine (this document) | Written -- item-009 |
-| engine/src/ | Exists, contains only placeholder index.ts |
-| Seam adapters | None implemented |
-| Feature code | None written |
-| Composition with platform | None |
-| Quality gates (typecheck, lint) | Functional on clean codebase |
-| Test suite | No test files (expected -- no features yet) |
-
-**Implementation begins in item-010.**
-
-Prior M2 scaffolding (29 files, ~4,700 lines in `engine/src/runtime/`) proved patterns but connected to in-memory mocks, not real OpenCode seams. It was removed as part of item-009. Git history preserves all deleted files for reference patterns (Result types, dependency injection, typed error discriminants, HTTP health checks).
+| engine/src/ | Adapter and feature code |
+| Seam adapters | 1 implemented: session-capabilities (item-012) |
+| Feature code | 1 feature: subagent-input (item-012) |
+| Composition with platform | 1 Level 3 patch: session capabilities seam |
+| Quality gates (typecheck, lint) | Functional |
+| Test suite | 8 unit tests (session-capabilities adapter, subagent-input feature) |
+| Level 3 patches | 1: session capabilities seam (see above) |
 
 ---
 
