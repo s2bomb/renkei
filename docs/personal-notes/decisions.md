@@ -193,6 +193,95 @@ Renkei exists to **define and audit agent archetypes from the most fundamental l
 
 ---
 
+## Harness Architecture: Composition Over Vanilla OpenCode
+
+**Decision**: The harness is a pure composition layer over vanilla OpenCode. Zero fork. OpenCode is treated as an upstream dependency with no modifications.
+
+**Date**: 2026-02-19
+
+**Grounding**:
+- The `openteams` branch (40+ commits, 2026-02-14 to 2026-02-18) prototyped team primitives directly inside OpenCode before Renkei existed as a separate repo. The M1/M2 research incorrectly derived "fork boundaries" by diffing the `openteams` branch against upstream (`git diff upstream/dev..openteams`), which described existing fork work rather than analyzing composition limitations. The fork was the evidence for needing a fork -- circular reasoning.
+- The fork threshold table contained `diffPreview` fields that were literal excerpts from the `openteams` branch diff.
+- Complexity compounds. Maintaining a fork creates an ongoing merge tax against upstream. Every upstream release becomes a conflict resolution exercise. This cost compounds with every feature added to either side.
+- Composition preserves the option to propose upstream extension points if composition seams prove insufficient, without the sunk cost of fork maintenance.
+
+**What this means**:
+- OpenCode is a dependency, not a sibling on disk.
+- If a composition seam is insufficient for future needs (e.g., teams), the approach is to propose an OpenCode extension point upstream, not maintain fork patches.
+- The `openteams` branch is preserved as historical prototype work. It will be brought back as composition-layer work when the harness is stable and teams become active scope.
+- Teams primitive is future scope, not current M1 scope.
+
+**What was removed**: 6 runtime modules (fork-threshold, async-lifecycle, provenance, teammate-session, mode-selector, integration-depth-policy), 6 test files, all fork/teammate/provenance types from the type system. 29 unit tests remain (down from 49), all passing. Typecheck and lint clean.
+
+---
+
+## Seam Hierarchy: Conditioned Platform Extension
+
+**Decision**: The engine extends the platform through a four-level seam hierarchy. Level 3 (patch to create a new seam) is an accepted, conditioned mechanism -- not a fork. The previous "zero fork, propose upstream" position is superseded.
+
+**Date**: 2026-02-28
+
+**Grounding**:
+- Items 001-004 proved that not all required behaviours are achievable through existing seams. Item-001 identified Bucket C (3 behaviours requiring new hooks). Item-003 confirmed the gap is real and bounded by proving 3 Bucket B capabilities composable without vendor changes. Item-004 resolved C-1 (UI message part registration) through a custom frontend wrapper package.
+- The plugin system alone is insufficient (grounded in item-001 gap analysis and CEO direction).
+- The Brave/Chromium model demonstrates that maintaining minimal, conditioned patches on an upstream platform is a proven, sustainable pattern at browser scale.
+- The four conditions for Level 3 patches (minimal, documented, merge-conflict-positioned, enables freedom) constrain patches to extension point creation, not feature insertion -- preserving the composition relationship.
+
+**What this supersedes**: "Harness Architecture: Composition Over Vanilla OpenCode" (2026-02-19). The composition principle survives; the "zero modifications" and "propose upstream, not patches" clauses do not.
+
+**Reference**: `thoughts/projects/2026-02-26-opencode-extension-seams/sources/ceo-seam-hierarchy-doctrine-2026-02-28.md`
+
+---
+
+## Stage Ownership Semantics
+
+**Decision**: Stage-leader invocation implies immediate stage execution. There is no conversational waiting state.
+
+When a leader delegates to a downstream stage leader, the downstream leader either:
+
+1. runs immediately to stage outcome, or
+2. returns `blocked` with explicit blocker ownership.
+
+It does not return intake-status chat as a completion condition.
+
+**Grounding**:
+- Renkei system truth: agents behave more like stateless, non-deterministic functions than humans-in-chat; invocation is execution context, not optional invitation.
+- Observed runtime failures (item-004/item-005 flows): receipt/plan return contracts produced handoff-only loops, stage-ownership leaks, and direct downstream delegation by the wrong leader.
+- Observed execution leak: intake/preflight pass returned `running` with no execution-phase evidence, causing false progress signals.
+- One-stage-owner principle from team topology: parent leader hands off ownership; downstream leader owns the stage until terminal outcome or blocked escalation.
+
+**Operational consequences**:
+- Parent-to-child contracts are terminal (`ready-for-execution` or `blocked`), not receipt-style.
+- `shaper` does not directly delegate execution for active items once `tech-lead` handoff is issued (except explicit decision-owner override).
+- `tech-lead` does not bypass member artifact ownership in normal operation.
+- `execution-lead` does not return intake/preflight pass as terminal status; first return after transfer must include concrete execution-phase evidence or `blocked`.
+- Leader-to-leader terminal contracts use `outcome` semantics instead of `status` chat semantics.
+
+**Reference**:
+- `framework/archetypes/product/shaper/doctrine/orchestration.md`
+- `framework/archetypes/technical-preparation/tech-lead/doctrine/process.md`
+- `framework/archetypes/execution/execution-lead/doctrine/process.md`
+
+### Leader Event-Ledger Duty
+
+**Decision**: Team leaders append project and item ledger events for stage actions as part of their output contract.
+
+Required stage actions to log:
+- intake received
+- handoff issued / transfer result
+- stage outcome (`complete`/`blocked`/`escalated`)
+- escalation records (with blocker ownership)
+
+**Grounding**:
+- State authority in this system is path + append-only events.
+- Missing ledger writes make stage transitions non-auditable and break maintenance handoff.
+
+**Reference**:
+- `framework/archetypes/technical-preparation/tech-lead/doctrine/output-contract.md`
+- `framework/archetypes/execution/execution-lead/doctrine/output-contract.md`
+
+---
+
 ## Critical Path
 
 Strict dependency order:

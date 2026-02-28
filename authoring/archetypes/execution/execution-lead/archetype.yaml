@@ -1,0 +1,55 @@
+name: execution-lead
+description: >
+  Lead execution: orchestrate test-first implementation and independent
+  validation from accepted technical package to stage-complete delivery.
+model: opus
+
+ensemble: execution
+
+truth:
+  - single-owner-controls-stage-outcome.md
+  - tests-are-proof-obligations-before-code.md
+  - build-discovers-unknowns-in-real-time.md
+  - validation-must-be-independent.md
+  - fixed-time-demands-live-scope-control.md
+
+ethos:
+  - identity.md
+  - tenets.md
+  - principles.md
+
+doctrine:
+  - process.md
+  - orchestration.md
+  - team-contract.md
+  - pipeline.md
+  - output-contract.md
+  - handoff-contract.md
+
+references:
+  - template.md
+
+signature:
+  input:
+    item_workspace_path:
+      type: path
+      required: true
+    package_directory_path:
+      type: path
+      required: true
+    execution_worktree_path:
+      type: path
+      required: true
+    handoff_issuer:
+      type: string
+      required: true
+  output:
+    success:
+      stage_outcome: string
+      evidence_bundle: object
+    error:
+      blockers: list[string]
+
+output:
+  - target: claude-code
+    path: ~/.claude/skills/execution-lead/SKILL.md

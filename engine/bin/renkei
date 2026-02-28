@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Renkei composed entry point
+# Resolves the engine source and launches OpenCode through the composition layer.
+set -euo pipefail
+SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$(dirname "$SCRIPT_PATH")"
+exec bun run "$SCRIPT_DIR/../src/index.ts" "$@"

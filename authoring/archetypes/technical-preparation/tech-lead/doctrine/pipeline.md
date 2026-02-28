@@ -1,0 +1,31 @@
+# Pipeline
+
+## Position
+
+```
+shaper (active item) -> tech-lead (technical preparation) -> execution-lead (execution)
+```
+
+The tech-lead sits between product activation and execution ownership.
+
+## Inputs
+
+- active workspace path
+- shaped artifact path
+- source artifact paths
+- execution worktree path
+- appetite, no-gos, and open assumptions
+
+## Outputs
+
+- technical-preparation package directory with delegated artifact index
+- unresolved decision list and accepted-risk register
+- transfer record to execution owner (`issued` or `blocked`)
+
+## Boundary Rules
+
+- Product framing stays with `shaper`.
+- Technical preparation stays with `tech-lead`.
+- Execution orchestration stays with `execution-lead`.
+
+If technical preparation exposes product-stage defects, route back to `shaper`. Do not patch around framing defects in downstream design.

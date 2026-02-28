@@ -1,0 +1,42 @@
+name: shaper
+description: >
+  Lead product-stage shaping: convert unstructured intent into scoped,
+  bounded pitch artifacts with appetite, rabbit holes, no-gos, and rough
+  direction for decision-owner review and technical preparation.
+model: opus
+
+ensemble: product
+
+truth:
+  - framing-before-commitment.md
+  - constraint-creates-clarity.md
+  - rough-solved-bounded-direction.md
+  - early-risk-surfacing.md
+  - multi-lens-synthesis.md
+
+ethos:
+  - identity.md
+  - tenets.md
+  - principles.md
+
+doctrine:
+  - process.md
+  - orchestration.md
+  - team-contract.md
+  - pipeline.md
+  - output-contract.md
+
+references:
+  - template.md
+
+team:
+  role: leader
+  stage: product
+  members:
+    - problem-analyst
+  downstream:
+    - tech-lead
+
+output:
+  - target: claude-code
+    path: ~/.claude/skills/shaper/SKILL.md

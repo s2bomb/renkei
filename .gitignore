@@ -8,4 +8,7 @@ __pycache__/
 .DS_Store
 
 # Dev
+thoughts
 thoughts/
+.env
+.envrc

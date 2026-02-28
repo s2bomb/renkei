@@ -1,0 +1,29 @@
+{
+  "version": "2026-02-19",
+  "entries": [
+    {
+      "id": "tool-registry",
+      "seam": "tool-registry",
+      "upstreamSurface": "tool/registry.ts",
+      "rationale": "Harness tool composition must use OpenCode tool registry seam."
+    },
+    {
+      "id": "plugin-hooks",
+      "seam": "plugin-hooks",
+      "upstreamSurface": "plugin/index.ts",
+      "rationale": "Harness lifecycle composition runs through OpenCode plugin hooks."
+    },
+    {
+      "id": "skill-load",
+      "seam": "skill-load",
+      "upstreamSurface": "skill/skill.ts",
+      "rationale": "Harness archetype loading composes with OpenCode skill loading."
+    },
+    {
+      "id": "sdk-client",
+      "seam": "sdk-client",
+      "upstreamSurface": "server/server.ts and sdk/js",
+      "rationale": "Harness session operations compose through OpenCode SDK/server surfaces."
+    }
+  ]
+}

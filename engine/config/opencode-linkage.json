@@ -1,0 +1,13 @@
+{
+  "mode": "subtree",
+  "opencodeRoot": "platform/opencode",
+  "provenance": {
+    "remote": "https://github.com/sst/opencode.git",
+    "ref": "v1.2.14",
+    "upstreamSha": "de2bc25677b419d2af0da8b6a24a05d3f22b67a8",
+    "syncedAt": "2026-02-26T00:00:00Z",
+    "previousRef": "origin/dev",
+    "previousVersion": "1.2.6",
+    "previousSyncedAt": "2026-02-19T05:30:41Z"
+  }
+}

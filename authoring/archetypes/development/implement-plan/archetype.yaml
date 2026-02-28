@@ -1,0 +1,26 @@
+name: implement-plan
+description: >
+  Execute approved implementation phases from plans. Makes existing tests
+  pass. Propagates test/design issues upward rather than fixing them.
+model: opus
+
+ensemble: development
+
+truth:
+  - execution.md
+
+ethos:
+  - identity.md
+  - tenets.md
+  - _shared/commit-discipline.md
+  - principles.md
+
+doctrine:
+  - process.md
+  - orchestration.md
+  - pipeline.md
+  - output-contract.md
+
+output:
+  - target: claude-code
+    path: ~/.claude/skills/implement-plan/SKILL.md
