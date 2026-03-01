@@ -131,4 +131,25 @@ describe("buildLaunchEnv", () => {
     const env = (result as Ok<LaunchEnvironment>).value
     expect(env.RENKEI_ENGINE_SOURCE).toBe(fixtureRoot)
   })
+
+  test("T-C07: RENKEI_SESSION_CAPABILITIES contains child policy JSON", () => {
+    const input = validInput()
+
+    const result = buildLaunchEnv(input)
+    expect(isOk(result)).toBe(true)
+    const env = (result as Ok<LaunchEnvironment>).value
+
+    const parsed = JSON.parse(env.RENKEI_SESSION_CAPABILITIES) as {
+      child?: {
+        promptVisible?: boolean
+        submissionMethod?: "sync" | "async"
+        shellModeAllowed?: boolean
+      }
+    }
+
+    expect(parsed.child).toBeDefined()
+    expect(parsed.child?.promptVisible).toBe(true)
+    expect(parsed.child?.submissionMethod).toBe("async")
+    expect(parsed.child?.shellModeAllowed).toBe(false)
+  })
 })

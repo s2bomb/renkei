@@ -83,13 +83,7 @@ import { UI } from "@/cli/ui.ts"
 addDefaultParsers(parsers.parsers)
 
 // Session capabilities seam -- Level 3 extension point for Renkei engine.
-// See engine/AGENTS.md for seam documentation.
-declare global {
-  // eslint-disable-next-line no-var
-  var __renkei_sessionCapabilities:
-    | ((sessionInfo: { parentID: string | undefined }, defaults: SessionCapabilities) => SessionCapabilities)
-    | undefined
-}
+// Policy comes from RENKEI_SESSION_CAPABILITIES (JSON contract) set by engine launch.
 
 type SessionCapabilities = {
   promptVisible: boolean
@@ -102,6 +96,43 @@ type SessionCapabilities = {
   commandsAllowed: boolean
   agentCyclingAllowed: boolean
   variantCyclingAllowed: boolean
+}
+
+type SessionCapabilitiesPolicy = {
+  child?: Partial<SessionCapabilities>
+}
+
+function parseChildCapabilitiesPolicy(raw: string | undefined): Partial<SessionCapabilities> | undefined {
+  if (!raw) return undefined
+
+  let parsed: unknown
+  try {
+    parsed = JSON.parse(raw)
+  } catch {
+    return undefined
+  }
+
+  if (!parsed || typeof parsed !== "object") return undefined
+
+  const child = (parsed as SessionCapabilitiesPolicy).child
+  if (!child || typeof child !== "object") return undefined
+
+  const result: Partial<SessionCapabilities> = {}
+
+  if (typeof child.promptVisible === "boolean") result.promptVisible = child.promptVisible
+  if (typeof child.sidebarVisible === "boolean") result.sidebarVisible = child.sidebarVisible
+  if (typeof child.permissionsEnabled === "boolean") result.permissionsEnabled = child.permissionsEnabled
+  if (typeof child.questionsEnabled === "boolean") result.questionsEnabled = child.questionsEnabled
+  if (typeof child.exitKeybindActive === "boolean") result.exitKeybindActive = child.exitKeybindActive
+  if (child.submissionMethod === "sync" || child.submissionMethod === "async") {
+    result.submissionMethod = child.submissionMethod
+  }
+  if (typeof child.shellModeAllowed === "boolean") result.shellModeAllowed = child.shellModeAllowed
+  if (typeof child.commandsAllowed === "boolean") result.commandsAllowed = child.commandsAllowed
+  if (typeof child.agentCyclingAllowed === "boolean") result.agentCyclingAllowed = child.agentCyclingAllowed
+  if (typeof child.variantCyclingAllowed === "boolean") result.variantCyclingAllowed = child.variantCyclingAllowed
+
+  return result
 }
 
 // Capabilities signal for app-level consumers (agent/variant cycling guards).
@@ -169,6 +200,7 @@ export function Session() {
   const [showGenericToolOutput, setShowGenericToolOutput] = kv.signal("generic_tool_output_visibility", false)
 
   const wide = createMemo(() => dimensions().width > 120)
+  const childPolicy = createMemo(() => parseChildCapabilitiesPolicy(process.env.RENKEI_SESSION_CAPABILITIES))
   const capabilities = createMemo((): SessionCapabilities => {
     const isChild = !!session()?.parentID
     const defaults: SessionCapabilities = {
@@ -183,10 +215,17 @@ export function Session() {
       agentCyclingAllowed: true,
       variantCyclingAllowed: true,
     }
-    if (process.env.RENKEI_SESSION_CAPABILITIES && typeof globalThis.__renkei_sessionCapabilities === "function") {
-      return globalThis.__renkei_sessionCapabilities({ parentID: session()?.parentID }, defaults)
+
+    let resolved = defaults
+
+    if (isChild && childPolicy()) {
+      resolved = {
+        ...resolved,
+        ...childPolicy(),
+      }
     }
-    return defaults
+
+    return resolved
   })
   createEffect(() => setCurrentCapabilities(capabilities()))
   onCleanup(() => setCurrentCapabilities(undefined))
@@ -269,7 +308,7 @@ export function Session() {
   let prompt: PromptRef
   const keybind = useKeybind()
 
-  // Allow exit when in child session (prompt is hidden)
+  // Child-session exit handling when capability policy enables it.
   const exit = useExit()
 
   createEffect(() => {
