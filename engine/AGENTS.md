@@ -244,7 +244,7 @@ Active patches on the vendored platform. Each entry records what the patch adds,
 **Added by**: item-012
 **Date**: 2026-03-01
 
-**What it adds**: A session capabilities computation in `session/index.tsx` that consolidates five scattered `session()?.parentID` guards into a single reactive `capabilities` memo with an override mechanism. The override is a function slot on `globalThis.__renkei_sessionCapabilities`, activated by the `RENKEI_SESSION_CAPABILITIES` environment variable. Also extends `PromptProps` in `prompt/index.tsx` with session policy props and adds a `currentCapabilities` signal export for `app.tsx` agent/variant cycling guards.
+**What it adds**: A session capabilities computation in `session/index.tsx` that consolidates five scattered `session()?.parentID` guards into a single reactive `capabilities` memo driven by `RENKEI_SESSION_CAPABILITIES` JSON policy. Also extends `PromptProps` in `prompt/index.tsx` with session policy props and adds a `currentCapabilities` signal export for `app.tsx` agent/variant cycling guards.
 
 **Why it is needed**: No existing OpenCode seam (Level 1 or 2) can control child session TUI capabilities. The plugin hooks are server-side. TuiEvent, command registry, and config cannot control component rendering. Level 3 seam decision flowchart walked in spec.md Section 2.
 
@@ -256,8 +256,9 @@ Active patches on the vendored platform. Each entry records what the patch adds,
 | `prompt/index.tsx` | 4 new optional props on `PromptProps`, 6 conditional branches in component | Props are additive (optional with permissive defaults). Branches are at existing decision points. |
 | `app.tsx` | 1 import, 3 guard checks in cycling commands | Guards are one-line additions inside existing `onSelect` handlers. |
 
-**Dependent features**:
-- `engine/src/features/subagent-input.ts` -- enables user input in child sessions
+**Dependent engine modules**:
+- `engine/src/adapters/config-injection.ts` -- injects `RENKEI_SESSION_CAPABILITIES` policy at launch
+- `engine/src/adapters/session-capabilities.ts` -- engine-owned policy contract and serializer
 
 **Four conditions verification**:
 
@@ -269,7 +270,7 @@ Active patches on the vendored platform. Each entry records what the patch adds,
 | Enables freedom | Yes | Capabilities object controls all 5 existing + 5 new child session behaviours. Any future child-session-specific feature composes through the same surface. |
 
 **Known limitations (v1)**:
-- No runtime type validation across the globalThis boundary. Engine and platform types are structurally isomorphic. Divergence requires manual synchronisation. See api-design.md DR-1.
+- No runtime schema versioning for the JSON policy contract. Field evolution must remain backward compatible.
 - `currentCapabilities` is module-level state. Single active session assumption. See api-design.md DR-3.
 
 ---
@@ -295,10 +296,10 @@ Honest record of what exists as of item-012.
 | Governing doctrine (this document) | Written -- item-009 |
 | engine/src/ | Adapter and feature code |
 | Seam adapters | 1 implemented: session-capabilities (item-012) |
-| Feature code | 1 feature: subagent-input (item-012) |
+| Feature code | No dedicated feature module (policy injected at launch via adapters) |
 | Composition with platform | 1 Level 3 patch: session capabilities seam |
 | Quality gates (typecheck, lint) | Functional |
-| Test suite | 8 unit tests (session-capabilities adapter, subagent-input feature) |
+| Test suite | 37 unit tests (includes session-capabilities adapter + launch env contract checks) |
 | Level 3 patches | 1: session capabilities seam (see above) |
 
 ---
