@@ -30,6 +30,7 @@ export interface LaunchEnvironment {
   readonly OPENCODE_CONFIG_DIR: string
   readonly RENKEI_ENGINE_SOURCE: string
   readonly RENKEI_WORKTREE_OVERRIDE: string | undefined
+  readonly RENKEI_SESSION_CAPABILITIES: string
 }
 
 export interface LaunchCommand {

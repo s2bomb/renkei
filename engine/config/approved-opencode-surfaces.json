@@ -24,6 +24,14 @@
       "seam": "sdk-client",
       "upstreamSurface": "server/server.ts and sdk/js",
       "rationale": "Harness session operations compose through OpenCode SDK/server surfaces."
+    },
+    {
+      "id": "session-capabilities",
+      "seam": "session-capabilities",
+      "upstreamSurface": "cli/cmd/tui/routes/session/index.tsx + component/prompt/index.tsx + app.tsx",
+      "rationale": "Engine session capability override via RENKEI_SESSION_CAPABILITIES JSON policy. Level 3 seam created by item-012. Enables engine to control child session TUI behaviour.",
+      "level": 3,
+      "patchedIn": "item-012"
     }
   ]
 }

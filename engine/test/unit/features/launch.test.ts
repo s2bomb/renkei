@@ -116,6 +116,7 @@ describe("buildLaunchCommand", () => {
     expect(cmd.env.OPENCODE_CONFIG_CONTENT).toBe(env.OPENCODE_CONFIG_CONTENT)
     expect(cmd.env.OPENCODE_CONFIG_DIR).toBe(env.OPENCODE_CONFIG_DIR)
     expect(cmd.env.RENKEI_ENGINE_SOURCE).toBe(env.RENKEI_ENGINE_SOURCE)
+    expect(cmd.env.RENKEI_SESSION_CAPABILITIES).toBe(env.RENKEI_SESSION_CAPABILITIES)
   })
 })
 

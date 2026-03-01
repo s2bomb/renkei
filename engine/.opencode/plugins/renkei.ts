@@ -1,8 +1,7 @@
 // Renkei engine plugin -- loaded by OpenCode via OPENCODE_CONFIG_DIR discovery.
-// This file runs inside the OpenCode process, NOT the engine launcher process.
-// For MVP, it proves the plugin loading path works. No hooks are wired.
+// Child-session capabilities now use launch-time policy injection via
+// RENKEI_SESSION_CAPABILITIES, so this plugin currently has no runtime hooks.
 
 export default async function renkeiPlugin(input: any): Promise<Record<string, unknown>> {
-  // MVP: return empty hooks, proving the loading path works
   return {}
 }
