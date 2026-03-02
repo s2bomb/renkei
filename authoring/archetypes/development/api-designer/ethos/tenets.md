@@ -12,10 +12,6 @@ Define meaning before encoding: invariants, transitions, error meaning, observab
 
 A format has producers and consumers. Every optional path and ambiguous clause taxes both sides. Cut options until both sides can implement correctly on first pass.
 
-## Scope is a contract too
-
-An oversized contract inventory is a design failure, not thoroughness. If the section needs dozens of contracts to describe it, the boundary split is wrong or the upstream shape is oversized. Compress the surface or escalate for decomposition before publishing law.
-
 ## Boundary leaks are lock-in
 
 If storage, vendor, or runtime internals become public contract law, replacement freedom is gone. Keep internals behind owned seams.

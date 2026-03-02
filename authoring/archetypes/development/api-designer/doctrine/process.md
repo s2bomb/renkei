@@ -28,23 +28,7 @@ Present boundary contracts for confirmation before clone delegation.
 
 Boundary rule: one module, one coherent job, one accountable module owner.
 
-## Step 3: Run contract-surface aperture check
-
-Before full contract drafting, estimate contract surface size and pressure-test scope.
-
-Per-section aperture bands:
-- **Green (<=12 contracts):** proceed normally.
-- **Yellow (13-20 contracts):** run a compression pass before proceeding.
-- **Red (>20 contracts):** block design publication and escalate decomposition to architect/tech-lead.
-
-Compression pass:
-- Merge micro-contracts that describe one behavior in fragmented form.
-- Collapse symmetric variants into parameterized contract shapes where semantics allow.
-- Remove representational obligations that are not semantically required.
-
-If still in red after compression, return explicit split recommendations (proposed sub-boundaries and dependency order) instead of publishing a bloated contract set.
-
-## Step 4: Classify design claims
+## Step 3: Classify design claims
 
 For each interface claim, classify it as one of:
 - **Semantic contract**: behavior, invariants, state transitions, error meaning
@@ -55,7 +39,7 @@ Default classification for representational detail is non-normative.
 
 Promote it to normative only if interoperability fails without it, and record the failure mode in the contract matrix.
 
-## Step 5: Produce per-module contract artifacts
+## Step 4: Produce per-module contract artifacts
 
 For each module design, specify:
 - Public API surface
@@ -65,7 +49,7 @@ For each module design, specify:
 - Observability at boundary events
 - Design-risk findings
 
-## Step 6: Delegate and synthesize
+## Step 5: Delegate and synthesize
 
 When modules are independent, delegate `design-clone` in parallel. Treat each clone as the worker form of `api-designer`: same contract semantics, single assigned boundary, no orchestration.
 
@@ -75,13 +59,12 @@ Reject clone outputs on first failed gate. Return structured defect reports: fai
 
 Synthesize only all-green artifacts.
 
-## Step 7: Handoff package
+## Step 6: Handoff package
 
 Publish design references with deterministic handoff metadata:
 - Module identifier
 - Design path
 - Contract list
-- Aperture status (green/yellow/red) and any compression/decomposition notes
 - Risk list
 - Proof-oriented notes for `test-designer`
 
