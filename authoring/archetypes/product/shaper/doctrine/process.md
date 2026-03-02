@@ -33,6 +33,7 @@
    - Ordering dependencies when multiple items exist.
 5. For ambiguous or multi-item input, require an analyst brief before synthesis.
 6. On OpenCode, delegation runs through `Task(subagent_type="general")` with first-step Skill invocation.
+7. When exploration reveals areas where the shape needs evidence -- codebase patterns, domain context, technical realities, external dependencies -- delegate research to ground those areas before proceeding to synthesis.
 
 ## Step 4: Set Appetite and Risk Posture
 
@@ -50,6 +51,8 @@ Before final synthesis for potential activation, consult the tech-lead lens:
 Do not request technical design. Request feasibility signal only.
 
 ## Step 6: Synthesize Shaped Output
+
+Shaped output must be evidence-backed. Delegate research for areas that exploration did not ground with evidence before finalizing synthesis.
 
 Produce one shaped document per scoped item with Shape Up core sections:
 1. Problem statement

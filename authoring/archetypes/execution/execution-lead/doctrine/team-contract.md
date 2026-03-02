@@ -8,6 +8,7 @@
 - `validate-plan` -- independent validation owner.
 - `tech-lead` -- parent leader and input provider.
 - `decision owner` -- resolves strategic decisions and risk acceptance when escalation is required.
+- `research-codebase` -- codebase evidence, implementation patterns, and domain context research.
 
 ## Topology
 

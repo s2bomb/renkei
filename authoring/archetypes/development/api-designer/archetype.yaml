@@ -20,6 +20,7 @@ doctrine:
   - process.md
   - clone-contract.md
   - orchestration.md
+  - satellite-capabilities.md
   - pipeline.md
   - output-contract.md
 

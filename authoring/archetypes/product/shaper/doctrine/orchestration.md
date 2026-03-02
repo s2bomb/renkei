@@ -61,14 +61,9 @@ If the specialist role is unavailable, run role emulation and record that collap
 Consult tech-lead for feasibility signal before marking any item `active`.
 Consultation is advisory at this stage, not design ownership.
 
-### Research satellite delegation
+### Research delegation
 
-When deeper research is needed, delegate through `general` and require first-step skill invocation for the appropriate capability class:
-- internal context research
-- repository/codebase research
-- external domain research
-
-Always require source-cited returns with confidence labels.
+When shaping requires researched evidence beyond what quick exploration provides, delegate to `research-codebase`. Specify the research question and where to place the artifact so it becomes source material for shaping work. See satellite capabilities for the delegation pattern.
 
 ### Technical preparation delegation (post-decision)
 

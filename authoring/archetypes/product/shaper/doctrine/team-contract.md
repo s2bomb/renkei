@@ -7,6 +7,7 @@
 - `tech-lead` -- owns feasibility and implementation-risk signal before activation; owns technical preparation after activation.
 - `decision owner` -- owns commitment authority for state transitions.
 - `execution-lead` -- execution owner after technical-preparation handoff.
+- `research-codebase` -- codebase evidence, implementation patterns, and domain context research.
 
 ## Role Boundaries
 
