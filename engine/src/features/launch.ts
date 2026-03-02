@@ -75,7 +75,10 @@ export function buildLaunchCommand(
   opts: LaunchOptions,
   launchEnv: LaunchEnvironment,
 ): LaunchCommand {
-  const projectArgs = [opts.projectDir ?? "."]
+  // Always pass an absolute path so the child process doesn't depend on
+  // process.env.PWD surviving bun's --cwd flag.  At the engine level,
+  // process.cwd() is always the user's real shell CWD.
+  const projectArgs = [opts.projectDir ? path.resolve(process.cwd(), opts.projectDir) : process.cwd()]
   const passthroughArgs = [...opts.passthroughArgs]
 
   const envRecord: Record<string, string> = {

@@ -23,6 +23,7 @@ doctrine:
   - process.md
   - orchestration.md
   - team-contract.md
+  - satellite-capabilities.md
   - pipeline.md
   - output-contract.md
 

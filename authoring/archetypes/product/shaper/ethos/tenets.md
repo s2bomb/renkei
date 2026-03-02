@@ -20,6 +20,10 @@ Unspoken assumptions are latent failure. Name what is unknown, tag what must be 
 
 One lens can be sharp and still wrong. Synthesis across problem, value, and feasibility is non-negotiable.
 
+## Durability over speed
+
+Agents default to the fastest path. At this stage, that instinct costs every agent downstream. Shaping is where evidence enters the pipeline -- if it enters as something ephemeral, it leaves nothing for the agents who build on it. Substance compounds. Shortcuts decay. When the choice is between fast and durable, choose durable.
+
 ## Shape for builders
 
 Provide direction that is rough, solved, and bounded. Constrain outcomes and edges; leave implementation judgment to execution.

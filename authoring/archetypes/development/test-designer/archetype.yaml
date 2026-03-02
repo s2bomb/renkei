@@ -19,6 +19,7 @@ ethos:
 doctrine:
   - process.md
   - orchestration.md
+  - satellite-capabilities.md
   - pipeline.md
   - output-contract.md
 

@@ -88,7 +88,7 @@ describe("buildLaunchCommand", () => {
   test("T-L13: produces bun run command with correct args and env", () => {
     const res = fixtures.resolution()
     const opts = fixtures.launchOptions({
-      projectDir: "~/project",
+      projectDir: "/abs/project",
       passthroughArgs: ["--model", "claude"],
     })
     const env = fixtures.launchEnvironment()
@@ -105,8 +105,8 @@ describe("buildLaunchCommand", () => {
     expect(cwdArg).toContain("opencode/packages/opencode")
     expect(cmd.args).toContain("--conditions=browser")
     expect(cmd.args).toContain("src/index.ts")
-    // projectDir and passthrough in order after the fixed prefix
-    const projectIdx = cmd.args.indexOf("~/project")
+    // projectDir is resolved to absolute and appears before passthrough args
+    const projectIdx = cmd.args.indexOf("/abs/project")
     const modelIdx = cmd.args.indexOf("--model")
     const claudeIdx = cmd.args.indexOf("claude")
     expect(projectIdx).toBeGreaterThan(-1)
@@ -117,6 +117,40 @@ describe("buildLaunchCommand", () => {
     expect(cmd.env.OPENCODE_CONFIG_DIR).toBe(env.OPENCODE_CONFIG_DIR)
     expect(cmd.env.RENKEI_ENGINE_SOURCE).toBe(env.RENKEI_ENGINE_SOURCE)
     expect(cmd.env.RENKEI_SESSION_CAPABILITIES).toBe(env.RENKEI_SESSION_CAPABILITIES)
+  })
+
+  test("T-L14: project arg is always an absolute path (CWD correctness invariant)", () => {
+    const res = fixtures.resolution()
+    const env = fixtures.launchEnvironment()
+    const cwd = process.cwd()
+
+    // Case 1: no projectDir → uses process.cwd() (always absolute)
+    const cmd1 = buildLaunchCommand(res, fixtures.launchOptions({ projectDir: undefined }), env)
+    const afterIndex1 = cmd1.args.indexOf("src/index.ts")
+    const projectArg1 = cmd1.args[afterIndex1 + 1] as string
+    expect(path.isAbsolute(projectArg1)).toBe(true)
+    expect(projectArg1).toBe(cwd)
+
+    // Case 2: relative projectDir → resolved to absolute against CWD
+    const cmd2 = buildLaunchCommand(res, fixtures.launchOptions({ projectDir: "." }), env)
+    const afterIndex2 = cmd2.args.indexOf("src/index.ts")
+    const projectArg2 = cmd2.args[afterIndex2 + 1] as string
+    expect(path.isAbsolute(projectArg2)).toBe(true)
+    expect(projectArg2).toBe(cwd)
+
+    // Case 3: relative subdir → resolved to absolute against CWD
+    const cmd3 = buildLaunchCommand(res, fixtures.launchOptions({ projectDir: "./subdir" }), env)
+    const afterIndex3 = cmd3.args.indexOf("src/index.ts")
+    const projectArg3 = cmd3.args[afterIndex3 + 1] as string
+    expect(path.isAbsolute(projectArg3)).toBe(true)
+    expect(projectArg3).toBe(path.resolve(cwd, "./subdir"))
+
+    // Case 4: absolute projectDir → passed through unchanged
+    const cmd4 = buildLaunchCommand(res, fixtures.launchOptions({ projectDir: "/explicit/path" }), env)
+    const afterIndex4 = cmd4.args.indexOf("src/index.ts")
+    const projectArg4 = cmd4.args[afterIndex4 + 1] as string
+    expect(path.isAbsolute(projectArg4)).toBe(true)
+    expect(projectArg4).toBe("/explicit/path")
   })
 })
 
