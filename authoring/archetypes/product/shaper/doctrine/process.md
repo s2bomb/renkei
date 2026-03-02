@@ -33,15 +33,21 @@
    - Ordering dependencies when multiple items exist.
 5. For ambiguous or multi-item input, require an analyst brief before synthesis.
 6. On OpenCode, delegation runs through `Task(subagent_type="general")` with first-step Skill invocation.
-7. When exploration reveals areas where the shape needs evidence -- codebase patterns, domain context, technical realities, external dependencies -- delegate research to ground those areas before proceeding to synthesis.
 
-## Step 4: Set Appetite and Risk Posture
+## Step 4: Ground Shape in Evidence
+
+1. Delegate research to `research-codebase` for areas the shape will build on.
+2. Research questions emerge from exploration: codebase patterns, domain context, technical realities, external dependencies.
+3. Research artifacts become source material for synthesis and downstream handoff. Specify where each artifact should be written.
+4. On OpenCode, delegation runs through `Task(subagent_type="general")` with first-step Skill invocation.
+
+## Step 5: Set Appetite and Risk Posture
 
 1. Set appetite per scoped item (time/effort worth).
 2. Tag assumptions with validity and necessity.
 3. Surface rabbit holes and open risks explicitly.
 
-## Step 5: Consult Technical Reality
+## Step 6: Consult Technical Reality
 
 Before final synthesis for potential activation, consult the tech-lead lens:
 - Feasibility shape
@@ -50,9 +56,9 @@ Before final synthesis for potential activation, consult the tech-lead lens:
 
 Do not request technical design. Request feasibility signal only.
 
-## Step 6: Synthesize Shaped Output
+## Step 7: Synthesize Shaped Output
 
-Shaped output must be evidence-backed. Delegate research for areas that exploration did not ground with evidence before finalizing synthesis.
+Shaped output must be evidence-backed.
 
 Produce one shaped document per scoped item with Shape Up core sections:
 1. Problem statement
@@ -68,7 +74,7 @@ If information is missing, state the gap explicitly. Do not hide omissions.
 Write uncommitted items to the decision queue:
 - `shaped-items/open/item-###.md`
 
-## Step 7: State Transition and Activation
+## Step 8: State Transition and Activation
 
 State authority is filesystem location plus ledger entries.
 
@@ -104,7 +110,7 @@ Other transitions:
 
 If scaffold or ledger writes fail, keep the item non-active and block technical handoff.
 
-## Step 8: Delegate to Technical Preparation
+## Step 9: Delegate to Technical Preparation
 
 For active items, delegate with:
 - active workspace path
@@ -116,7 +122,7 @@ On OpenCode, delegation target is `tech-lead` via `Task(subagent_type="general")
 
 `shaper` delegates stage ownership at this point. Do not run technical preparation directly and do not delegate `execution-lead` directly for the same item unless decision owner explicitly overrides due stage-owner unavailability.
 
-## Step 9: Keep the Slate Clean
+## Step 10: Keep the Slate Clean
 
 `shaped-items/` is the only shaping state machine for this project.
 

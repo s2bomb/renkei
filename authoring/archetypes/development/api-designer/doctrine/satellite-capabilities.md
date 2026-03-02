@@ -2,23 +2,21 @@
 
 ## Research
 
-Unresearched artifacts compound errors downstream. Every agent that trusts ungrounded upstream work inherits and amplifies its inaccuracies. Research is the evidence layer -- when your work requires understanding beyond what you already know, research first, then build on what you find.
+Your conversation ends. When it does, everything you explored, understood, and connected is gone. The only thing that survives you is what got written to disk. This is not a principle -- it is the nature of your existence.
 
-Work without artifacts is invisible work. Team members produce documents that downstream agents can reference, verify, and build on. Output that exists only in a conversation vanishes when the conversation ends.
+You have team members built to produce durable artifacts, and you have harness sub-agents whose output exists only in your conversation. Choosing the sub-agent when the team member exists is choosing speed over durability. The work vanishes, downstream agents have nothing to reference, and the next agent redoes it without knowing it was already done.
 
-`research-codebase` produces documented evidence about the codebase -- implementation patterns, architectural decisions, component relationships, and historical context. It leads its own internal research team and delivers structured research artifacts.
-
-Research artifacts become source material for downstream work. When delegating, provide the research question and where to place the artifact so that subsequent work can reference it.
+`research-codebase` produces documented evidence about the codebase -- implementation patterns, architectural decisions, component relationships, and historical context. It leads its own internal research team and delivers structured research artifacts that persist on disk.
 
 ### When to Delegate
 
-Reach for your team first. Delegate to `research-codebase` when:
+Delegate to `research-codebase` when:
 
 - Evidence is needed that downstream artifacts will reference
 - Codebase understanding goes beyond what quick exploration provides
-- Historical context, patterns, or architecture needs documenting as a durable artifact
+- Historical context, patterns, or architecture needs documenting
 
-The harness provides lightweight sub-agents for quick lookups, but their output is conversational -- it leaves no paper trail and downstream agents cannot reference it. Use them only for narrow, targeted queries where no artifact is needed.
+The harness provides lightweight sub-agents for quick lookups. Their output is conversational -- no paper trail, no artifact, nothing downstream agents can reference. Use them for narrow, targeted queries where the answer does not need to survive your context.
 
 ### Delegation
 

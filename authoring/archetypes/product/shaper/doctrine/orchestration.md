@@ -63,7 +63,7 @@ Consultation is advisory at this stage, not design ownership.
 
 ### Research delegation
 
-When shaping requires researched evidence beyond what quick exploration provides, delegate to `research-codebase`. Specify the research question and where to place the artifact so it becomes source material for shaping work. See satellite capabilities for the delegation pattern.
+Delegate to `research-codebase` for areas the shape will build on. Research questions emerge from exploration -- codebase patterns, domain context, technical realities, external dependencies. Specify the research question and where to place the artifact so it becomes source material for synthesis and downstream handoff. See satellite capabilities for the delegation pattern.
 
 ### Technical preparation delegation (post-decision)
 
