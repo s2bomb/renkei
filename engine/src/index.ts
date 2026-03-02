@@ -1,5 +1,30 @@
+import path from "node:path"
 import { parseLaunchOptions, launch } from "./features/launch"
 import { isErr } from "./shared/result"
+
+/**
+ * When --worktree points to a different worktree, re-exec from that worktree's
+ * engine so ALL of its code runs -- not just the platform/config/authoring paths.
+ * Without this, the engine code always runs from whichever worktree owns the
+ * renkei binary, and --worktree only redirects resolution paths.
+ */
+async function reexecIfNeeded(worktreeOverride: string | undefined): Promise<void> {
+  if (worktreeOverride === undefined) return
+
+  const targetIndex = path.resolve(worktreeOverride, "engine", "src", "index.ts")
+  const currentIndex = path.resolve(import.meta.dirname, "index.ts")
+  if (targetIndex === currentIndex) return
+
+  const proc = Bun.spawn(["bun", "run", targetIndex, ...process.argv.slice(2)], {
+    cwd: process.cwd(),
+    stdin: "inherit",
+    stdout: "inherit",
+    stderr: "inherit",
+    env: process.env,
+  })
+  const exitCode = await proc.exited
+  process.exit(exitCode ?? 1)
+}
 
 async function main(): Promise<void> {
   const parseResult = parseLaunchOptions(process.argv.slice(2))
@@ -10,6 +35,8 @@ async function main(): Promise<void> {
   }
 
   const opts = parseResult.value
+  await reexecIfNeeded(opts.worktreeOverride)
+
   const scriptDir = import.meta.dirname
 
   const result = await launch(opts, scriptDir)
