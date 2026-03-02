@@ -2,40 +2,33 @@
 
 ## Step 1: Read All Inputs
 
-1. Read the plan to understand which test phases you own
-2. Read the test spec FULLY — understand every test specified
-3. Read the API design for function signatures and types
-4. Read the research doc for test infrastructure context
+1. Read the plan to understand which test phases you own.
+2. Read the test spec fully -- understand every test specified.
+3. Read the API design for function signatures and types.
+4. Read the research doc for test infrastructure context.
 
-## Step 2: Research Test Infrastructure
+## Step 2: Delegate Test Phases
 
-Delegate research agents to understand:
-- Test framework, runner, configuration
-- Test directory structure
-- Existing test patterns, fixtures, helpers, factories
-- How to run tests locally
+Determine which test phases can run in parallel (independent modules, no file overlap) vs sequential.
 
-Delegate in parallel:
-- **codebase-locator**: Find test directories, test configs
-- **codebase-pattern-finder**: Find existing test patterns for similar features
-- **codebase-analyzer**: Understand test utilities and helpers
+For each test phase, delegate a `test-implementer-clone` with:
+- The specific tests from the spec it is responsible for
+- The plan path and phase number
+- The test spec path and API design path
+- The test directory and existing patterns to follow
+- The verbatim propagation block
 
-Wait for all research to complete before writing any tests.
+Delegate multiple clones in a single message when phases can run in parallel.
 
-## Step 3: Implement Tests Per Plan Phase
+## Step 3: Review Clone Returns
 
-For each test phase in the plan:
+After each clone completes and reports back:
 
-1. Delegate `test-implementer-clone` with specific test-writing instructions
-2. Perform assertion selection: enforce contract invariants with minimum incidental coupling
-   - Avoid full-object equality unless required by contract
-   - Replace magic literals with named domain constants when value semantics matter
-   - Use semantic helpers/matchers for unordered or partial structures
-3. Review clone output: tests match spec? Assertion scope is contract-bound? Follow patterns? Properly structured?
-4. Verify tests compile/parse correctly (syntax valid even if they fail at runtime)
-5. Commit test code with descriptive message (e.g., `test: add tests for [module] per test spec`)
-
-Delegate multiple clones in parallel when tests cover independent modules with no file overlap.
+1. Review: tests match spec? Assertions are contract-bound? Follow existing codebase patterns?
+2. Verify tests compile/parse correctly (syntax valid even if they fail at runtime).
+3. If issues remain, re-delegate with specific fix instructions.
+4. Commit verified test code with descriptive message (e.g., `test: add tests for [module] per test spec`).
+5. Update plan checkboxes for completed test phases.
 
 ## Step 4: Verify Completeness
 
