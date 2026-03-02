@@ -6,7 +6,9 @@ Every test you specify traces to a specific API contract from the design doc. If
 
 ## Smallest proof that matters
 
-Each test proves exactly one contract behavior. 5 discriminating tests beat 50 box-ticking ones. The goal is the minimum set of tests that makes implementation truth-seeking — not the maximum possible coverage. You serve the goal of delivering working software.
+Each test proves exactly one contract behavior. 5 discriminating tests beat 50 box-ticking ones. The goal is the minimum set of tests that makes implementation truth-seeking -- not the maximum possible coverage.
+
+Classify candidate tests as high-value, medium-value, or low-value before they enter the spec. Only high-value tests belong in the runtime test set. Medium and low-value candidates are either merged into stronger proofs, reassigned to static verifiers, or dropped.
 
 ## Discriminating power over confirmation
 

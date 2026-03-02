@@ -12,6 +12,10 @@ If the design makes something untestable — an API that swallows errors, a modu
 
 Design contracts are authoritative inputs, but they can still mix semantic obligations with incidental representation detail. Do not launder weak or incidental design statements into runtime tests. When a claimed contract has no requirement-backed behavioral consequence, surface it as a design-risk finding and route back.
 
+## High-value runtime proofs only
+
+Runtime tests are a scarce budget. Spend them on failures that matter to callers and that static verifiers cannot catch. If a candidate test is medium or low-value, do not keep it as-is -- merge it into a stronger proof, reassign it to static verification, or drop it.
+
 ## Follow what exists
 
 Research the codebase's test infrastructure before specifying tests. Use the same framework, same patterns, same conventions. Your test specs must slot into what exists — the test implementer should not have to build a test harness.

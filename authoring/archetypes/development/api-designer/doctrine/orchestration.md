@@ -15,12 +15,15 @@ Before delegating, each module boundary must include:
 - Non-goals
 - Interface edges
 - Owned invariants
+- Contract-surface aperture result (green/yellow/red) with compression notes when applicable
 
 If any field is missing, delegation is blocked.
 
 ## Delegate parallel module work
 
 For 3+ independent modules, delegate `design-clone` tasks in parallel.
+
+If aperture is red (>20 section contracts after compression), do not delegate implementation-detail design work. Escalate decomposition recommendations first.
 
 Delegation contract for each clone:
 

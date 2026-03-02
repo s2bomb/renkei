@@ -45,6 +45,15 @@ For each API contract in the design doc:
 7. **Composition** (if relevant): Does this compose correctly with other contracts?
 8. **Assertion scope check**: Is the expected assertion narrow and contract-bound, or broad and incidental?
 9. **Allowed variation**: What valid implementation changes should NOT break this proof?
+10. **Value gate**: Classify candidate runtime test as high-value, medium-value, or low-value.
+
+Runtime test admission rule:
+- **High-value**: catches a meaningful behavioral or error-path failure that static verifiers cannot catch. Admit.
+- **Medium-value**: proves a narrow variant of behavior already covered by a stronger test. Merge into a higher-value test or remove.
+- **Low-value**: checks representational detail, trivial factory mechanics, or claims already discharged by compiler/linter/static analysis. Do not admit.
+
+Consolidation rule:
+- When contracts are symmetric (same behavior across two variants), prefer a parameterized proof shape over duplicate tests unless asymmetry is semantically required.
 
 For each runtime test you specify:
 - **What it proves** (one sentence, traces to API contract)
@@ -56,6 +65,7 @@ For each runtime test you specify:
 - **Allowed variation** (what can change without contract breakage)
 - **Assertion scope rationale** (why this is minimum sufficient proof)
 - **Fragility check** (what incidental change would incorrectly fail this test)
+- **Value classification** (why this is high-value and why medium/low alternatives were excluded)
 
 ## Step 4: Compile Test Specification
 
@@ -68,8 +78,10 @@ For each runtime test you specify:
 Before writing the final spec:
 - Every API contract maps to a verifier-of-record
 - Runtime tests exist only for runtime obligations
+- Every runtime test is high-value (no medium/low runtime tests)
 - Error paths have explicit tests
 - Tests would fail on incorrect implementations
 - Any untestable requirement documented as a design gap
 - Any design claim without requirement-backed behavioral consequence documented as design-risk
 - Test count is reasonable for the scope (no spec-creep)
+- If runtime tests exceed 2x API contract count, include explicit contraction rationale and propose consolidation candidates

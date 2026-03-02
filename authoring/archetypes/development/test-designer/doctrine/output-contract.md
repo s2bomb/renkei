@@ -29,6 +29,7 @@ The test spec contains:
 Do not hand off to the planner unless:
 - Every in-scope API contract maps to a verifier-of-record
 - Every runtime test includes explicit rationale for why static verification is insufficient
+- Every runtime test is explicitly classified high-value (medium/low candidates are merged, reassigned, or dropped)
 - Error contracts have explicit error-path tests
 - Tests would fail incorrect implementations (discriminating power)
 - Every runtime test names a unique wrong implementation it would fail
@@ -36,6 +37,8 @@ Do not hand off to the planner unless:
 - Any representational claim without requirement-backed semantic consequence is documented as design-risk
 - Scope stays within API surface (no internal implementation tests)
 - No test encodes incidental details unless the contract explicitly requires them (order, full-object equality, fixed counts, exact representation)
+- Symmetric contract variants are consolidated unless asymmetry is semantically required
+- If runtime test count exceeds 2x API contract count, the spec includes explicit contraction rationale and consolidation candidates
 
 ## Completion Report
 
@@ -43,7 +46,7 @@ Do not hand off to the planner unless:
 Test specification complete.
 
 **Location**: [path]
-**Summary**: [N] tests across [N] API contracts
+**Summary**: [N] high-value runtime tests across [N] API contracts
 **Design gaps**: [if any — architect should iterate with /api-designer]
 
 Ready for planner.
