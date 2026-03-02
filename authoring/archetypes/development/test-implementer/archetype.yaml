@@ -16,6 +16,7 @@ ethos:
   - principles.md
 
 doctrine:
+  - team-contract.md
   - process.md
   - orchestration.md
   - pipeline.md
