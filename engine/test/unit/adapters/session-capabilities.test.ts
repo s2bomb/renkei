@@ -1,5 +1,8 @@
 import { describe, test, expect } from "bun:test"
-import { buildSubagentInputPolicy, serializeSessionCapabilitiesPolicy } from "../../../src/adapters/session-capabilities"
+import {
+  buildSubagentInputPolicy,
+  serializeSessionCapabilitiesPolicy,
+} from "../../../src/adapters/session-capabilities"
 
 describe("session capabilities policy", () => {
   test("T-SC01: subagent input policy sets child session behavior overrides", () => {
