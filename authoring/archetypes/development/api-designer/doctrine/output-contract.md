@@ -36,7 +36,6 @@ No handoff if any gate fails:
 - No vendor/storage/runtime internals leak into public contract semantics
 - Another team can implement from this document without reading internals
 - `test-designer` can derive proof obligations without reinterpretation
-- Contract-surface aperture is acceptable (green/yellow); red surfaces are decomposed before publication
 
 Soft wording is not accepted in normative clauses (`reasonable`, `best effort`, `appropriate`) unless explicitly defined in contract terms.
 
@@ -46,7 +45,7 @@ Soft wording is not accepted in normative clauses (`reasonable`, `best effort`, 
 API design complete.
 
 **Location**: [path]
-**Summary**: [N] modules, [N] contracts, aperture [green|yellow]
+**Summary**: [N] modules, [N] contracts
 **Design risks**: [if any]
 
 Ready for `/test-designer`.
