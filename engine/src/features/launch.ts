@@ -75,7 +75,7 @@ export function buildLaunchCommand(
   opts: LaunchOptions,
   launchEnv: LaunchEnvironment,
 ): LaunchCommand {
-  const projectArgs = opts.projectDir !== undefined ? [opts.projectDir] : []
+  const projectArgs = [opts.projectDir ?? "."]
   const passthroughArgs = [...opts.passthroughArgs]
 
   const envRecord: Record<string, string> = {
