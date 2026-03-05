@@ -2036,11 +2036,17 @@ function WebSearch(props: ToolProps<any>) {
 }
 
 function Task(props: ToolProps<typeof TaskTool>) {
-  const { theme } = useTheme()
-  const keybind = useKeybind()
   const { navigate } = useRoute()
-  const local = useLocal()
   const sync = useSync()
+
+  function open() {
+    const id = props.metadata.sessionId
+    if (!id) return
+    navigate({
+      type: "session",
+      sessionID: id,
+    })
+  }
 
   onMount(() => {
     if (props.metadata.sessionId && !sync.data.message[props.metadata.sessionId]?.length)
@@ -2091,6 +2097,7 @@ function Task(props: ToolProps<typeof TaskTool>) {
       spinner={isRunning()}
       complete={props.input.description}
       pending="Delegating..."
+      onClick={props.metadata.sessionId ? open : undefined}
       part={props.part}
     >
       {content()}
