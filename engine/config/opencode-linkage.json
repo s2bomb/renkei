@@ -1,13 +1,15 @@
 {
   "mode": "subtree",
   "opencodeRoot": "platform/opencode",
+  "subtreeRemote": "opencode",
   "provenance": {
-    "remote": "https://github.com/sst/opencode.git",
-    "ref": "v1.2.14",
-    "upstreamSha": "de2bc25677b419d2af0da8b6a24a05d3f22b67a8",
-    "syncedAt": "2026-02-26T00:00:00Z",
-    "previousRef": "origin/dev",
-    "previousVersion": "1.2.6",
-    "previousSyncedAt": "2026-02-19T05:30:41Z"
-  }
+    "remote": "https://github.com/anomalyco/opencode.git",
+    "ref": "v1.2.17",
+    "upstreamSha": "715b844c2a88810b6178d7a2467c7d36ea8fb764",
+    "syncedAt": "2026-03-05T00:00:00Z",
+    "previousRef": "v1.2.14",
+    "previousVersion": "1.2.14",
+    "previousSyncedAt": "2026-02-26T00:00:00Z"
+  },
+  "upgradeMethod": "git subtree pull --prefix=platform/opencode opencode <tag> --squash"
 }
