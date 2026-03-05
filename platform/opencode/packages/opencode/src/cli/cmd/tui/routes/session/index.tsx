@@ -1711,12 +1711,14 @@ function InlineTool(props: {
   complete: any
   pending: string
   spinner?: boolean
+  onClick?: () => void
   children: JSX.Element
   part: ToolPart
 }) {
   const [margin, setMargin] = createSignal(0)
   const { theme } = useTheme()
   const ctx = use()
+  const renderer = useRenderer()
   const sync = useSync()
 
   const permission = createMemo(() => {
@@ -1744,6 +1746,11 @@ function InlineTool(props: {
     <box
       marginTop={margin()}
       paddingLeft={3}
+      onMouseUp={() => {
+        if (!props.onClick) return
+        if (renderer.getSelection()?.getSelectedText()) return
+        props.onClick()
+      }}
       renderBefore={function () {
         const el = this as BoxRenderable
         const parent = el.parent
