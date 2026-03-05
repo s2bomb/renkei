@@ -23,7 +23,7 @@ import { DialogSessionList } from "@tui/component/dialog-session-list"
 import { KeybindProvider } from "@tui/context/keybind"
 import { ThemeProvider, useTheme } from "@tui/context/theme"
 import { Home } from "@tui/routes/home"
-import { Session } from "@tui/routes/session"
+import { Session, currentCapabilities } from "@tui/routes/session"
 import { PromptHistoryProvider } from "./component/prompt/history"
 import { FrecencyProvider } from "./component/prompt/frecency"
 import { PromptStashProvider } from "./component/prompt/stash"
@@ -477,6 +477,7 @@ function App() {
       category: "Agent",
       hidden: true,
       onSelect: () => {
+        if (currentCapabilities()?.agentCyclingAllowed === false) return
         local.agent.move(1)
       },
     },
@@ -487,6 +488,7 @@ function App() {
       category: "Agent",
       hidden: true,
       onSelect: () => {
+        if (currentCapabilities()?.variantCyclingAllowed === false) return
         local.model.variant.cycle()
       },
     },
@@ -497,6 +499,7 @@ function App() {
       category: "Agent",
       hidden: true,
       onSelect: () => {
+        if (currentCapabilities()?.agentCyclingAllowed === false) return
         local.agent.move(-1)
       },
     },
