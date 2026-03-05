@@ -324,10 +324,10 @@ Honest record of what exists as of item-012.
 | engine/src/ | Adapter and feature code |
 | Seam adapters | 1 implemented: session-capabilities (item-012) |
 | Feature code | No dedicated feature module (policy injected at launch via adapters) |
-| Composition with platform | 1 Level 3 patch: session capabilities seam |
+| Composition with platform | 2 Level 3 patches: session capabilities seam + inline tool click seam |
 | Quality gates (typecheck, lint) | Functional |
 | Test suite | 37 unit tests (includes session-capabilities adapter + launch env contract checks) |
-| Level 3 patches | 1: session capabilities seam (see above) |
+| Level 3 patches | 2: session capabilities seam + inline tool click seam (see above) |
 
 ---
 
