@@ -1716,11 +1716,11 @@ function InlineTool(props: {
   part: ToolPart
 }) {
   const [margin, setMargin] = createSignal(0)
-  const [hover, setHover] = createSignal(false)
   const { theme } = useTheme()
   const ctx = use()
-  const renderer = useRenderer()
   const sync = useSync()
+  const renderer = useRenderer()
+  const [hover, setHover] = createSignal(false)
 
   const permission = createMemo(() => {
     const callID = sync.data.permission[ctx.sessionID]?.at(0)?.tool?.callID
@@ -1730,6 +1730,7 @@ function InlineTool(props: {
 
   const fg = createMemo(() => {
     if (permission()) return theme.warning
+    if (hover() && props.onClick) return theme.text
     if (props.complete) return theme.textMuted
     return theme.text
   })
@@ -1747,19 +1748,11 @@ function InlineTool(props: {
     <box
       marginTop={margin()}
       paddingLeft={3}
-      backgroundColor={props.onClick && hover() ? theme.backgroundElement : undefined}
-      onMouseOver={() => {
-        if (!props.onClick) return
-        setHover(true)
-      }}
-      onMouseOut={() => {
-        if (!props.onClick) return
-        setHover(false)
-      }}
+      onMouseOver={() => props.onClick && setHover(true)}
+      onMouseOut={() => setHover(false)}
       onMouseUp={() => {
-        if (!props.onClick) return
         if (renderer.getSelection()?.getSelectedText()) return
-        props.onClick()
+        props.onClick?.()
       }}
       renderBefore={function () {
         const el = this as BoxRenderable
@@ -1983,8 +1976,10 @@ function Read(props: ToolProps<typeof ReadTool>) {
       </InlineTool>
       <For each={loaded()}>
         {(filepath) => (
-          <box paddingLeft={5}>
-            <text fg={theme.textMuted}>⤷ Loaded {normalizePath(filepath)}</text>
+          <box paddingLeft={3}>
+            <text paddingLeft={3} fg={theme.textMuted}>
+              ↳ Loaded {normalizePath(filepath)}
+            </text>
           </box>
         )}
       </For>
@@ -2049,15 +2044,6 @@ function Task(props: ToolProps<typeof TaskTool>) {
   const { navigate } = useRoute()
   const sync = useSync()
 
-  function open() {
-    const id = props.metadata.sessionId
-    if (!id) return
-    navigate({
-      type: "session",
-      sessionID: id,
-    })
-  }
-
   onMount(() => {
     if (props.metadata.sessionId && !sync.data.message[props.metadata.sessionId]?.length)
       sync.session.sync(props.metadata.sessionId)
@@ -2107,8 +2093,12 @@ function Task(props: ToolProps<typeof TaskTool>) {
       spinner={isRunning()}
       complete={props.input.description}
       pending="Delegating..."
-      onClick={props.metadata.sessionId ? open : undefined}
       part={props.part}
+      onClick={() => {
+        if (props.metadata.sessionId) {
+          navigate({ type: "session", sessionID: props.metadata.sessionId })
+        }
+      }}
     >
       {content()}
     </InlineTool>
