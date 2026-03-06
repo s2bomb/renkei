@@ -273,6 +273,33 @@ Active patches on the vendored platform. Each entry records what the patch adds,
 - No runtime schema versioning for the JSON policy contract. Field evolution must remain backward compatible.
 - `currentCapabilities` is module-level state. Single active session assumption. See api-design.md DR-3.
 
+### Patch 2: Inline Tool Click Seam
+
+**Added by**: 2026-03-05 subagent clickable task patch
+**Date**: 2026-03-05
+
+**What it adds**: Optional `onClick` support in TUI `InlineTool` rows in `session/index.tsx`, hover background affordance for clickable inline rows, plus `Task` row wiring to navigate to `metadata.sessionId` when present.
+
+**Why it is needed**: Upstream v1.2.17 changed delegated `task` rendering from a clickable block to a non-clickable inline row, removing direct navigation to child sessions from the message thread. Existing seams (keybinds and session cycling commands) preserve capability but not the required direct click interaction.
+
+**Files patched**:
+
+| File | Changes | Rebaseline Notes |
+|---|---|---|
+| `session/index.tsx` | Added optional `onClick` prop + mouse-up dispatch in `InlineTool`; wired `Task` renderer to call `navigate` with `metadata.sessionId` | Localized to tool rendering section. No protocol/schema changes. |
+
+**Dependent engine modules**:
+- None currently. This is a platform hook consumed directly by existing TUI task rows.
+
+**Four conditions verification**:
+
+| Condition | Satisfied | Evidence |
+|---|---|---|
+| Minimal | Yes | Single-file additive hook and one consumer wiring. |
+| Documented | Yes | This section. |
+| Positioned | Yes | Patch stays within stable session tool renderer area; no high-churn backend paths touched. |
+| Enables freedom | Yes | Any inline tool row can become interactive without adding new structural seams. |
+
 ---
 
 ## Dependencies
@@ -297,10 +324,10 @@ Honest record of what exists as of item-012.
 | engine/src/ | Adapter and feature code |
 | Seam adapters | 1 implemented: session-capabilities (item-012) |
 | Feature code | No dedicated feature module (policy injected at launch via adapters) |
-| Composition with platform | 1 Level 3 patch: session capabilities seam |
+| Composition with platform | 2 Level 3 patches: session capabilities seam + inline tool click seam |
 | Quality gates (typecheck, lint) | Functional |
 | Test suite | 37 unit tests (includes session-capabilities adapter + launch env contract checks) |
-| Level 3 patches | 1: session capabilities seam (see above) |
+| Level 3 patches | 2: session capabilities seam + inline tool click seam (see above) |
 
 ---
 

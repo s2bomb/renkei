@@ -1711,12 +1711,15 @@ function InlineTool(props: {
   complete: any
   pending: string
   spinner?: boolean
+  onClick?: () => void
   children: JSX.Element
   part: ToolPart
 }) {
   const [margin, setMargin] = createSignal(0)
+  const [hover, setHover] = createSignal(false)
   const { theme } = useTheme()
   const ctx = use()
+  const renderer = useRenderer()
   const sync = useSync()
 
   const permission = createMemo(() => {
@@ -1744,6 +1747,20 @@ function InlineTool(props: {
     <box
       marginTop={margin()}
       paddingLeft={3}
+      backgroundColor={props.onClick && hover() ? theme.backgroundElement : undefined}
+      onMouseOver={() => {
+        if (!props.onClick) return
+        setHover(true)
+      }}
+      onMouseOut={() => {
+        if (!props.onClick) return
+        setHover(false)
+      }}
+      onMouseUp={() => {
+        if (!props.onClick) return
+        if (renderer.getSelection()?.getSelectedText()) return
+        props.onClick()
+      }}
       renderBefore={function () {
         const el = this as BoxRenderable
         const parent = el.parent
@@ -2029,11 +2046,17 @@ function WebSearch(props: ToolProps<any>) {
 }
 
 function Task(props: ToolProps<typeof TaskTool>) {
-  const { theme } = useTheme()
-  const keybind = useKeybind()
   const { navigate } = useRoute()
-  const local = useLocal()
   const sync = useSync()
+
+  function open() {
+    const id = props.metadata.sessionId
+    if (!id) return
+    navigate({
+      type: "session",
+      sessionID: id,
+    })
+  }
 
   onMount(() => {
     if (props.metadata.sessionId && !sync.data.message[props.metadata.sessionId]?.length)
@@ -2084,6 +2107,7 @@ function Task(props: ToolProps<typeof TaskTool>) {
       spinner={isRunning()}
       complete={props.input.description}
       pending="Delegating..."
+      onClick={props.metadata.sessionId ? open : undefined}
       part={props.part}
     >
       {content()}
