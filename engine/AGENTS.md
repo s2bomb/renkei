@@ -278,7 +278,7 @@ Active patches on the vendored platform. Each entry records what the patch adds,
 **Added by**: 2026-03-05 subagent clickable task patch
 **Date**: 2026-03-05
 
-**What it adds**: Optional `onClick` support in TUI `InlineTool` rows in `session/index.tsx`, plus `Task` row wiring to navigate to `metadata.sessionId` when present.
+**What it adds**: Optional `onClick` support in TUI `InlineTool` rows in `session/index.tsx`, hover background affordance for clickable inline rows, plus `Task` row wiring to navigate to `metadata.sessionId` when present.
 
 **Why it is needed**: Upstream v1.2.17 changed delegated `task` rendering from a clickable block to a non-clickable inline row, removing direct navigation to child sessions from the message thread. Existing seams (keybinds and session cycling commands) preserve capability but not the required direct click interaction.
 
