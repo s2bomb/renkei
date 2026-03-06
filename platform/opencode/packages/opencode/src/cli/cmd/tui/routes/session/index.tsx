@@ -1716,6 +1716,7 @@ function InlineTool(props: {
   part: ToolPart
 }) {
   const [margin, setMargin] = createSignal(0)
+  const [hover, setHover] = createSignal(false)
   const { theme } = useTheme()
   const ctx = use()
   const renderer = useRenderer()
@@ -1746,6 +1747,15 @@ function InlineTool(props: {
     <box
       marginTop={margin()}
       paddingLeft={3}
+      backgroundColor={props.onClick && hover() ? theme.backgroundElement : undefined}
+      onMouseOver={() => {
+        if (!props.onClick) return
+        setHover(true)
+      }}
+      onMouseOut={() => {
+        if (!props.onClick) return
+        setHover(false)
+      }}
       onMouseUp={() => {
         if (!props.onClick) return
         if (renderer.getSelection()?.getSelectedText()) return
