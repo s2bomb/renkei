@@ -669,12 +669,12 @@ export function Prompt(props: PromptProps) {
             variant,
             parts: [
               {
-                id: Identifier.ascending("part"),
+                id: PartID.ascending(),
                 type: "text",
                 text: inputText,
               },
               ...nonTextParts.map((x) => ({
-                id: Identifier.ascending("part"),
+                id: PartID.ascending(),
                 ...x,
               })),
             ],
