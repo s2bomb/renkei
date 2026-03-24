@@ -239,39 +239,21 @@ All four quality gate commands must exit 0. On a clean-slate codebase (no featur
 
 Active patches on the vendored platform. Each entry records what the patch adds, why it is needed, which engine features depend on it, and how it survives rebaseline.
 
-### Patch 1: Session Capabilities Seam
+### Patch 1: Session Capabilities Seam (SUSPENDED)
 
 **Added by**: item-012
 **Date**: 2026-03-01
+**Suspended**: 2026-03-25 (v1.3.0 rebaseline)
 
-**What it adds**: A session capabilities computation in `session/index.tsx` that consolidates five scattered `session()?.parentID` guards into a single reactive `capabilities` memo driven by `RENKEI_SESSION_CAPABILITIES` JSON policy. Also extends `PromptProps` in `prompt/index.tsx` with session policy props and adds a `currentCapabilities` signal export for `app.tsx` agent/variant cycling guards.
+**What it added**: A session capabilities computation in `session/index.tsx` that consolidated five scattered `session()?.parentID` guards into a single reactive `capabilities` memo driven by `RENKEI_SESSION_CAPABILITIES` JSON policy. Extended `PromptProps` in `prompt/index.tsx` with session policy props and added a `currentCapabilities` signal export for `app.tsx` agent/variant cycling guards.
 
-**Why it is needed**: No existing OpenCode seam (Level 1 or 2) can control child session TUI capabilities. The plugin hooks are server-side. TuiEvent, command registry, and config cannot control component rendering. Level 3 seam decision flowchart walked in spec.md Section 2.
+**Why suspended**: The v1.3.0 upstream release significantly restructured all three patched files (`session/index.tsx`: 146 lines changed, `app.tsx`: 55 lines changed, `prompt/index.tsx`: 59 lines changed). The subtree merge auto-resolved cleanly but dropped all Renkei additions because upstream rewrote the regions where our patches lived. The engine is not yet daily-drivable and no runtime code depends on the platform-side seam consumption. The engine-side adapters (`config-injection.ts`, `session-capabilities.ts`) continue to compile and pass tests -- they serialize the policy, but the platform no longer consumes it.
 
-**Files patched**:
+**Re-implementation plan**: When the engine reaches daily-drivable status and team composition requires child session capability control, re-implement the seam targeting v1.3.0's architecture. Notable v1.3.0 changes relevant to re-implementation: new plugin hooks (`experimental.session.compacting`, `tool.definition`), expanded `Agent.Info` type, permission field on `StreamInput`, and stable agent/skill ordering.
 
-| File | Changes | Rebaseline Notes |
-|---|---|---|
-| `session/index.tsx` | `SessionCapabilities` type, `capabilities` memo, 5 guard replacements, `currentCapabilities` signal export | Memo is in the stable computation region (~lines 119-165). Guard replacements are single-expression swaps. Signal export is module-level. |
-| `prompt/index.tsx` | 4 new optional props on `PromptProps`, 6 conditional branches in component | Props are additive (optional with permissive defaults). Branches are at existing decision points. |
-| `app.tsx` | 1 import, 3 guard checks in cycling commands | Guards are one-line additions inside existing `onSelect` handlers. |
-
-**Dependent engine modules**:
+**Dependent engine modules** (still compile, serialization-only):
 - `engine/src/adapters/config-injection.ts` -- injects `RENKEI_SESSION_CAPABILITIES` policy at launch
 - `engine/src/adapters/session-capabilities.ts` -- engine-owned policy contract and serializer
-
-**Four conditions verification**:
-
-| Condition | Satisfied | Evidence |
-|---|---|---|
-| Minimal | Yes | Hook only. Zero feature logic. All policy decisions computed in engine. |
-| Documented | Yes | This section. |
-| Positioned | Yes | Memo in stable region. Guard swaps are single expressions. Props are additive. |
-| Enables freedom | Yes | Capabilities object controls all 5 existing + 5 new child session behaviours. Any future child-session-specific feature composes through the same surface. |
-
-**Known limitations (v1)**:
-- No runtime schema versioning for the JSON policy contract. Field evolution must remain backward compatible.
-- `currentCapabilities` is module-level state. Single active session assumption. See api-design.md DR-3.
 
 ### Patch 2: Inline Tool Click Seam (RETIRED)
 
@@ -303,10 +285,10 @@ Honest record of what exists as of item-012.
 | engine/src/ | Adapter and feature code |
 | Seam adapters | 1 implemented: session-capabilities (item-012) |
 | Feature code | No dedicated feature module (policy injected at launch via adapters) |
-| Composition with platform | 1 active Level 3 patch: session capabilities seam (inline tool click seam retired -- upstream absorbed) |
+| Composition with platform | 0 active Level 3 patches. Session capabilities seam suspended at v1.3.0 rebaseline (upstream restructured patched regions). Inline tool click seam retired (upstream absorbed). |
 | Quality gates (typecheck, lint) | Functional |
-| Test suite | 37 unit tests (includes session-capabilities adapter + launch env contract checks) |
-| Level 3 patches | 1 active (session capabilities seam) + 1 retired (inline tool click seam) |
+| Test suite | 38 unit tests (includes session-capabilities adapter + launch env contract checks) |
+| Level 3 patches | 0 active, 1 suspended (session capabilities seam), 1 retired (inline tool click seam) |
 
 ---
 
