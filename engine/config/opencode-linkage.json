@@ -4,12 +4,12 @@
   "subtreeRemote": "opencode",
   "provenance": {
     "remote": "https://github.com/anomalyco/opencode.git",
-    "ref": "v1.2.27",
-    "upstreamSha": "4ee426ba549131c4903a71dfb6259200467aca81",
-    "syncedAt": "2026-03-18T00:00:00Z",
-    "previousRef": "v1.2.24",
-    "previousVersion": "1.2.24",
-    "previousSyncedAt": "2026-03-10T00:00:00Z"
+    "ref": "v1.3.0",
+    "upstreamSha": "16fac6ba3e8bb6e8048d581fa7ffb50224774bee",
+    "syncedAt": "2026-03-25T00:00:00Z",
+    "previousRef": "v1.2.27",
+    "previousVersion": "1.2.27",
+    "previousSyncedAt": "2026-03-18T00:00:00Z"
   },
   "upgradeMethod": "git subtree pull --prefix=platform/opencode opencode <tag> --squash"
 }

@@ -1,4 +1,4 @@
-import { BoxRenderable, TextareaRenderable, MouseEvent, PasteEvent, t, dim, fg } from "@opentui/core"
+import { BoxRenderable, TextareaRenderable, MouseEvent, PasteEvent, decodePasteBytes, t, dim, fg } from "@opentui/core"
 import { createEffect, createMemo, type JSX, onMount, createSignal, onCleanup, on, Show, Switch, Match } from "solid-js"
 import "opentui-spinner/solid"
 import path from "path"
@@ -13,6 +13,7 @@ import { MessageID, PartID } from "@/session/schema"
 import { createStore, produce } from "solid-js/store"
 import { useKeybind } from "@tui/context/keybind"
 import { usePromptHistory, type PromptInfo } from "./history"
+import { assign } from "./part"
 import { usePromptStash } from "./stash"
 import { DialogStash } from "../dialog-stash"
 import { type AutocompleteRef, Autocomplete } from "./autocomplete"
@@ -44,11 +45,6 @@ export type PromptProps = {
   ref?: (ref: PromptRef) => void
   hint?: JSX.Element
   showPlaceholder?: boolean
-  // Session capability policies (from capabilities seam)
-  submissionMethod?: "sync" | "async"
-  shellModeAllowed?: boolean
-  commandsAllowed?: boolean
-  isChildSession?: boolean
 }
 
 export type PromptRef = {
@@ -593,10 +589,6 @@ export function Prompt(props: PromptProps) {
     const variant = local.model.variant.current()
 
     if (store.mode === "shell") {
-      if (props.shellModeAllowed === false) {
-        setStore("mode", "normal")
-        return
-      }
       sdk.client.session.shell({
         sessionID,
         agent: local.agent.current().name,
@@ -615,7 +607,6 @@ export function Prompt(props: PromptProps) {
         return sync.data.command.some((x) => x.name === command)
       })
     ) {
-      if (props.commandsAllowed === false) return
       // Parse command from first line, preserve multi-line content in arguments
       const firstLineEnd = inputText.indexOf("\n")
       const firstLine = firstLineEnd === -1 ? inputText : inputText.slice(0, firstLineEnd)
@@ -639,9 +630,10 @@ export function Prompt(props: PromptProps) {
           })),
       })
     } else {
-      if (props.submissionMethod === "async") {
-        sdk.client.session.promptAsync({
+      sdk.client.session
+        .prompt({
           sessionID,
+          ...selectedModel,
           messageID,
           agent: local.agent.current().name,
           model: selectedModel,
@@ -652,35 +644,10 @@ export function Prompt(props: PromptProps) {
               type: "text",
               text: inputText,
             },
-            ...nonTextParts.map((x) => ({
-              id: PartID.ascending(),
-              ...x,
-            })),
+            ...nonTextParts.map(assign),
           ],
         })
-      } else {
-        sdk.client.session
-          .prompt({
-            sessionID,
-            ...selectedModel,
-            messageID,
-            agent: local.agent.current().name,
-            model: selectedModel,
-            variant,
-            parts: [
-              {
-                id: PartID.ascending(),
-                type: "text",
-                text: inputText,
-              },
-              ...nonTextParts.map((x) => ({
-                id: PartID.ascending(),
-                ...x,
-              })),
-            ],
-          })
-          .catch(() => {})
-      }
+        .catch(() => {})
     }
     history.append({
       ...store.prompt,
@@ -797,7 +764,6 @@ export function Prompt(props: PromptProps) {
   })
 
   const placeholderText = createMemo(() => {
-    if (props.isChildSession) return "Reply to subagent..."
     if (props.sessionID) return undefined
     if (store.mode === "shell") {
       const example = SHELL_PLACEHOLDERS[store.placeholder % SHELL_PLACEHOLDERS.length]
@@ -920,7 +886,6 @@ export function Prompt(props: PromptProps) {
                   }
                 }
                 if (e.name === "!" && input.visualCursor.offset === 0) {
-                  if (props.shellModeAllowed === false) return
                   setStore("placeholder", Math.floor(Math.random() * SHELL_PLACEHOLDERS.length))
                   setStore("mode", "shell")
                   e.preventDefault()
@@ -969,7 +934,7 @@ export function Prompt(props: PromptProps) {
                 // Normalize line endings at the boundary
                 // Windows ConPTY/Terminal often sends CR-only newlines in bracketed paste
                 // Replace CRLF first, then any remaining CR
-                const normalizedText = event.text.replace(/\r\n/g, "\n").replace(/\r/g, "\n")
+                const normalizedText = decodePasteBytes(event.bytes).replace(/\r\n/g, "\n").replace(/\r/g, "\n")
                 const pastedContent = normalizedText.trim()
                 if (!pastedContent) {
                   command.trigger("prompt.paste")
@@ -1182,11 +1147,9 @@ export function Prompt(props: PromptProps) {
                       {keybind.print("variant_cycle")} <span style={{ fg: theme.textMuted }}>variants</span>
                     </text>
                   </Show>
-                  <Show when={!props.isChildSession}>
-                    <text fg={theme.text}>
-                      {keybind.print("agent_cycle")} <span style={{ fg: theme.textMuted }}>agents</span>
-                    </text>
-                  </Show>
+                  <text fg={theme.text}>
+                    {keybind.print("agent_cycle")} <span style={{ fg: theme.textMuted }}>agents</span>
+                  </text>
                   <text fg={theme.text}>
                     {keybind.print("command_list")} <span style={{ fg: theme.textMuted }}>commands</span>
                   </text>
