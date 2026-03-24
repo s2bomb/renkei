@@ -84,7 +84,7 @@ import { useTuiConfig } from "../../context/tui-config"
 
 addDefaultParsers(parsers.parsers)
 
-// Renkei Level 3 seam: prompt visibility in child sessions.
+// RENKEI-PATCH: prompt-visibility-seam
 // Reads RENKEI_SESSION_CAPABILITIES JSON policy (set by engine launch).
 // Default: follow OpenCode's native behaviour (hide prompt in child sessions).
 const renkeiPromptVisible: boolean | undefined = (() => {
