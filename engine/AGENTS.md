@@ -239,21 +239,34 @@ All four quality gate commands must exit 0. On a clean-slate codebase (no featur
 
 Active patches on the vendored platform. Each entry records what the patch adds, why it is needed, which engine features depend on it, and how it survives rebaseline.
 
-### Patch 1: Session Capabilities Seam (SUSPENDED)
+### Patch 1: Prompt Visibility Seam (v2)
 
-**Added by**: item-012
-**Date**: 2026-03-01
-**Suspended**: 2026-03-25 (v1.3.0 rebaseline)
+**Added by**: item-012 (v1, 2026-03-01), redesigned v2 2026-03-25 (v1.3.0 rebaseline)
 
-**What it added**: A session capabilities computation in `session/index.tsx` that consolidated five scattered `session()?.parentID` guards into a single reactive `capabilities` memo driven by `RENKEI_SESSION_CAPABILITIES` JSON policy. Extended `PromptProps` in `prompt/index.tsx` with session policy props and added a `currentCapabilities` signal export for `app.tsx` agent/variant cycling guards.
+**What it adds**: A single extension point in `session/index.tsx` that reads `RENKEI_SESSION_CAPABILITIES` JSON policy from the environment and uses its `child.promptVisible` field to control whether the prompt is visible in child (sub-agent) sessions. Vanilla OpenCode hides the prompt in child sessions (`!session()?.parentID`). The seam overrides this when the policy is set.
 
-**Why suspended**: The v1.3.0 upstream release significantly restructured all three patched files (`session/index.tsx`: 146 lines changed, `app.tsx`: 55 lines changed, `prompt/index.tsx`: 59 lines changed). The subtree merge auto-resolved cleanly but dropped all Renkei additions because upstream rewrote the regions where our patches lived. The engine is not yet daily-drivable and no runtime code depends on the platform-side seam consumption. The engine-side adapters (`config-injection.ts`, `session-capabilities.ts`) continue to compile and pass tests -- they serialize the policy, but the platform no longer consumes it.
+**Why it is needed**: Sub-agent sessions need a visible input field for interactive use. No existing OpenCode seam (plugin hooks, config, agent definition) can control TUI component visibility in child sessions.
 
-**Re-implementation plan**: When the engine reaches daily-drivable status and team composition requires child session capability control, re-implement the seam targeting v1.3.0's architecture. Notable v1.3.0 changes relevant to re-implementation: new plugin hooks (`experimental.session.compacting`, `tool.definition`), expanded `Agent.Info` type, permission field on `StreamInput`, and stable agent/skill ordering.
+**Files patched**:
 
-**Dependent engine modules** (still compile, serialization-only):
+| File | Changes | Rebaseline Notes |
+|---|---|---|
+| `session/index.tsx` | 1 module-level const (IIFE parsing env var, ~10 lines at line 87), 1 expression change at the Prompt render site (line ~1189) | Module-level const is between `addDefaultParsers` and `CustomSpeedScroll` class -- stable landmarks. Prompt render site is a single expression swap. |
+
+**v1 → v2 redesign rationale**: The v1 patch (item-012) touched 3 files across ~60 lines with a full capabilities type, reactive memo, signal export, and guard replacements. It did not survive the v1.3.0 rebaseline -- upstream restructured all 3 files and git's merge silently dropped the additions. The v2 patch is scoped to 1 file, ~11 lines, and addresses the capability actually in use (prompt visibility). Additional capabilities can be added as separate patches when needed.
+
+**Dependent engine modules**:
 - `engine/src/adapters/config-injection.ts` -- injects `RENKEI_SESSION_CAPABILITIES` policy at launch
 - `engine/src/adapters/session-capabilities.ts` -- engine-owned policy contract and serializer
+
+**Four conditions verification**:
+
+| Condition | Satisfied | Evidence |
+|---|---|---|
+| Minimal | Yes | 1 const + 1 expression change. No types, no signal, no imports added. |
+| Documented | Yes | This section. |
+| Positioned | Yes | Module-level const between two stable landmarks (`addDefaultParsers` call and `CustomSpeedScroll` class). Expression change at Prompt render call. |
+| Enables freedom | Yes | Any future `child.*` policy field reads from the same env var parsing. New capabilities extend the IIFE without additional patch sites. |
 
 ### Patch 2: Inline Tool Click Seam (RETIRED)
 
@@ -285,10 +298,10 @@ Honest record of what exists as of item-012.
 | engine/src/ | Adapter and feature code |
 | Seam adapters | 1 implemented: session-capabilities (item-012) |
 | Feature code | No dedicated feature module (policy injected at launch via adapters) |
-| Composition with platform | 0 active Level 3 patches. Session capabilities seam suspended at v1.3.0 rebaseline (upstream restructured patched regions). Inline tool click seam retired (upstream absorbed). |
+| Composition with platform | 1 active Level 3 patch: prompt visibility seam v2 (1 file, ~11 lines). Inline tool click seam retired (upstream absorbed). |
 | Quality gates (typecheck, lint) | Functional |
 | Test suite | 38 unit tests (includes session-capabilities adapter + launch env contract checks) |
-| Level 3 patches | 0 active, 1 suspended (session capabilities seam), 1 retired (inline tool click seam) |
+| Level 3 patches | 1 active (prompt visibility seam v2), 1 retired (inline tool click seam) |
 
 ---
 
