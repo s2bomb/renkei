@@ -83,19 +83,6 @@ import { useTuiConfig } from "../../context/tui-config"
 
 addDefaultParsers(parsers.parsers)
 
-// RENKEI-PATCH: prompt-visibility-seam
-// Reads RENKEI_SESSION_CAPABILITIES JSON policy (set by engine launch).
-// Default: follow OpenCode's native behaviour (hide prompt in child sessions).
-const renkeiPromptVisible: boolean | undefined = (() => {
-  const raw = process.env.RENKEI_SESSION_CAPABILITIES
-  if (!raw) return undefined
-  try {
-    const policy = JSON.parse(raw)
-    if (typeof policy?.child?.promptVisible === "boolean") return policy.child.promptVisible
-  } catch {}
-  return undefined
-})()
-
 class CustomSpeedScroll implements ScrollAcceleration {
   constructor(private speed: number) {}
 
@@ -1176,11 +1163,7 @@ export function Session() {
                 <SubagentFooter />
               </Show>
               <Prompt
-                visible={
-                  (renkeiPromptVisible ?? !session()?.parentID) &&
-                  permissions().length === 0 &&
-                  questions().length === 0
-                }
+                visible={!session()?.parentID && permissions().length === 0 && questions().length === 0}
                 ref={(r) => {
                   prompt = r
                   promptRef.set(r)
