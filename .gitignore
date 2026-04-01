@@ -1,14 +1,31 @@
-# Python
-__pycache__/
-*.py[cod]
-*.egg-info/
-.ruff_cache/
-
-# OS
 .DS_Store
-
-# Dev
-thoughts
-thoughts/
+node_modules
+.worktrees
+.sst
 .env
-.envrc
+.idea
+.vscode
+.codex
+*~
+playground
+tmp
+dist
+ts-dist
+.turbo
+**/.serena
+.serena/
+/result
+refs
+Session.vim
+/opencode.json
+a.out
+target
+.scripts
+.direnv/
+
+# Local dev files
+opencode-dev
+UPCOMING_CHANGELOG.md
+logs/
+*.bun-build
+tsconfig.tsbuildinfo
