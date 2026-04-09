@@ -251,7 +251,7 @@ Active patches on the vendored platform. Each entry records what the patch adds,
 
 | File | Changes | Rebaseline Notes |
 |---|---|---|
-| `session/index.tsx` | 1 module-level const (IIFE parsing env var, ~10 lines at line 87), 1 expression change at the Prompt render site (line ~1189) | Module-level const is between `addDefaultParsers` and `CustomSpeedScroll` class -- stable landmarks. Prompt render site is a single expression swap. |
+| `session/index.tsx` | 1 module-level const (IIFE parsing env var, ~10 lines at line 89), 1 expression change at `visible` memo (line ~147) | Module-level const is between `addDefaultParsers` and `context = createContext` -- stable landmarks. Expression change is in the `visible` memo definition. |
 
 **v1 → v2 redesign rationale**: The v1 patch (item-012) touched 3 files across ~60 lines with a full capabilities type, reactive memo, signal export, and guard replacements. It did not survive the v1.3.0 rebaseline -- upstream restructured all 3 files and git's merge silently dropped the additions. The v2 patch is scoped to 1 file, ~11 lines, and addresses the capability actually in use (prompt visibility). Additional capabilities can be added as separate patches when needed.
 
