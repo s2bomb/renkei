@@ -86,6 +86,19 @@ import { TuiPluginRuntime } from "../../plugin"
 
 addDefaultParsers(parsers.parsers)
 
+// RENKEI-PATCH: prompt-visibility-seam
+// Reads RENKEI_SESSION_CAPABILITIES JSON policy (set by engine launch).
+// Default: follow OpenCode's native behaviour (hide prompt in child sessions).
+const renkeiPromptVisible: boolean | undefined = (() => {
+  const raw = process.env.RENKEI_SESSION_CAPABILITIES
+  if (!raw) return undefined
+  try {
+    const policy = JSON.parse(raw)
+    if (typeof policy?.child?.promptVisible === "boolean") return policy.child.promptVisible
+  } catch {}
+  return undefined
+})()
+
 const context = createContext<{
   width: number
   sessionID: string
@@ -130,7 +143,9 @@ export function Session() {
     if (session()?.parentID) return []
     return children().flatMap((x) => sync.data.question[x.id] ?? [])
   })
-  const visible = createMemo(() => !session()?.parentID && permissions().length === 0 && questions().length === 0)
+  const visible = createMemo(
+    () => (renkeiPromptVisible ?? !session()?.parentID) && permissions().length === 0 && questions().length === 0,
+  )
   const disabled = createMemo(() => permissions().length > 0 || questions().length > 0)
 
   const pending = createMemo(() => {
